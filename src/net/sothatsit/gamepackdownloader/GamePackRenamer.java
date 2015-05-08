@@ -14,7 +14,9 @@ public class GamePackRenamer extends ConverterHelper {
     public String getNextClassName(String fullName, String shortName) {
         String name = super.getNextClassName(fullName, shortName);
 
-        BasicYAML yaml = BasicYAML.getFile("refactorings/" + name + ".txt");
+        BasicYAML yaml = BasicYAML.getFile("/refactorings/" + name + ".txt");
+
+        GamePackDownloader.info("Loading " + name);
 
         if(yaml != null && yaml.isSet("class-name")) {
             name = yaml.getValue("class-name");
@@ -27,7 +29,7 @@ public class GamePackRenamer extends ConverterHelper {
     public String getNextFieldName(String className, String field, String descriptor) {
         String name = super.getNextFieldName(className, field, descriptor);
 
-        BasicYAML yaml = BasicYAML.getFile("refactorings/" + className + ".txt");
+        BasicYAML yaml = BasicYAML.getFile("/refactorings/" + className + ".txt");
 
         if(yaml != null && yaml.isSet(name)) {
             name = yaml.getValue(name);
@@ -40,7 +42,7 @@ public class GamePackRenamer extends ConverterHelper {
     public String getNextMethodName(String className, String method, String descriptor) {
         String name = super.getNextMethodName(className, method, descriptor);
 
-        BasicYAML yaml = BasicYAML.getFile("refactorings/" + className + ".txt");
+        BasicYAML yaml = BasicYAML.getFile("/refactorings/" + className + ".txt");
 
         if(yaml != null && yaml.isSet(name)) {
             name = yaml.getValue(name);
