@@ -17,9 +17,9 @@ public class GamePackDownloader {
     }
 
     public static void run(String[] args) {
-        if(args.length == 0) {
+        if(args.length < 2) {
             log("More arguments supplied than necessary");
-            exit("args: [jar-file-location]* [fernflower-args]");
+            exit("args: [gamepack-output] [options] [fernflower-options]");
             return;
         }
 
@@ -40,6 +40,88 @@ public class GamePackDownloader {
         if(latest > 0) {
             info("Current Version: v" + latest);
         }
+
+        String options = args[1];
+
+        if(options.length() < 2 || options.charAt(0) != '-') {
+            log("Invalid options supplied: " + options);
+            exit("Valid: -<d (download) , s (decompile)>");
+            return;
+        }
+
+        boolean download = false;
+        boolean decompile = false;
+
+        for(char c : options.substring(1).toCharArray()) {
+            if(c == 'd') {
+                download = true;
+            } else if(c == 's') {
+                decompile = true;
+            } else {
+                exit("Unknown Argument: '" + c + '\'');
+                return;
+            }
+        }
+
+        if(download && !downloadLatest(folder)) {
+            if(decompile) {
+                exit("No new versions to decompile, exiting");
+            } else {
+                exit();
+            }
+            return;
+        }
+
+        if(decompile) {
+            String[] arguments = new String[args.length - 2];
+
+            System.arraycopy(args, 2, arguments, 0, args.length - 2);
+
+            File latestGamepack = new File(folder, "gamepack " + getLatestVersion(folder) + ".jar");
+
+            decompileFile(folder, latestGamepack, arguments);
+        }
+
+        exit();
+    }
+
+    public static void decompileFile(File folder, File file, String[] args) {
+        info("Decompiling source using fernflower");
+
+        File f = new File(folder, file.getName().substring(0, file.getName().length() - 4) + " source");
+
+        if(!f.exists()) {
+            f.mkdir();
+        }
+
+        String[] arguments = new String[args.length + 3];
+
+        System.arraycopy(args, 1, arguments, 0, args.length - 1);
+
+        arguments[arguments.length - 4] = "-ren=1";
+        arguments[arguments.length - 3] = "-urc=net.sothatsit.gamepackdownloader.GamePackRenamer";
+        arguments[arguments.length - 2] = file.getAbsolutePath();
+        arguments[arguments.length - 1] = f.getAbsolutePath();
+
+        runFernflower(arguments);
+
+        int version = getLatestVersion(folder);
+
+        info("Decompiled Gamepack " + version);
+
+        File source = new File(f, file.getName());
+
+        unZipIt(source, f);
+
+        if(!source.delete()) {
+            info("Unable to delete zip archive");
+        }
+
+        info("Un-zipped Gamepack " + version + " source");
+    }
+
+    public static boolean downloadLatest(File folder) {
+        int latest = getLatestVersion(folder);
 
         File file = (latest < 0 ? null : new File(folder, "gamepack " + latest + ".jar"));
         File newFile = new File(folder, "gamepack " + (latest < 0 ? 1 : latest + 1) + ".jar");
@@ -108,7 +190,7 @@ public class GamePackDownloader {
                 info("Error checking contents of files against eachother");
                 e.printStackTrace();
                 exit();
-                return;
+                return false;
             }
 
             info("Files Checked [" + round((System.nanoTime() - start) / 1000000d, 2) + "ms]");
@@ -120,17 +202,18 @@ public class GamePackDownloader {
 
                 if(!deleted) {
                     exit("Unable to delete output file");
-                    return;
+                    return false;
                 }
 
                 log("output deleted");
                 exit("Current Version: v" + getLatestVersion(folder));
-                return;
+                return false;
             } else {
                 if(output.renameTo(newFile)) {
                     info("output renamed from temp");
                 } else {
                     info("unable to rename output from temp");
+                    return false;
                 }
             }
         } else {
@@ -138,43 +221,12 @@ public class GamePackDownloader {
                 info("output renamed from temp");
             } else {
                 info("unable to rename output from temp");
+                return false;
             }
         }
 
         info("New Version Downloaded: v" + getLatestVersion(folder));
-
-        info("Decompiling source using fernflower");
-
-        String[] arguments = new String[args.length + 1];
-
-        System.arraycopy(args, 1, arguments, 0, args.length - 1);
-
-        File f = new File(folder, newFile.getName().substring(0, newFile.getName().length() - 4) + " source");
-
-        if(!f.exists()) {
-            f.mkdir();
-        }
-
-        arguments[arguments.length - 2] = newFile.getAbsolutePath();
-        arguments[arguments.length - 1] = f.getAbsolutePath();
-
-        runFernflower(arguments);
-
-        int version = getLatestVersion(folder);
-
-        info("Decompiled Gamepack " + version);
-
-        File source = new File(f, newFile.getName());
-
-        unZipIt(source, f);
-
-        if(!source.delete()) {
-            info("Unable to delete zip archive");
-        }
-
-        info("Un-zipped Gamepack " + version + " source");
-
-        exit();
+        return true;
     }
 
     public static void runFernflower(String[] args) {
