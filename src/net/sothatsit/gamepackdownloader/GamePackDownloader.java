@@ -9,7 +9,7 @@ public class GamePackDownloader {
     public static final String GAMEPACK_URL = "http://oldschool1.runescape.com/gamepack.jar";
 
     public static void main(String[] args) {
-        run(new String[]{"/Users/dugdemo/Desktop"});
+        run(args);
     }
 
     public static void run(String[] args) {
