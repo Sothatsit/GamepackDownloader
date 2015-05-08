@@ -18,7 +18,7 @@ public class GamePackDownloader {
 
     public static void run(String[] args) {
         if(args.length < 2) {
-            log("More arguments supplied than necessary");
+            log("Not enough arguments supplied");
             exit("args: [gamepack-output] [options] [fernflower-options]");
             return;
         }
@@ -95,9 +95,9 @@ public class GamePackDownloader {
             f.mkdir();
         }
 
-        String[] arguments = new String[args.length + 3];
+        String[] arguments = new String[args.length + 4];
 
-        System.arraycopy(args, 1, arguments, 0, args.length - 1);
+        System.arraycopy(args, 0, arguments, 0, args.length);
 
         arguments[arguments.length - 4] = "-ren=1";
         arguments[arguments.length - 3] = "-urc=net.sothatsit.gamepackdownloader.GamePackRenamer";
