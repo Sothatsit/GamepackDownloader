@@ -91,9 +91,11 @@ public class GamePackDownloader {
 
         File f = new File(folder, file.getName().substring(0, file.getName().length() - 4) + " source");
 
-        if(!f.exists()) {
-            f.mkdir();
+        if(f.exists()) {
+            f.delete();
         }
+
+        f.mkdir();
 
         String[] arguments = new String[args.length + 4];
 
