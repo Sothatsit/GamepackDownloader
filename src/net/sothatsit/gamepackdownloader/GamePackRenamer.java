@@ -1,5 +1,6 @@
 package net.sothatsit.gamepackdownloader;
 
+import net.sothatsit.gamepackdownloader.refactor.BasicYAML;
 import org.jetbrains.java.decompiler.modules.renamer.ConverterHelper;
 
 public class GamePackRenamer extends ConverterHelper {
@@ -11,17 +12,41 @@ public class GamePackRenamer extends ConverterHelper {
 
     @Override
     public String getNextClassName(String fullName, String shortName) {
-        return super.getNextClassName(fullName, shortName);
+        String name = super.getNextClassName(fullName, shortName);
+
+        BasicYAML yaml = BasicYAML.getFile("refactorings/" + name + ".txt");
+
+        if(yaml != null && yaml.isSet("class-name")) {
+            name = yaml.getValue("class-name");
+        }
+
+        return name;
     }
 
     @Override
     public String getNextFieldName(String className, String field, String descriptor) {
-        return super.getNextFieldName(className, field, descriptor);
+        String name = super.getNextFieldName(className, field, descriptor);
+
+        BasicYAML yaml = BasicYAML.getFile("refactorings/" + className + ".txt");
+
+        if(yaml != null && yaml.isSet(name)) {
+            name = yaml.getValue(name);
+        }
+
+        return name;
     }
 
     @Override
     public String getNextMethodName(String className, String method, String descriptor) {
-        return super.getNextMethodName(className, method, descriptor);
+        String name = super.getNextMethodName(className, method, descriptor);
+
+        BasicYAML yaml = BasicYAML.getFile("refactorings/" + className + ".txt");
+
+        if(yaml != null && yaml.isSet(name)) {
+            name = yaml.getValue(name);
+        }
+
+        return name;
     }
 
 }
