@@ -1,6 +1,6 @@
-package net.sothatsit.gamepackdownloader;
+package net.sothatsit.gamepackdownloader.refactor;
 
-import net.sothatsit.gamepackdownloader.refactor.BasicYAML;
+import net.sothatsit.gamepackdownloader.GamePackDownloader;
 import org.jetbrains.java.decompiler.modules.renamer.ConverterHelper;
 
 public class GamePackRenamer extends ConverterHelper {
@@ -30,6 +30,8 @@ public class GamePackRenamer extends ConverterHelper {
         final String initName = super.getNextFieldName(className, field, descriptor);
         String name = initName;
 
+        GamePackDownloader.info("Field \"" + field + "\" to \"" + initName + "\"");
+
         BasicYAML yaml = BasicYAML.getFile("/refactorings/" + className + ".txt");
 
         if(yaml != null && yaml.isSet("field_" + name)) {
@@ -44,6 +46,8 @@ public class GamePackRenamer extends ConverterHelper {
     public String getNextMethodName(String className, String method, String descriptor) {
         final String initName = super.getNextMethodName(className, method, descriptor);
         String name = initName;
+
+        GamePackDownloader.info("Method \"" + method + "\" to \"" + initName + "\"");
 
         BasicYAML yaml = BasicYAML.getFile("/refactorings/" + className + ".txt");
 
