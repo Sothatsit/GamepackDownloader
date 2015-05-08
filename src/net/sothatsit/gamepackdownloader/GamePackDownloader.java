@@ -1,6 +1,9 @@
 package net.sothatsit.gamepackdownloader;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 
@@ -14,12 +17,8 @@ public class GamePackDownloader {
 
     public static void run(String[] args) {
         if(args.length == 0) {
-            exit("Output folder not supplied");
-            return;
-        }
-
-        if(args.length != 1) {
-            exit("More arguments supplied than necessary");
+            log("More arguments supplied than necessary");
+            exit("args: [jar-file-location]* [fernflower-location] [fernflower-args]");
             return;
         }
 
@@ -37,7 +36,9 @@ public class GamePackDownloader {
 
         int latest = getLatestVersion(folder);
 
-        info("Current Version: v" + latest);
+        if(latest > 0) {
+            info("Current Version: v" + latest);
+        }
 
         File file = (latest < 0 ? null : new File(folder, "gamepack " + latest + ".jar"));
         File newFile = new File(folder, "gamepack " + (latest < 0 ? 1 : latest + 1) + ".jar");
@@ -133,7 +134,23 @@ public class GamePackDownloader {
             }
         }
 
-        exit("New Version Downloaded: v" + getLatestVersion(folder));
+        log("New Version Downloaded: v" + getLatestVersion(folder));
+
+        if(args.length >= 2) {
+            log("Decompiling source using fernflower");
+
+            String[] arguments = new String[args.length - 2];
+
+            System.arraycopy(args, 0, arguments, 0, arguments.length);
+
+            runFernflower(arguments);
+        } else {
+            exit();
+        }
+    }
+
+    public static void runFernflower(String[] args) {
+        //ConsoleDecompiler.main(args);
     }
 
     public static int getLatestVersion(File folder) {
@@ -161,7 +178,7 @@ public class GamePackDownloader {
 
                 return v;
             } catch(NumberFormatException e) {
-                e.printStackTrace();
+                return -1;
             }
         }
         return -1;
