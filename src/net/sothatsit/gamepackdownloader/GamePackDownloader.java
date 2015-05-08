@@ -106,7 +106,7 @@ public class GamePackDownloader {
         System.arraycopy(args, 0, arguments, 0, args.length);
 
         arguments[arguments.length - 4] = "-ren=1";
-        arguments[arguments.length - 3] = "-urc=net.sothatsit.gamepackdownloader.GamePackRenamer";
+        arguments[arguments.length - 3] = "-urc=net.sothatsit.gamepackdownloader.refactor.GamePackRenamer";
         arguments[arguments.length - 2] = file.getAbsolutePath();
         arguments[arguments.length - 1] = f.getAbsolutePath();
 
