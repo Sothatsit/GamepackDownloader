@@ -1,5 +1,7 @@
 package net.sothatsit.gamepackdownloader;
 
+import org.jetbrains.java.decompiler.main.decompiler.ConsoleDecompiler;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,7 +20,7 @@ public class GamePackDownloader {
     public static void run(String[] args) {
         if(args.length == 0) {
             log("More arguments supplied than necessary");
-            exit("args: [jar-file-location]* [fernflower-location] [fernflower-args]");
+            exit("args: [jar-file-location]* [fernflower-args]");
             return;
         }
 
@@ -58,7 +60,7 @@ public class GamePackDownloader {
                             long progress = downloader.getProgress();
                             long size = downloader.getFileSize();
 
-                            if(progress < 0) {
+                            if(progress < 0 || size < 0) {
                                 continue;
                             }
 
@@ -132,25 +134,38 @@ public class GamePackDownloader {
                     info("unable to rename output from temp");
                 }
             }
+        } else {
+            if(output.renameTo(newFile)) {
+                info("output renamed from temp");
+            } else {
+                info("unable to rename output from temp");
+            }
         }
 
         log("New Version Downloaded: v" + getLatestVersion(folder));
 
-        if(args.length >= 2) {
-            log("Decompiling source using fernflower");
+        log("Decompiling source using fernflower");
 
-            String[] arguments = new String[args.length - 2];
+        String[] arguments = new String[args.length + 1];
 
-            System.arraycopy(args, 0, arguments, 0, arguments.length);
+        System.arraycopy(args, 1, arguments, 0, args.length - 1);
 
-            runFernflower(arguments);
-        } else {
-            exit();
+        File f = new File(folder, newFile.getName().substring(0, newFile.getName().length() - 4));
+
+        if(!f.exists()) {
+            f.mkdir();
         }
+
+        arguments[arguments.length - 2] = newFile.getAbsolutePath();
+        arguments[arguments.length - 1] = f.getAbsolutePath();
+
+        runFernflower(arguments);
+        log("Decompiled Gamepack " + getLatestVersion(folder));
+        exit();
     }
 
     public static void runFernflower(String[] args) {
-        //ConsoleDecompiler.main(args);
+        ConsoleDecompiler.main(args);
     }
 
     public static int getLatestVersion(File folder) {
