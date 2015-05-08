@@ -93,10 +93,7 @@ public class GamePackDownloader {
 
         if(f.exists() && f.isDirectory()) {
             info("Deleting previous source code to avoid conflicts");
-            for(File subFile : f.listFiles()) {
-                subFile.delete();
-            }
-            f.delete();
+            deleteFolder(f);
         } else if(f.exists()) {
             info("Deleting previous source code to avoid conflicts");
             f.delete();
@@ -128,6 +125,17 @@ public class GamePackDownloader {
         }
 
         info("Un-zipped Gamepack " + version + " source");
+    }
+
+    public static void deleteFolder(File folder) {
+        for(File subFile : folder.listFiles()) {
+            if(subFile.isDirectory()) {
+                deleteFolder(subFile);
+            }
+
+            subFile.delete();
+        }
+        folder.delete();
     }
 
     public static boolean downloadLatest(File folder) {
