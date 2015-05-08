@@ -19,7 +19,7 @@ public class GamePackRenamer extends ConverterHelper {
 
         if(yaml != null && yaml.isSet("class-name")) {
             name = yaml.getValue("class-name");
-            GamePackDownloader.info("Renamed class \"" + initName + "\" to " + name);
+            GamePackDownloader.info("Renamed class \"" + initName + "\" to \'" + name + '"');
         }
 
         return name;
@@ -34,7 +34,7 @@ public class GamePackRenamer extends ConverterHelper {
 
         if(yaml != null && yaml.isSet(name)) {
             name = yaml.getValue(name);
-            GamePackDownloader.info("Renamed field \"" + initName + "\" of class \"" + className + "\" to " + name);
+            GamePackDownloader.info("Renamed field \"" + initName + "\" of class \"" + className + "\" to '" + name + '"');
         }
 
         return name;
@@ -49,7 +49,7 @@ public class GamePackRenamer extends ConverterHelper {
 
         if(yaml != null && yaml.isSet(name)) {
             name = yaml.getValue(name);
-            GamePackDownloader.info("Renamed method \"" + initName + "\" of class \"\" + className + \"\" to " + name);
+            GamePackDownloader.info("Renamed method \"" + initName + "\" of class \"\" + className + \"\" to '" + name + '"');
         }
 
         return name;
