@@ -2,7 +2,7 @@
 Downloads the latest oldschool runescape gamepack.
 
 # Usage
-java -jar <jar-file-location> <output-directory>
+java -jar [jar-file-location] [output-directory]
 
 # Output
 The program will output files called "gamepack <version>.jar". The versions are calculated from the known versions previously downloaded.
