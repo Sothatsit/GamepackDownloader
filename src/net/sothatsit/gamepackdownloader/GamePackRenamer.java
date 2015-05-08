@@ -12,14 +12,14 @@ public class GamePackRenamer extends ConverterHelper {
 
     @Override
     public String getNextClassName(String fullName, String shortName) {
-        String name = super.getNextClassName(fullName, shortName);
+        final String initName = super.getNextClassName(fullName, shortName);
+        String name = initName;
 
         BasicYAML yaml = BasicYAML.getFile("/refactorings/" + name + ".txt");
 
-        GamePackDownloader.info("Loading " + name);
-
         if(yaml != null && yaml.isSet("class-name")) {
             name = yaml.getValue("class-name");
+            GamePackDownloader.info("Renamed class \"" + initName + "\" to " + name);
         }
 
         return name;
@@ -27,12 +27,14 @@ public class GamePackRenamer extends ConverterHelper {
 
     @Override
     public String getNextFieldName(String className, String field, String descriptor) {
-        String name = super.getNextFieldName(className, field, descriptor);
+        final String initName = super.getNextFieldName(className, field, descriptor);
+        String name = initName;
 
         BasicYAML yaml = BasicYAML.getFile("/refactorings/" + className + ".txt");
 
         if(yaml != null && yaml.isSet(name)) {
             name = yaml.getValue(name);
+            GamePackDownloader.info("Renamed field \"" + initName + "\" of class \"" + className + "\" to " + name);
         }
 
         return name;
@@ -40,12 +42,14 @@ public class GamePackRenamer extends ConverterHelper {
 
     @Override
     public String getNextMethodName(String className, String method, String descriptor) {
-        String name = super.getNextMethodName(className, method, descriptor);
+        final String initName = super.getNextMethodName(className, method, descriptor);
+        String name = initName;
 
         BasicYAML yaml = BasicYAML.getFile("/refactorings/" + className + ".txt");
 
         if(yaml != null && yaml.isSet(name)) {
             name = yaml.getValue(name);
+            GamePackDownloader.info("Renamed method \"" + initName + "\" of class \"\" + className + \"\" to " + name);
         }
 
         return name;
