@@ -2,12 +2,11 @@ package net.sothatsit.gamepackdownloader;
 
 import org.jetbrains.java.decompiler.main.decompiler.ConsoleDecompiler;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class GamePackDownloader {
 
@@ -142,15 +141,15 @@ public class GamePackDownloader {
             }
         }
 
-        log("New Version Downloaded: v" + getLatestVersion(folder));
+        info("New Version Downloaded: v" + getLatestVersion(folder));
 
-        log("Decompiling source using fernflower");
+        info("Decompiling source using fernflower");
 
         String[] arguments = new String[args.length + 1];
 
         System.arraycopy(args, 1, arguments, 0, args.length - 1);
 
-        File f = new File(folder, newFile.getName().substring(0, newFile.getName().length() - 4));
+        File f = new File(folder, newFile.getName().substring(0, newFile.getName().length() - 4) + " source");
 
         if(!f.exists()) {
             f.mkdir();
@@ -160,7 +159,21 @@ public class GamePackDownloader {
         arguments[arguments.length - 1] = f.getAbsolutePath();
 
         runFernflower(arguments);
-        log("Decompiled Gamepack " + getLatestVersion(folder));
+
+        int version = getLatestVersion(folder);
+
+        info("Decompiled Gamepack " + version);
+
+        File source = new File(f, newFile.getName());
+
+        unZipIt(source, f);
+
+        if(!source.delete()) {
+            info("Unable to delete zip archive");
+        }
+
+        info("Un-zipped Gamepack " + version + " source");
+
         exit();
     }
 
@@ -189,14 +202,52 @@ public class GamePackDownloader {
             try {
                 String version = fileName.substring(9, fileName.length() - 4);
 
-                Integer v = Integer.valueOf(version);
-
-                return v;
+                return Integer.valueOf(version);
             } catch(NumberFormatException e) {
                 return -1;
             }
         }
         return -1;
+    }
+
+    public static void unZipIt(File zipFile, File outputFolder){
+        byte[] buffer = new byte[1024];
+
+        try{
+            if(!outputFolder.exists()){
+                outputFolder.mkdir();
+            }
+
+            ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
+            ZipEntry ze = zis.getNextEntry();
+
+            while(ze != null){
+                String fileName = ze.getName();
+                File newFile = new File(outputFolder + File.separator + fileName);
+
+                System.out.println("file unzip : "+ newFile.getAbsoluteFile());
+
+                new File(newFile.getParent()).mkdirs();
+
+                FileOutputStream fos = new FileOutputStream(newFile);
+
+                int len;
+                while ((len = zis.read(buffer)) > 0) {
+                    fos.write(buffer, 0, len);
+                }
+
+                fos.close();
+                ze = zis.getNextEntry();
+            }
+
+            zis.closeEntry();
+            zis.close();
+
+            System.out.println("Done");
+
+        }catch(IOException ex){
+            ex.printStackTrace();
+        }
     }
 
     public static boolean areContentsSame(File f1, File f2) throws IOException {
