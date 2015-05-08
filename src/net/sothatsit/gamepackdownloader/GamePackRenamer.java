@@ -32,8 +32,8 @@ public class GamePackRenamer extends ConverterHelper {
 
         BasicYAML yaml = BasicYAML.getFile("/refactorings/" + className + ".txt");
 
-        if(yaml != null && yaml.isSet(name)) {
-            name = yaml.getValue(name);
+        if(yaml != null && yaml.isSet("field_" + name)) {
+            name = yaml.getValue("field_" + name);
             GamePackDownloader.info("Renamed field \"" + initName + "\" of class \"" + className + "\" to '" + name + '"');
         }
 
@@ -47,8 +47,8 @@ public class GamePackRenamer extends ConverterHelper {
 
         BasicYAML yaml = BasicYAML.getFile("/refactorings/" + className + ".txt");
 
-        if(yaml != null && yaml.isSet(name)) {
-            name = yaml.getValue(name);
+        if(yaml != null && yaml.isSet("method_" + name)) {
+            name = yaml.getValue("method_" + name);
             GamePackDownloader.info("Renamed method \"" + initName + "\" of class \"\" + className + \"\" to '" + name + '"');
         }
 
