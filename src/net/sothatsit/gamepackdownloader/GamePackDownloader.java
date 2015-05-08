@@ -91,7 +91,14 @@ public class GamePackDownloader {
 
         File f = new File(folder, file.getName().substring(0, file.getName().length() - 4) + " source");
 
-        if(f.exists()) {
+        if(f.exists() && f.isDirectory()) {
+            info("Deleting previous source code to avoid conflicts");
+            for(File subFile : f.listFiles()) {
+                subFile.delete();
+            }
+            f.delete();
+        } else if(f.exists()) {
+            info("Deleting previous source code to avoid conflicts");
             f.delete();
         }
 
