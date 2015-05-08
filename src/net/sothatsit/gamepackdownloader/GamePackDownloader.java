@@ -77,16 +77,17 @@ public class GamePackDownloader {
 
             System.arraycopy(args, 2, arguments, 0, args.length - 2);
 
-            File latestGamepack = new File(folder, "gamepack " + getLatestVersion(folder) + ".jar");
-
-            decompileFile(folder, latestGamepack, arguments);
+            decompileFile(folder, arguments);
         }
 
         exit();
     }
 
-    public static void decompileFile(File folder, File file, String[] args) {
-        info("Decompiling source using fernflower");
+    public static void decompileFile(File folder, String[] args) {
+        int latest = getLatestVersion(folder);
+        File file = new File(folder, "gamepack " + latest + ".jar");
+
+        info("Decompiling Gamepack " + latest + " using fernflower");
 
         File f = new File(folder, file.getName().substring(0, file.getName().length() - 4) + " source");
 
