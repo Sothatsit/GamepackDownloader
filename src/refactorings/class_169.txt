@@ -1,1 +1,3 @@
 class-name: Main
+method_op: load
+method_ox: onValidDomain
