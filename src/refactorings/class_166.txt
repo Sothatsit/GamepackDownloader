@@ -273,4 +273,4 @@ field_field_Messages_Ljava_lang_String__271: type
 field_field_Messages_Ljava_lang_String__76: off
 field_field_Messages_Ljava_lang_String__63: full
 field_field_Messages_Ljava_lang_String__274: loading
-field_field_Messages_Ljava_lang_String__275: clickToSwitch=
+field_field_Messages_Ljava_lang_String__275: clickToSwitch
