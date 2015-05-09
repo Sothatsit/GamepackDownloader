@@ -8,7 +8,7 @@ Options:
 
 "-d" - download from runescape.com
 
-"-s" - decompile
+"-s" - decompile latest version
 
 "-ds" - download from runescape.com and decompile if new version
 
