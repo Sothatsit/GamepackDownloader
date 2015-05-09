@@ -2,7 +2,12 @@
 Downloads the latest oldschool runescape gamepack.
 
 # Usage
-java -jar [jar-file-location] [output-directory]
+java -jar [jar-file-location] [options] [output-directory] [fernflower-options]
+
+Options:
+"-d" - download from runescape.com
+"-s" - decompile
+"-ds" - download from runescape.com and decompile if new version
 
 # Output
 The program will output files called "gamepack <version>.jar". The versions are calculated from the known versions previously downloaded.
