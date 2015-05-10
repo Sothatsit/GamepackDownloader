@@ -60,14 +60,14 @@ public class MethodDescriptor extends Descriptor {
 
     @Override
     public String getDescriptorReformatted() {
-        StringBuilder builder = new StringBuilder("a_");
+        StringBuilder builder = new StringBuilder("a");
 
         for(String str : arguments) {
             builder.append(str);
             builder.append('_');
         }
 
-        builder.append("r_");
+        builder.append("r");
         builder.append(returnType);
 
         return builder.toString();
