@@ -4,15 +4,12 @@ import net.sothatsit.gamepackdownloader.GamePackDownloader;
 import org.jetbrains.java.decompiler.modules.renamer.ConverterHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GamePackRenamer extends ConverterHelper {
 
     private List<String> takenNames = new ArrayList<>();
-    private Map<String, String> classNames = new HashMap<>();
-    private Map<String, String> yamlFiles = new HashMap<>();
+    private ClassNameStore store = new ClassNameStore();
 
     @Override
     public boolean toBeRenamed(Type elementType, String className, String element, String descriptor) {
@@ -33,33 +30,21 @@ public class GamePackRenamer extends ConverterHelper {
             GamePackDownloader.info("Renamed class \"" + initName + "\" to \'" + name + '"');
         }
 
-        if(yaml != null) {
-            yamlFiles.put(name, initName);
-        }
-
-        classNames.put(fullName, name);
+        store.registerClass(initName, name, fullName);
 
         return name;
     }
 
-    public String getClassName(String oldName) {
-        return (classNames.containsKey(oldName) ? classNames.get(oldName) : oldName);
-    }
-
-    public String getYamlFile(String newName) {
-        return (yamlFiles.containsKey(newName) ? yamlFiles.get(newName) : newName);
-    }
-
     @Override
     public String getNextFieldName(String className, String field, String descriptor) {
-        className = getClassName(className);
+        className = store.getClassName(className);
 
         final String initName = uniqueName("field", className, descriptor);
         String name = initName;
 
         GamePackDownloader.info("Field \"" + field + "\" to \"" + initName + "\", descriptor: " + descriptor);
 
-        BasicYAML yaml = BasicYAML.getFile("/refactorings/" + getYamlFile(className) + ".txt");
+        BasicYAML yaml = BasicYAML.getFile("/refactorings/" + store.getYamlFile(className) + ".txt");
 
         if(yaml != null && yaml.isSet("field_" + name)) {
             name = yaml.getValue("field_" + name);
@@ -71,14 +56,14 @@ public class GamePackRenamer extends ConverterHelper {
 
     @Override
     public String getNextMethodName(String className, String method, String descriptor) {
-        className = getClassName(className);
+        className = store.getClassName(className);
 
         final String initName = uniqueName("method", className, descriptor);
         String name = initName;
 
         GamePackDownloader.info("Method \"" + method + "\" to \"" + initName + "\", descriptor: " + descriptor);
 
-        BasicYAML yaml = BasicYAML.getFile("/refactorings/" + getYamlFile(className) + ".txt");
+        BasicYAML yaml = BasicYAML.getFile("/refactorings/" + store.getYamlFile(className) + ".txt");
 
         if(yaml != null && yaml.isSet("method_" + name)) {
             name = yaml.getValue("method_" + name);
