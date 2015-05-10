@@ -32,7 +32,7 @@ public class URLDownloader {
     }
 
     public long getProgress() throws IOException {
-        if(output == null || !output.exists()) {
+        if (output == null || !output.exists()) {
             return -1;
         }
 
@@ -51,7 +51,7 @@ public class URLDownloader {
             conn.getInputStream();
             return conn.getContentLength();
         } finally {
-            if(conn != null) {
+            if (conn != null) {
                 conn.disconnect();
             }
         }

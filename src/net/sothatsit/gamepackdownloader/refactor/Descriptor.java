@@ -41,31 +41,31 @@ public abstract class Descriptor {
     }
 
     public static String getFullName(String descriptorPart, ClassNameStore store) {
-        if(descriptorPart.length() == 0) {
+        if (descriptorPart.length() == 0) {
             return "";
         }
 
         StringBuilder append = new StringBuilder();
-        while(descriptorPart.length() > 1 && descriptorPart.charAt(0) == '[') {
+        while (descriptorPart.length() > 1 && descriptorPart.charAt(0) == '[') {
             append.append("Array");
             descriptorPart = descriptorPart.substring(1);
         }
 
-        if(descriptorPart.charAt(0) == 'L') {
-            if(descriptorPart.charAt(descriptorPart.length() - 1) != ';') {
+        if (descriptorPart.charAt(0) == 'L') {
+            if (descriptorPart.charAt(descriptorPart.length() - 1) != ';') {
                 return descriptorPart;
             }
 
             String clazz = store.getClassName(descriptorPart.substring(1, descriptorPart.length() - 1));
 
-            if(shortenedNames.containsKey(clazz)) {
+            if (shortenedNames.containsKey(clazz)) {
                 clazz = shortenedNames.get(clazz);
             }
 
             return clazz + append;
         }
 
-        if(fullNames.containsKey(descriptorPart.charAt(0))) {
+        if (fullNames.containsKey(descriptorPart.charAt(0))) {
             return fullNames.get(descriptorPart.charAt(0)) + append;
         }
 

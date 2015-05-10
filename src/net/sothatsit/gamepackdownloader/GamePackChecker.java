@@ -24,7 +24,7 @@ public class GamePackChecker {
         final List<String> gamePacks = new ArrayList<>();
         final List<GamePackCheckThread> threads = new ArrayList<>();
 
-        for(int i = 0; i < threadCount; i++) {
+        for (int i = 0; i < threadCount; i++) {
             GamePackCheckThread thread = new GamePackCheckThread(gamePacks, threads, reloadCount);
 
             synchronized (threads) {
@@ -34,7 +34,7 @@ public class GamePackChecker {
             thread.start();
         }
 
-        while(threads.size() > 0) {
+        while (threads.size() > 0) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
@@ -62,10 +62,10 @@ public class GamePackChecker {
         @Override
         public void run() {
             try {
-                for(int i = 0; i < reloadCount; i++) {
+                for (int i = 0; i < reloadCount; i++) {
                     String gamePack = getGamePack();
 
-                    if(gamePack == null) {
+                    if (gamePack == null) {
                         continue;
                     }
 
@@ -74,7 +74,7 @@ public class GamePackChecker {
 
                         log("Loaded gamePack: " + gamePack + " (duplicate ? " + duplicate + ")");
 
-                        if(!duplicate) {
+                        if (!duplicate) {
                             gamePacks.add(gamePack);
                         }
                     }
@@ -116,10 +116,10 @@ public class GamePackChecker {
 
         //info("content: " + content);
 
-        for(Split split : splits) {
+        for (Split split : splits) {
             String[] str = splitAtFirst(content, split.splitAt);
 
-            if(str.length <= split.index) {
+            if (str.length <= split.index) {
                 log("Invalid Index: " + split.index);
                 log("str.length: " + str.length);
                 log("splitAt: " + split.splitAt);
@@ -133,31 +133,31 @@ public class GamePackChecker {
     }
 
     public static String[] splitAtFirst(String subject, String splitAt) {
-        if(subject == null || subject.length() == 0) {
-            return new String[] {"", ""};
+        if (subject == null || subject.length() == 0) {
+            return new String[]{"", ""};
         }
 
-        if(splitAt == null || splitAt.length() == 0) {
-            return new String[] {subject, ""};
+        if (splitAt == null || splitAt.length() == 0) {
+            return new String[]{subject, ""};
         }
 
         char[] subjectArray = subject.toCharArray();
         char[] split = splitAt.toCharArray();
 
         StringBuilder builder = null;
-        for(int i = 0; i < subjectArray.length; i++) {
+        for (int i = 0; i < subjectArray.length; i++) {
             char c = subjectArray[i];
 
-            if(builder == null && c == split[0]) {
+            if (builder == null && c == split[0]) {
                 builder = new StringBuilder();
             }
 
-            if(builder != null) {
+            if (builder != null) {
                 builder.append(c);
 
-                if(startsWith(splitAt, builder.toString())) {
-                    if(builder.length() == splitAt.length()) {
-                        return new String[] {subject.substring(0, i - builder.length() + 1), subject.substring(i + 1)};
+                if (startsWith(splitAt, builder.toString())) {
+                    if (builder.length() == splitAt.length()) {
+                        return new String[]{subject.substring(0, i - builder.length() + 1), subject.substring(i + 1)};
                     }
                 } else {
                     builder = null;
@@ -165,18 +165,18 @@ public class GamePackChecker {
             }
         }
 
-        return new String[] {subject, ""};
+        return new String[]{subject, ""};
     }
 
     public static boolean startsWith(String subject, String start) {
-        if(subject == null || subject.length() == 0 || start == null || start.length() == 0 || start.length() > subject.length()) {
+        if (subject == null || subject.length() == 0 || start == null || start.length() == 0 || start.length() > subject.length()) {
             return false;
         }
 
         char[] c1 = subject.toCharArray();
         char[] c2 = start.toCharArray();
-        for(int i = 0; i < c2.length; i++) {
-            if(c1[i] != c2[i]) {
+        for (int i = 0; i < c2.length; i++) {
+            if (c1[i] != c2[i]) {
                 return false;
             }
         }
@@ -190,7 +190,7 @@ public class GamePackChecker {
         try {
             URLConnection conn = url.openConnection();
 
-            if(conn instanceof HttpURLConnection) {
+            if (conn instanceof HttpURLConnection) {
                 ((HttpURLConnection) conn).setInstanceFollowRedirects(false);
             }
 
@@ -208,7 +208,7 @@ public class GamePackChecker {
             return sb.toString();
 
         } finally {
-            if(rd != null) {
+            if (rd != null) {
                 rd.close();
             }
         }

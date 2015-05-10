@@ -16,10 +16,10 @@ public class MethodDescriptor extends Descriptor {
         String args;
         String ret;
 
-        if(split[1].isEmpty()) {
+        if (split[1].isEmpty()) {
             args = "";
             ret = split[0];
-        } else if(split[0].length() > 1){
+        } else if (split[0].length() > 1) {
             args = split[0].substring(1);
             ret = split[1];
         } else {
@@ -33,28 +33,28 @@ public class MethodDescriptor extends Descriptor {
 
         StringBuilder builder = null;
         StringBuilder append = null;
-        int i=0;
-        while(i < args.length()) {
+        int i = 0;
+        while (i < args.length()) {
             char c = args.charAt(i);
 
             String add = (append == null ? "" : append.toString());
 
-            if(builder != null) {
+            if (builder != null) {
                 builder.append(c);
 
-                if(c == ';') {
+                if (c == ';') {
                     arguments.add(Descriptor.getFullName(add + builder.toString(), store));
                     builder = null;
                     append = null;
                 }
             } else {
-                if(c == '[') {
-                    if(append == null) {
+                if (c == '[') {
+                    if (append == null) {
                         append = new StringBuilder();
                     }
 
                     append.append('[');
-                } else if(c == 'L') {
+                } else if (c == 'L') {
                     builder = new StringBuilder();
                     builder.append(c);
                 } else {
@@ -73,7 +73,7 @@ public class MethodDescriptor extends Descriptor {
     public String getDescriptorReformatted() {
         StringBuilder builder = new StringBuilder("a");
 
-        for(String str : arguments) {
+        for (String str : arguments) {
             builder.append(getClassName(str));
             builder.append('_');
         }
@@ -95,7 +95,7 @@ public class MethodDescriptor extends Descriptor {
     public static String getClassName(String fullName) {
         int index = fullName.lastIndexOf('/');
 
-        if(index >= 0) {
+        if (index >= 0) {
             return fullName.substring(index + 1);
         }
 

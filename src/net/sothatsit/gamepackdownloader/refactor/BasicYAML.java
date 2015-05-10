@@ -16,17 +16,17 @@ public class BasicYAML {
         this.values = new HashMap<>();
 
         BufferedReader br = null;
-        try{
+        try {
             br = new BufferedReader(new InputStreamReader(is));
 
             String line;
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 decodeLine(line);
             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if(is != null) {
+            if (is != null) {
                 try {
                     is.close();
                 } catch (IOException e) {
@@ -34,7 +34,7 @@ public class BasicYAML {
                 }
             }
 
-            if(br != null) {
+            if (br != null) {
                 try {
                     br.close();
                 } catch (IOException e) {
@@ -45,7 +45,7 @@ public class BasicYAML {
     }
 
     private void decodeLine(String line) {
-        if(!containsCharacter(line, ':')) {
+        if (!containsCharacter(line, ':')) {
             return;
         }
 
@@ -54,7 +54,7 @@ public class BasicYAML {
         split[0] = split[0].trim();
         split[1] = split[1].trim();
 
-        if(split[0].length() == 0 || split[1].length() == 0) {
+        if (split[0].length() == 0 || split[1].length() == 0) {
             return;
         }
 
@@ -74,31 +74,31 @@ public class BasicYAML {
     }
 
     public static String[] splitAtFirst(String subject, String splitAt) {
-        if(subject == null || subject.length() == 0) {
-            return new String[] {"", ""};
+        if (subject == null || subject.length() == 0) {
+            return new String[]{"", ""};
         }
 
-        if(splitAt == null || splitAt.length() == 0) {
-            return new String[] {subject, ""};
+        if (splitAt == null || splitAt.length() == 0) {
+            return new String[]{subject, ""};
         }
 
         char[] subjectArray = subject.toCharArray();
         char[] split = splitAt.toCharArray();
 
         StringBuilder builder = null;
-        for(int i = 0; i < subjectArray.length; i++) {
+        for (int i = 0; i < subjectArray.length; i++) {
             char c = subjectArray[i];
 
-            if(builder == null && c == split[0]) {
+            if (builder == null && c == split[0]) {
                 builder = new StringBuilder();
             }
 
-            if(builder != null) {
+            if (builder != null) {
                 builder.append(c);
 
-                if(startsWith(splitAt, builder.toString())) {
-                    if(builder.length() == splitAt.length()) {
-                        return new String[] {subject.substring(0, i - builder.length() + 1), subject.substring(i + 1)};
+                if (startsWith(splitAt, builder.toString())) {
+                    if (builder.length() == splitAt.length()) {
+                        return new String[]{subject.substring(0, i - builder.length() + 1), subject.substring(i + 1)};
                     }
                 } else {
                     builder = null;
@@ -106,18 +106,18 @@ public class BasicYAML {
             }
         }
 
-        return new String[] {subject, ""};
+        return new String[]{subject, ""};
     }
 
     public static boolean startsWith(String subject, String start) {
-        if(subject == null || subject.length() == 0 || start == null || start.length() == 0 || start.length() > subject.length()) {
+        if (subject == null || subject.length() == 0 || start == null || start.length() == 0 || start.length() > subject.length()) {
             return false;
         }
 
         char[] c1 = subject.toCharArray();
         char[] c2 = start.toCharArray();
-        for(int i = 0; i < c2.length; i++) {
-            if(c1[i] != c2[i]) {
+        for (int i = 0; i < c2.length; i++) {
+            if (c1[i] != c2[i]) {
                 return false;
             }
         }
@@ -126,8 +126,8 @@ public class BasicYAML {
     }
 
     public static boolean containsCharacter(String subject, char character) {
-        for(char c : subject.toCharArray()) {
-            if(c == character) {
+        for (char c : subject.toCharArray()) {
+            if (c == character) {
                 return true;
             }
         }
@@ -135,13 +135,13 @@ public class BasicYAML {
     }
 
     public static BasicYAML getFile(String resource) {
-        if(files.containsKey(resource)) {
+        if (files.containsKey(resource)) {
             return files.get(resource);
         }
 
         InputStream stream = BasicYAML.class.getResourceAsStream(resource);
 
-        if(stream == null) {
+        if (stream == null) {
             return null;
         }
 

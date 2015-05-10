@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="fernflower">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/fernflower.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

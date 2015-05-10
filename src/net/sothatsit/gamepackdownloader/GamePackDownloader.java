@@ -17,7 +17,7 @@ public class GamePackDownloader {
     }
 
     public static void run(String[] args) {
-        if(args.length < 2) {
+        if (args.length < 2) {
             log("Not enough arguments supplied");
             exit("args: [gamepack-output] [options] [fernflower-options]");
             return;
@@ -25,25 +25,25 @@ public class GamePackDownloader {
 
         File folder = new File(args[0]);
 
-        if(!folder.exists()) {
+        if (!folder.exists()) {
             exit("Supplied file does not exist");
             return;
         }
 
-        if(!folder.isDirectory()) {
+        if (!folder.isDirectory()) {
             exit("Supplied file is not a directory");
             return;
         }
 
         int latest = getLatestVersion(folder);
 
-        if(latest > 0) {
+        if (latest > 0) {
             info("Current Version: v" + latest);
         }
 
         String options = args[1];
 
-        if(options.length() < 2 || options.charAt(0) != '-') {
+        if (options.length() < 2 || options.charAt(0) != '-') {
             log("Invalid options supplied: " + options);
             exit("Valid: -<d (download) , s (decompile)>");
             return;
@@ -52,10 +52,10 @@ public class GamePackDownloader {
         boolean download = false;
         boolean decompile = false;
 
-        for(char c : options.substring(1).toCharArray()) {
-            if(c == 'd') {
+        for (char c : options.substring(1).toCharArray()) {
+            if (c == 'd') {
                 download = true;
-            } else if(c == 's') {
+            } else if (c == 's') {
                 decompile = true;
             } else {
                 exit("Unknown Argument: '" + c + '\'');
@@ -63,8 +63,8 @@ public class GamePackDownloader {
             }
         }
 
-        if(download && !downloadLatest(folder)) {
-            if(decompile) {
+        if (download && !downloadLatest(folder)) {
+            if (decompile) {
                 exit("No new versions to decompile, exiting");
             } else {
                 exit();
@@ -72,7 +72,7 @@ public class GamePackDownloader {
             return;
         }
 
-        if(decompile) {
+        if (decompile) {
             String[] arguments = new String[args.length - 2];
 
             System.arraycopy(args, 2, arguments, 0, args.length - 2);
@@ -91,10 +91,10 @@ public class GamePackDownloader {
 
         File f = new File(folder, file.getName().substring(0, file.getName().length() - 4) + " source");
 
-        if(f.exists() && f.isDirectory()) {
+        if (f.exists() && f.isDirectory()) {
             info("Deleting previous source code to avoid conflicts");
             deleteFolder(f);
-        } else if(f.exists()) {
+        } else if (f.exists()) {
             info("Deleting previous source code to avoid conflicts");
             f.delete();
         }
@@ -120,7 +120,7 @@ public class GamePackDownloader {
 
         unZipIt(source, f);
 
-        if(!source.delete()) {
+        if (!source.delete()) {
             info("Unable to delete zip archive");
         }
 
@@ -128,8 +128,8 @@ public class GamePackDownloader {
     }
 
     public static void deleteFolder(File folder) {
-        for(File subFile : folder.listFiles()) {
-            if(subFile.isDirectory()) {
+        for (File subFile : folder.listFiles()) {
+            if (subFile.isDirectory()) {
                 deleteFolder(subFile);
             }
 
@@ -154,12 +154,12 @@ public class GamePackDownloader {
             new Thread() {
                 @Override
                 public void run() {
-                    while(!downloader.isFinished()) {
+                    while (!downloader.isFinished()) {
                         try {
                             long progress = downloader.getProgress();
                             long size = downloader.getFileSize();
 
-                            if(progress < 0 || size < 0) {
+                            if (progress < 0 || size < 0) {
                                 continue;
                             }
 
@@ -192,11 +192,11 @@ public class GamePackDownloader {
             }
 
             info("Finished Downloading [" + (long) ((System.nanoTime() - start) / 1000000d) + "ms]");
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if(file != null) {
+        if (file != null) {
             info("Checking file against previous version");
 
             final long start = System.nanoTime();
@@ -213,12 +213,12 @@ public class GamePackDownloader {
 
             info("Files Checked [" + round((System.nanoTime() - start) / 1000000d, 2) + "ms]");
 
-            if(same) {
+            if (same) {
                 info("Contents of files are the same, deleting newly downloaded file");
 
                 boolean deleted = output.delete();
 
-                if(!deleted) {
+                if (!deleted) {
                     exit("Unable to delete output file");
                     return false;
                 }
@@ -227,7 +227,7 @@ public class GamePackDownloader {
                 exit("Current Version: v" + getLatestVersion(folder));
                 return false;
             } else {
-                if(output.renameTo(newFile)) {
+                if (output.renameTo(newFile)) {
                     info("output renamed from temp");
                 } else {
                     info("unable to rename output from temp");
@@ -235,7 +235,7 @@ public class GamePackDownloader {
                 }
             }
         } else {
-            if(output.renameTo(newFile)) {
+            if (output.renameTo(newFile)) {
                 info("output renamed from temp");
             } else {
                 info("unable to rename output from temp");
@@ -253,14 +253,14 @@ public class GamePackDownloader {
 
     public static int getLatestVersion(File folder) {
         File[] files;
-        if(folder == null || !folder.exists() || (files  = folder.listFiles()) == null || files.length == 0) {
+        if (folder == null || !folder.exists() || (files = folder.listFiles()) == null || files.length == 0) {
             return -1;
         }
 
         int highest = -1;
-        for(File f : files) {
+        for (File f : files) {
             int v;
-            if((v = getVersion(f.getName())) > highest) {
+            if ((v = getVersion(f.getName())) > highest) {
                 highest = v;
             }
         }
@@ -268,34 +268,34 @@ public class GamePackDownloader {
     }
 
     public static int getVersion(String fileName) {
-        if(fileName.startsWith("gamepack ") && fileName.endsWith(".jar")) {
+        if (fileName.startsWith("gamepack ") && fileName.endsWith(".jar")) {
             try {
                 String version = fileName.substring(9, fileName.length() - 4);
 
                 return Integer.valueOf(version);
-            } catch(NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 return -1;
             }
         }
         return -1;
     }
 
-    public static void unZipIt(File zipFile, File outputFolder){
+    public static void unZipIt(File zipFile, File outputFolder) {
         byte[] buffer = new byte[1024];
 
-        try{
-            if(!outputFolder.exists()){
+        try {
+            if (!outputFolder.exists()) {
                 outputFolder.mkdir();
             }
 
             ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
             ZipEntry ze = zis.getNextEntry();
 
-            while(ze != null){
+            while (ze != null) {
                 String fileName = ze.getName();
                 File newFile = new File(outputFolder + File.separator + fileName);
 
-                System.out.println("file unzip : "+ newFile.getAbsoluteFile());
+                System.out.println("file unzip : " + newFile.getAbsoluteFile());
 
                 new File(newFile.getParent()).mkdirs();
 
@@ -315,13 +315,13 @@ public class GamePackDownloader {
 
             System.out.println("Done");
 
-        }catch(IOException ex){
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
     public static boolean areContentsSame(File f1, File f2) throws IOException {
-        if(f1 == null || f2 == null || !f1.exists() || !f2.exists() || f1.length() != f2.length()) {
+        if (f1 == null || f2 == null || !f1.exists() || !f2.exists() || f1.length() != f2.length()) {
             return false;
         }
 
@@ -335,19 +335,19 @@ public class GamePackDownloader {
             byte[] data1 = new byte[1024];
             byte[] data2 = new byte[1024];
 
-            while(stream1.read(data1) != -1 && stream2.read(data2) != -1) {
-                if(!Arrays.equals(data1, data2)) {
+            while (stream1.read(data1) != -1 && stream2.read(data2) != -1) {
+                if (!Arrays.equals(data1, data2)) {
                     return false;
                 }
             }
 
             return true;
         } finally {
-            if(stream1 != null) {
+            if (stream1 != null) {
                 stream1.close();
             }
 
-            if(stream2 != null) {
+            if (stream2 != null) {
                 stream2.close();
             }
         }
@@ -362,7 +362,7 @@ public class GamePackDownloader {
     }
 
     public static void info(String log) {
-        log("[Info] "+log);
+        log("[Info] " + log);
     }
 
     public static void log(String log) {

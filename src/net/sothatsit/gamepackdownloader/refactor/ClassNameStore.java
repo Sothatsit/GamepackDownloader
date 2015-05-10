@@ -8,7 +8,7 @@ public class ClassNameStore {
     private Map<String, String> classNames;
     private Map<String, String> yamlFiles;
 
-    public  ClassNameStore() {
+    public ClassNameStore() {
         classNames = new HashMap<>();
         yamlFiles = new HashMap<>();
     }

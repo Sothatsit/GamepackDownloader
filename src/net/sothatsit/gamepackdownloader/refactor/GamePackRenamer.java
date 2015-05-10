@@ -25,7 +25,7 @@ public class GamePackRenamer extends ConverterHelper {
 
         BasicYAML yaml = BasicYAML.getFile("/refactorings/" + name + ".txt");
 
-        if(yaml != null && yaml.isSet("class-name")) {
+        if (yaml != null && yaml.isSet("class-name")) {
             name = yaml.getValue("class-name");
             GamePackDownloader.info("Renamed class \"" + initName + "\" to \"" + name + '"');
         }
@@ -48,7 +48,7 @@ public class GamePackRenamer extends ConverterHelper {
 
         BasicYAML yaml = BasicYAML.getFile("/refactorings/" + store.getYamlFile(className) + ".txt");
 
-        if(yaml != null && yaml.isSet("field_" + name)) {
+        if (yaml != null && yaml.isSet("field_" + name)) {
             name = yaml.getValue("field_" + name);
             GamePackDownloader.info("Renamed field \"" + initName + "\" of class \"" + className + "\" to \"" + name + '"');
         }
@@ -69,7 +69,7 @@ public class GamePackRenamer extends ConverterHelper {
 
         BasicYAML yaml = BasicYAML.getFile("/refactorings/" + store.getYamlFile(className) + ".txt");
 
-        if(yaml != null && yaml.isSet("method_" + name)) {
+        if (yaml != null && yaml.isSet("method_" + name)) {
             name = yaml.getValue("method_" + name);
             GamePackDownloader.info("Renamed method \"" + initName + "\" of class \"\" + className + \"\" to \"" + name + '"');
         }
@@ -85,7 +85,7 @@ public class GamePackRenamer extends ConverterHelper {
         do {
             index++;
             name = initName + "_" + index;
-        } while(takenNames.contains(name));
+        } while (takenNames.contains(name));
 
         takenNames.add(name);
 
@@ -95,14 +95,14 @@ public class GamePackRenamer extends ConverterHelper {
     public String validate(String name) {
         StringBuilder builder = new StringBuilder();
 
-        for(int i=0; i<name.length(); i++) {
+        for (int i = 0; i < name.length(); i++) {
             char c = name.charAt(i);
 
-            if(i == 0 && !Character.isJavaIdentifierStart(c)) {
+            if (i == 0 && !Character.isJavaIdentifierStart(c)) {
                 builder.append('m');
-            } else if(!Character.isJavaIdentifierPart(c)) {
+            } else if (!Character.isJavaIdentifierPart(c)) {
                 builder.append('_');
-            }else {
+            } else {
                 builder.append(c);
             }
         }
