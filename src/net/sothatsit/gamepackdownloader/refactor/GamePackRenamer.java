@@ -30,7 +30,7 @@ public class GamePackRenamer extends ConverterHelper {
             GamePackDownloader.info("Renamed class \"" + initName + "\" to \'" + name + '"');
         }
 
-        store.registerClass(initName, name, fullName);
+        store.registerClass(fullName, name, initName);
 
         return name;
     }
