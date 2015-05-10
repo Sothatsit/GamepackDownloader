@@ -37,7 +37,7 @@ public abstract class Descriptor {
         fullNames.put('U', "Unknown");
     }
 
-    public String getFullName(String descriptorPart, ClassNameStore store) {
+    public static String getFullName(String descriptorPart, ClassNameStore store) {
         if(descriptorPart.length() == 0) {
             return "";
         }
