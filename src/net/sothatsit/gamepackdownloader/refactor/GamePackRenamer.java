@@ -50,7 +50,7 @@ public class GamePackRenamer extends ConverterHelper {
 
         if(yaml != null && yaml.isSet("field_" + name)) {
             name = yaml.getValue("field_" + name);
-            GamePackDownloader.info("Renamed field \"" + initName + "\" of class \"" + className + "\" to '" + name + '"');
+            GamePackDownloader.info("Renamed field \"" + initName + "\" of class \"" + className + "\" to \"" + name + '"');
         }
 
         return name;
