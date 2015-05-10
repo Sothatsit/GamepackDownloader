@@ -32,23 +32,34 @@ public class MethodDescriptor extends Descriptor {
         List<String> arguments = new ArrayList<>();
 
         StringBuilder builder = null;
+        StringBuilder append = null;
         int i=0;
         while(i < args.length()) {
             char c = args.charAt(i);
+
+            String add = (append == null ? "" : append.toString());
 
             if(builder != null) {
                 builder.append(c);
 
                 if(c == ';') {
-                    arguments.add(Descriptor.getFullName(builder.toString(), store));
+                    arguments.add(Descriptor.getFullName(add + builder.toString(), store));
                     builder = null;
+                    append = null;
                 }
             } else {
-                if(c == 'L') {
+                if(c == '[') {
+                    if(append == null) {
+                        append = new StringBuilder();
+                    }
+
+                    append.append('[');
+                } else if(c == 'L') {
                     builder = new StringBuilder();
                     builder.append(c);
                 } else {
-                    arguments.add(Descriptor.getFullName(Character.toString(c), store));
+                    arguments.add(Descriptor.getFullName(add + Character.toString(c), store));
+                    append = null;
                 }
             }
 
