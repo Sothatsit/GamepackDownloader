@@ -36,13 +36,15 @@ public class GamePackRenamer extends ConverterHelper {
     }
 
     @Override
-    public String getNextFieldName(String className, String field, String descriptor) {
+    public String getNextFieldName(String className, String field, String descriptorStr) {
         className = store.getClassName(className);
 
-        final String initName = uniqueName("field", className, descriptor);
+        FieldDescriptor descriptor = new FieldDescriptor(descriptorStr, store);
+
+        final String initName = uniqueName("field", className, descriptor.getType());
         String name = initName;
 
-        GamePackDownloader.info("Field \"" + field + "\" to \"" + initName + "\", descriptor: " + descriptor);
+        GamePackDownloader.info("Field \"" + field + "\" to \"" + initName + "\", descriptor: " + descriptor.getType());
 
         BasicYAML yaml = BasicYAML.getFile("/refactorings/" + store.getYamlFile(className) + ".txt");
 
