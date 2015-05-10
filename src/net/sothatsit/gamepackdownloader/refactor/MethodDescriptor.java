@@ -70,7 +70,7 @@ public class MethodDescriptor extends Descriptor {
         builder.append("r_");
         builder.append(returnType);
 
-        return null;
+        return builder.toString();
     }
 
     public String getReturnType() {
