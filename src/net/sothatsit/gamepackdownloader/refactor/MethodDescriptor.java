@@ -74,7 +74,7 @@ public class MethodDescriptor extends Descriptor {
         StringBuilder builder = new StringBuilder("a");
 
         for(String str : arguments) {
-            builder.append(str);
+            builder.append(getClassName(str));
             builder.append('_');
         }
 
@@ -90,6 +90,16 @@ public class MethodDescriptor extends Descriptor {
 
     public String[] getArguments() {
         return arguments;
+    }
+
+    public static String getClassName(String fullName) {
+        int index = fullName.lastIndexOf('/');
+
+        if(index >= 0) {
+            return fullName.substring(index + 1);
+        }
+
+        return fullName;
     }
 
 }
