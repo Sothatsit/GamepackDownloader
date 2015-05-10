@@ -41,7 +41,7 @@ public class GamePackRenamer extends ConverterHelper {
 
         FieldDescriptor descriptor = new FieldDescriptor(descriptorStr, store);
 
-        final String initName = uniqueName("field", className, descriptor.getType());
+        final String initName = uniqueName("f", className, descriptor.getType());
         String name = initName;
 
         GamePackDownloader.info("Field \"" + field + "\" to \"" + initName + "\", descriptor: " + descriptorStr);
@@ -60,7 +60,7 @@ public class GamePackRenamer extends ConverterHelper {
     public String getNextMethodName(String className, String method, String descriptor) {
         className = store.getClassName(className);
 
-        final String initName = uniqueName("method", className, descriptor);
+        final String initName = uniqueName("m", className, descriptor);
         String name = initName;
 
         GamePackDownloader.info("Method \"" + method + "\" to \"" + initName + "\", descriptor: " + descriptor);
