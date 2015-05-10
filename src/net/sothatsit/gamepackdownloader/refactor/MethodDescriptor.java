@@ -74,7 +74,6 @@ public class MethodDescriptor extends Descriptor {
         StringBuilder builder = new StringBuilder("a");
 
         for(String str : arguments) {
-            builder.append('_');
             builder.append(str);
             builder.append('_');
         }
