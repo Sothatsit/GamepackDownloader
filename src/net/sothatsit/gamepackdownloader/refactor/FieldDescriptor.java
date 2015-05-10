@@ -12,7 +12,7 @@ public class FieldDescriptor extends Descriptor {
 
     @Override
     public String getDescriptorReformatted() {
-        return null;
+        return type;
     }
 
     public String getType() {
