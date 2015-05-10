@@ -53,7 +53,7 @@ public abstract class Descriptor {
                 return descriptorPart;
             }
 
-            String clazz = store.getClassName(descriptorPart.substring(1, descriptorPart.length() - 2));
+            String clazz = store.getClassName(descriptorPart.substring(1, descriptorPart.length() - 1));
 
             return clazz + append;
         }
