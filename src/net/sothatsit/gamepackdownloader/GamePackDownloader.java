@@ -151,6 +151,10 @@ public class GamePackDownloader {
         File newFile = new File(folder, "gamepack " + (latest < 0 ? 1 : latest + 1) + ".jar");
         File output = new File(folder, "gamepack temp.jar");
 
+        if(output.exists() && output.delete()) {
+            info("Deleted gamepack temp");
+        }
+
         try {
             URL url = new URL(getGamepackUrl());
 
