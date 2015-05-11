@@ -19,7 +19,7 @@ public class GamePackChecker {
     };
 
     public static void check(int threadCount, int reloadCount) {
-        log("GamePack Checker Started");
+        GamePackDownloader.info("GamePack Checker Started");
 
         final List<String> gamePacks = new ArrayList<>();
         final List<GamePackCheckThread> threads = new ArrayList<>();
@@ -42,7 +42,7 @@ public class GamePackChecker {
             }
         }
 
-        log("Loaded " + gamePacks.size() + " unique GamePacks");
+        GamePackDownloader.info("Loaded " + gamePacks.size() + " unique GamePacks");
     }
 
     public static class GamePackCheckThread extends Thread {
@@ -70,7 +70,7 @@ public class GamePackChecker {
                     synchronized (gamePacks) {
                         boolean duplicate = gamePacks.contains(gamePack);
 
-                        log("Loaded gamePack: " + gamePack + " (duplicate ? " + duplicate + ")");
+                        GamePackDownloader.info("Loaded gamePack: " + gamePack + " (duplicate ? " + duplicate + ")");
 
                         if (!duplicate) {
                             gamePacks.add(gamePack);
@@ -91,26 +91,26 @@ public class GamePackChecker {
         try {
             url = new URL(GAME_URL);
         } catch (MalformedURLException e) {
-            log("URL Malformed: \"" + GAME_URL + "\"");
+            GamePackDownloader.info("URL Malformed: \"" + GAME_URL + "\"");
             e.printStackTrace();
             exit();
             return null;
         }
 
-        log("Downloading web page content...");
+        GamePackDownloader.info("Downloading web page content...");
 
         long start = System.nanoTime();
         String content;
         try {
             content = getContent(url);
         } catch (IOException e) {
-            log("Error getting content of web page: \"" + GAME_URL + "\"");
+            GamePackDownloader.info("Error getting content of web page: \"" + GAME_URL + "\"");
             e.printStackTrace();
             exit();
             return null;
         }
 
-        log("Recieved web page content [" + (long) ((System.nanoTime() - start) / 1000000d) + "ms]");
+        GamePackDownloader.info("Recieved web page content [" + (long) ((System.nanoTime() - start) / 1000000d) + "ms]");
 
         //info("content: " + content);
 
@@ -118,14 +118,16 @@ public class GamePackChecker {
             String[] str = splitAtFirst(content, split.splitAt);
 
             if (str.length <= split.index) {
-                log("Invalid Index: " + split.index);
-                log("str.length: " + str.length);
-                log("splitAt: " + split.splitAt);
+                GamePackDownloader.info("Invalid Index: " + split.index);
+                GamePackDownloader.info("str.length: " + str.length);
+                GamePackDownloader.info("splitAt: " + split.splitAt);
                 continue;
             }
 
             content = str[split.index];
         }
+
+        GamePackDownloader.info("Loaded gamepack archive: " + content);
 
         return content;
     }
@@ -220,10 +222,6 @@ public class GamePackChecker {
             this.splitAt = splitAt;
             this.index = index;
         }
-    }
-
-    public static void log(String log) {
-        System.out.println(log);
     }
 
     public static void exit() {
