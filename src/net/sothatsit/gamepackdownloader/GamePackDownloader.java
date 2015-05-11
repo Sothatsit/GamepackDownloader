@@ -233,7 +233,7 @@ public class GamePackDownloader {
                     return false;
                 }
 
-                log("output deleted");
+                info("output deleted");
                 exit("Current Version: v" + getLatestVersion(folder));
                 return false;
             } else {
