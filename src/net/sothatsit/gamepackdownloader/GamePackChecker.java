@@ -43,8 +43,6 @@ public class GamePackChecker {
         }
 
         log("Loaded " + gamePacks.size() + " unique GamePacks");
-
-        exit();
     }
 
     public static class GamePackCheckThread extends Thread {
