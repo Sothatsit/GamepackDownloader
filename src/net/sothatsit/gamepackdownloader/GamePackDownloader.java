@@ -10,10 +10,16 @@ import java.util.zip.ZipInputStream;
 
 public class GamePackDownloader {
 
-    public static final String GAMEPACK_URL = "http://oldschool1.runescape.com/gamepack.jar";
+    public static final String GAMEPACK_URL = "http://oldschool1.runescape.com/gamepack_%archive%.jar";
+    public static final String REPLACE = "%archive%";
 
     public static void main(String[] args) {
         run(args);
+    }
+
+    public static String getGamepackUrl() {
+        String archive = GamePackChecker.getGamePack();
+        return archive == null ? "" : GAMEPACK_URL.replace(REPLACE, archive);
     }
 
     public static void run(String[] args) {
@@ -146,7 +152,7 @@ public class GamePackDownloader {
         File output = new File(folder, "gamepack temp.jar");
 
         try {
-            URL url = new URL(GAMEPACK_URL);
+            URL url = new URL(getGamepackUrl());
 
             final URLDownloader downloader = new URLDownloader(url, output);
             final long start = System.nanoTime();
