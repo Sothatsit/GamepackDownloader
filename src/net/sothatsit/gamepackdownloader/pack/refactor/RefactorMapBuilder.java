@@ -67,6 +67,8 @@ public class RefactorMapBuilder {
             }
         });
 
+        map.fixDuplicates();
+
         return map;
     }
 
