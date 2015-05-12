@@ -199,4 +199,7 @@ public class RefactorMap {
         }
     }
 
+    public static RefactorMapBuilder builder(IClassRenamer classRenamer, IFieldRenamer fieldRenamer, IMethodRenamer methodRenamer) {
+        return new RefactorMapBuilder(classRenamer, fieldRenamer, methodRenamer);
+    }
 }
