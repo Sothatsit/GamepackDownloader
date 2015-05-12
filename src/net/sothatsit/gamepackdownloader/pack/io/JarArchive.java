@@ -50,7 +50,11 @@ public class JarArchive {
                 if(!entry.isDirectory() && loader.shouldLoad(jarFile, entry)) {
                     byte[] data = new byte[(int) size];
 
-                    zip.read(data, offset, (int) size);
+                    int read = zip.read(data, offset, (int) size);
+
+                    if(read < 0) {
+                        break;
+                    }
 
                     loader.onLoad(jarFile, entry, data);
                 }
