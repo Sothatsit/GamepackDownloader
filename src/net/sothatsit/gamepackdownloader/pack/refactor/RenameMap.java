@@ -1,4 +1,4 @@
-package net.sothatsit.gamepackdownloader.bytecode;
+package net.sothatsit.gamepackdownloader.pack.refactor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
