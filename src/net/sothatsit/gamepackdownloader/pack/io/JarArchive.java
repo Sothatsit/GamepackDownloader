@@ -2,6 +2,7 @@ package net.sothatsit.gamepackdownloader.pack.io;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 public class JarArchive {
 
@@ -64,6 +66,49 @@ public class JarArchive {
         } finally {
             if(fis != null) {
                 fis.close();
+            }
+
+            if(zip != null) {
+                zip.close();
+            }
+        }
+    }
+
+    public void editArchive(final ArchiveEditor editor) throws IOException {
+        FileOutputStream fos = null;
+        ZipOutputStream zip = null;
+        try {
+            String path = jarFile.getAbsolutePath();
+            int lastIndex = path.lastIndexOf('.');
+
+            String name = path.substring(0, lastIndex - 1) + " temp" + path.substring(lastIndex);
+
+            fos = new FileOutputStream(new File(name));
+            zip = new ZipOutputStream(fos);
+            final ZipOutputStream stream = zip;
+
+            ArchiveLoader loader = new ArchiveLoader() {
+                @Override
+                public boolean shouldLoad(File file, ZipEntry entry) throws IOException {
+                    return true;
+                }
+
+                @Override
+                public void onLoad(File file, ZipEntry entry, byte[] data) throws IOException {
+                    if(editor.shouldEdit(file, entry)) {
+                        data = editor.edit(file, entry, data);
+                    }
+
+                    ZipEntry newEntry = new ZipEntry(entry.getName());
+                    stream.putNextEntry(newEntry);
+                    stream.write(data);
+                }
+            };
+
+            loadArchive(loader);
+        } finally {
+            if(fos != null) {
+                fos.close();
             }
 
             if(zip != null) {
