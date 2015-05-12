@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RenameMap {
+public class RefactorMap {
 
     private List<RenameClass> classes;
 
-    public RenameMap() {
+    public RefactorMap() {
         this.classes = new ArrayList<>();
     }
 
