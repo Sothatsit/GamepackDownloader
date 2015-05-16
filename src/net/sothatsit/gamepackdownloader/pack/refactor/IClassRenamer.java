@@ -2,6 +2,6 @@ package net.sothatsit.gamepackdownloader.pack.refactor;
 
 public interface IClassRenamer {
 
-    public String getNewName(String oldName, String[] interfaces, String superClass);
+    public String getNewName(int version, int access, String name, String signature, String superName, String[] interfaces);
 
 }
