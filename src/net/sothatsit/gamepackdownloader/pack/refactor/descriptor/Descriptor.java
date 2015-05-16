@@ -18,7 +18,6 @@ public abstract class Descriptor {
     public abstract String getDescriptorReformatted();
 
     public static final Map<Character, String> fullNames = new HashMap<>();
-    public static final Map<String, String> shortenedNames = new HashMap<>();
 
     static {
         fullNames.put('B', "Byte");
@@ -36,8 +35,6 @@ public abstract class Descriptor {
         fullNames.put('X', "ByteChar");
         fullNames.put('Y', "ShortChar");
         fullNames.put('U', "Unknown");
-
-        shortenedNames.put("java/lang/String", "String");
     }
 
     public static String getFullName(String descriptorPart, ClassNameSupplier supplier) {
@@ -58,10 +55,6 @@ public abstract class Descriptor {
 
             String baseName = descriptorPart.substring(1, descriptorPart.length() - 1);
             String clazz = (supplier == null ? baseName : supplier.getClassName(baseName));
-
-            if (shortenedNames.containsKey(clazz)) {
-                clazz = shortenedNames.get(clazz);
-            }
 
             return clazz + append;
         }
