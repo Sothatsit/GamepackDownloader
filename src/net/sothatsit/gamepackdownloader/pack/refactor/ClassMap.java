@@ -152,6 +152,20 @@ public class ClassMap {
             return classes;
         }
 
+        public boolean isImplementing(String clazz) {
+            return name.equals(clazz) || contains(interfaces, clazz);
+        }
+
+        public List<MapClass> getImplementingClasses() {
+            List<MapClass> classes = new ArrayList<>();
+            for(MapClass clazz : classes) {
+                if(clazz.isImplementing(name)) {
+                    classes.add(clazz);
+                }
+            }
+            return classes;
+        }
+
     }
 
     public class MapMethod {
@@ -332,6 +346,19 @@ public class ClassMap {
         });
 
         return map;
+    }
+
+    private static boolean contains(String[] array, String str) {
+        if(str == null || array.length == 0) {
+            return false;
+        }
+
+        for(String s : array) {
+            if(s != null && s.equalsIgnoreCase(str)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
