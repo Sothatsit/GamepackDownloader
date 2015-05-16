@@ -76,9 +76,13 @@ public abstract class Descriptor {
         return fullName.substring(index + 1);
     }
 
-    public static Class<?> getClass(String fullName) throws ClassNotFoundException {
+    public static Class<?> getClass(String fullName) {
         fullName = fullName.replace('/', '.');
 
-        return Class.forName(fullName);
+        try {
+            return Class.forName(fullName);
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
     }
 }
