@@ -3,6 +3,8 @@ package net.sothatsit.gamepackdownloader.pack.refactor;
 import jdk.internal.org.objectweb.asm.*;
 import net.sothatsit.gamepackdownloader.pack.io.ArchiveLoader;
 import net.sothatsit.gamepackdownloader.pack.io.JarArchive;
+import net.sothatsit.gamepackdownloader.pack.refactor.descriptor.FieldDescriptor;
+import net.sothatsit.gamepackdownloader.pack.refactor.descriptor.MethodDescriptor;
 
 import java.io.File;
 import java.io.IOException;
@@ -136,6 +138,20 @@ public class ClassMap {
             return null;
         }
 
+        public MapClass getSuperClass() {
+            return getMapClass(superName);
+        }
+
+        public MapClass[] getInterfaceClasses() {
+            MapClass[] classes = new MapClass[interfaces.length];
+
+            for(int i=0; i<interfaces.length; i++) {
+                classes[i] = getMapClass(interfaces[i]);
+            }
+
+            return classes;
+        }
+
     }
 
     public class MapMethod {
@@ -170,6 +186,36 @@ public class ClassMap {
 
         public String getDesc() {
             return desc;
+        }
+
+        public String getReturnType() {
+            MethodDescriptor descriptor = new MethodDescriptor(desc, null);
+
+            return descriptor.getReturnType();
+        }
+
+        public MapClass getReturnClass() {
+            MethodDescriptor descriptor = new MethodDescriptor(desc, null);
+
+            return getMapClass(descriptor.getReturnType());
+        }
+
+        public String[] getArguments() {
+            MethodDescriptor descriptor = new MethodDescriptor(desc, null);
+
+            return descriptor.getArguments();
+        }
+
+        public MapClass[] getArgumentClasses() {
+            MethodDescriptor descriptor = new MethodDescriptor(desc, null);
+
+            MapClass[] classes = new MapClass[descriptor.getArguments().length];
+
+            for(int i=0; i < descriptor.getArguments().length; i++) {
+                classes[i] = getMapClass(descriptor.getArguments()[i]);
+            }
+
+            return classes;
         }
 
         public String getSignature() {
@@ -213,6 +259,18 @@ public class ClassMap {
 
         public String getDesc() {
             return desc;
+        }
+
+
+        public String getType() {
+            FieldDescriptor descriptor = new FieldDescriptor(desc, null);
+
+            return descriptor.getType();
+        }
+        public MapClass getTypeClass() {
+            FieldDescriptor descriptor = new FieldDescriptor(desc, null);
+
+            return getMapClass(descriptor.getType());
         }
 
         public String getSignature() {
