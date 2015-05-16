@@ -13,7 +13,11 @@ public class RefactorMap {
         this.classes = new ArrayList<>();
     }
 
-    private RenameClass getRenameClass(String oldName) {
+    public List<RenameClass> getRenameClasses() {
+        return classes;
+    }
+
+    public RenameClass getRenameClass(String oldName) {
         for(RenameClass clazz : classes) {
             if(clazz.getOldName().equals(oldName)) {
                 return clazz;
@@ -106,6 +110,14 @@ public class RefactorMap {
             this.newName = null;
             this.fieldNames = new HashMap<>();
             this.methodNames = new HashMap<>();
+        }
+
+        public Map<String, String> getFieldNames() {
+            return fieldNames;
+        }
+
+        public Map<String, String> getMethodNames() {
+            return methodNames;
         }
 
         public String getOldName() {
