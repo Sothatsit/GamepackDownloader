@@ -20,20 +20,20 @@ public abstract class Descriptor {
     public static final Map<Character, String> fullNames = new HashMap<>();
 
     static {
-        fullNames.put('B', "Byte");
-        fullNames.put('C', "Char");
-        fullNames.put('D', "Double");
-        fullNames.put('F', "Float");
-        fullNames.put('I', "Int");
-        fullNames.put('J', "Long");
-        fullNames.put('S', "Short");
-        fullNames.put('Z', "Boolean");
-        fullNames.put('V', "Void");
+        fullNames.put('B', "java/lang/Byte");
+        fullNames.put('C', "java/lang/Char");
+        fullNames.put('D', "java/lang/Double");
+        fullNames.put('F', "java/lang/Float");
+        fullNames.put('I', "java/lang/Integer");
+        fullNames.put('J', "java/lang/Long");
+        fullNames.put('S', "java/lang/Short");
+        fullNames.put('Z', "java/lang/Boolean");
+        fullNames.put('V', "java/lang/Void");
         fullNames.put('G', "Group2Empty");
         fullNames.put('N', "NotInitialized");
         fullNames.put('A', "Address");
         fullNames.put('X', "ByteChar");
-        fullNames.put('Y', "ShortChar");
+        fullNames.put('Y', "java/lang/Character");
         fullNames.put('U', "Unknown");
     }
 
@@ -64,5 +64,15 @@ public abstract class Descriptor {
         }
 
         return descriptorPart + append;
+    }
+
+    public static String getShortName(String fullName) {
+        int index = fullName.lastIndexOf('/');
+
+        if(index < 0 || index >= fullName.length() - 1) {
+            return fullName;
+        }
+
+        return fullName.substring(index + 1);
     }
 }
