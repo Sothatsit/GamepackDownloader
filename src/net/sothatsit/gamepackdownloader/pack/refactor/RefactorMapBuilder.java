@@ -1,5 +1,6 @@
 package net.sothatsit.gamepackdownloader.pack.refactor;
 
+import net.sothatsit.gamepackdownloader.GamePackDownloader;
 import net.sothatsit.gamepackdownloader.pack.io.JarArchive;
 import net.sothatsit.gamepackdownloader.pack.refactor.descriptor.Descriptor;
 
@@ -32,6 +33,8 @@ public class RefactorMapBuilder {
             if(refactored.equals(clazz.getName())) {
                 continue;
             }
+
+            GamePackDownloader.info("Refactored class \"" + clazz.getName() + "\" to \"" + refactored + "\"");
 
             map.setClassName(clazz.getName(), refactored);
         }
@@ -72,6 +75,8 @@ public class RefactorMapBuilder {
                 if(refactored.equals(field.getName())) {
                     continue;
                 }
+
+                GamePackDownloader.info("Refactored field \"" + field.getName() + "\" of class \"" + className + "\" to \"" + refactored + "\"");
 
                 map.setFieldName(clazz.getName(), field.getName(), refactored);
             }
@@ -129,6 +134,8 @@ public class RefactorMapBuilder {
                 if(refactored.equals(method.getName())) {
                     continue;
                 }
+
+                GamePackDownloader.info("Refactored method \"" + method.getName() + "\" of class \"" + className + "\" to \"" + refactored + "\"");
 
                 map.setMethodName(className, method.getName(), refactored);
             }
