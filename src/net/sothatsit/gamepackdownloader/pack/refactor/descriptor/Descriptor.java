@@ -56,7 +56,8 @@ public abstract class Descriptor {
                 return descriptorPart;
             }
 
-            String clazz = supplier.getClassName(descriptorPart.substring(1, descriptorPart.length() - 1));
+            String baseName = descriptorPart.substring(1, descriptorPart.length() - 1);
+            String clazz = (supplier == null ? baseName : supplier.getClassName(baseName));
 
             if (shortenedNames.containsKey(clazz)) {
                 clazz = shortenedNames.get(clazz);
