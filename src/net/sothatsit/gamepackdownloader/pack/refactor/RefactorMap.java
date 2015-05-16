@@ -95,7 +95,7 @@ public class RefactorMap {
         }
     }
 
-    private class RenameClass {
+    public class RenameClass {
         private String oldName;
         private String newName;
         private Map<String, String> fieldNames;
