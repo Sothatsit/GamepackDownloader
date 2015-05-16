@@ -105,7 +105,7 @@ public class ClassMap {
                 fields.remove(existing);
             }
 
-            this.fields.add(new MapField(access, name, desc, signature, value));
+            this.fields.add(new MapField(this, access, name, desc, signature, value));
         }
 
         public void registerMethod(int access, String name, String desc, String signature, String[] exceptions) {
@@ -115,7 +115,7 @@ public class ClassMap {
                 methods.remove(existing);
             }
 
-            this.methods.add(new MapMethod(access, name, desc, signature, exceptions));
+            this.methods.add(new MapMethod(this, access, name, desc, signature, exceptions));
         }
 
         public MapField getField(String name) {
@@ -140,18 +140,24 @@ public class ClassMap {
 
     public class MapMethod {
 
+        private MapClass clazz;
         private int access;
         private String name;
         private String desc;
         private String signature;
         private String[] exceptions;
 
-        public MapMethod(int access, String name, String desc, String signature, String[] exceptions) {
+        public MapMethod(MapClass clazz, int access, String name, String desc, String signature, String[] exceptions) {
+            this.clazz = clazz;
             this.access = access;
             this.name = name;
             this.desc = desc;
             this.signature = signature;
             this.exceptions = exceptions;
+        }
+
+        public MapClass getClazz() {
+            return clazz;
         }
 
         public int getAccess() {
@@ -178,18 +184,23 @@ public class ClassMap {
 
     public class MapField {
 
+        private MapClass clazz;
         private int access;
         private String name;
         private String desc;
         private String signature;
         private Object value;
 
-        public MapField(int access, String name, String desc, String signature, Object value) {
+        public MapField(MapClass clazz, int access, String name, String desc, String signature, Object value) {
             this.access = access;
             this.name = name;
             this.desc = desc;
             this.signature = signature;
             this.value = value;
+        }
+
+        public MapClass getClazz() {
+            return clazz;
         }
 
         public int getAccess() {
