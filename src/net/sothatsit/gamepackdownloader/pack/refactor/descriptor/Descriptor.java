@@ -1,7 +1,5 @@
 package net.sothatsit.gamepackdownloader.pack.refactor.descriptor;
 
-import net.sothatsit.gamepackdownloader.refactor.ClassNameStore;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,7 +40,7 @@ public abstract class Descriptor {
         shortenedNames.put("java/lang/String", "String");
     }
 
-    public static String getFullName(String descriptorPart, ClassNameStore store) {
+    public static String getFullName(String descriptorPart, ClassNameSupplier supplier) {
         if (descriptorPart.length() == 0) {
             return "";
         }
@@ -58,7 +56,7 @@ public abstract class Descriptor {
                 return descriptorPart;
             }
 
-            String clazz = store.getClassName(descriptorPart.substring(1, descriptorPart.length() - 1));
+            String clazz = supplier.getClassName(descriptorPart.substring(1, descriptorPart.length() - 1));
 
             if (shortenedNames.containsKey(clazz)) {
                 clazz = shortenedNames.get(clazz);

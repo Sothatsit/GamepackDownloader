@@ -1,15 +1,13 @@
 package net.sothatsit.gamepackdownloader.pack.refactor.descriptor;
 
-import net.sothatsit.gamepackdownloader.refactor.ClassNameStore;
-
 public class FieldDescriptor extends Descriptor {
 
     private String type;
 
-    public FieldDescriptor(String descriptorRaw, ClassNameStore store) {
+    public FieldDescriptor(String descriptorRaw, ClassNameSupplier supplier) {
         super(descriptorRaw);
 
-        this.type = Descriptor.getFullName(descriptorRaw, store);
+        this.type = Descriptor.getFullName(descriptorRaw, supplier);
     }
 
     @Override

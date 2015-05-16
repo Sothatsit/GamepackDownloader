@@ -1,9 +1,6 @@
 package net.sothatsit.gamepackdownloader.pack.refactor.descriptor;
 
 import net.sothatsit.gamepackdownloader.refactor.BasicYAML;
-import net.sothatsit.gamepackdownloader.refactor.ClassNameStore;
-import net.sothatsit.gamepackdownloader.refactor.Descriptor;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +9,7 @@ public class MethodDescriptor extends net.sothatsit.gamepackdownloader.refactor.
     private String[] arguments;
     private String returnType;
 
-    public MethodDescriptor(String descriptorRaw, ClassNameStore store) {
+    public MethodDescriptor(String descriptorRaw, ClassNameSupplier supplier) {
         super(descriptorRaw);
 
         String[] split = BasicYAML.splitAtFirst(descriptorRaw, ")");
@@ -31,7 +28,7 @@ public class MethodDescriptor extends net.sothatsit.gamepackdownloader.refactor.
             ret = split[1];
         }
 
-        this.returnType = net.sothatsit.gamepackdownloader.refactor.Descriptor.getFullName(ret, store);
+        this.returnType = Descriptor.getFullName(ret, supplier);
 
         List<String> arguments = new ArrayList<>();
 
@@ -47,7 +44,7 @@ public class MethodDescriptor extends net.sothatsit.gamepackdownloader.refactor.
                 builder.append(c);
 
                 if (c == ';') {
-                    arguments.add(net.sothatsit.gamepackdownloader.refactor.Descriptor.getFullName(add + builder.toString(), store));
+                    arguments.add(Descriptor.getFullName(add + builder.toString(), supplier));
                     builder = null;
                     append = null;
                 }
@@ -62,7 +59,7 @@ public class MethodDescriptor extends net.sothatsit.gamepackdownloader.refactor.
                     builder = new StringBuilder();
                     builder.append(c);
                 } else {
-                    arguments.add(Descriptor.getFullName(add + Character.toString(c), store));
+                    arguments.add(Descriptor.getFullName(add + Character.toString(c), supplier));
                     append = null;
                 }
             }
