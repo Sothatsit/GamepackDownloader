@@ -2,6 +2,7 @@ package net.sothatsit.gamepackdownloader.refactor.asm;
 
 import jdk.internal.org.objectweb.asm.ClassReader;
 import jdk.internal.org.objectweb.asm.ClassWriter;
+import net.sothatsit.gamepackdownloader.GamePackDownloader;
 import net.sothatsit.gamepackdownloader.io.ArchiveEditor;
 import net.sothatsit.gamepackdownloader.io.JarArchive;
 import net.sothatsit.gamepackdownloader.refactor.IClassRenamer;
@@ -22,6 +23,7 @@ public class JarRefactorer {
     }
 
     public static void refactor(final JarArchive archive, final RefactorMap refactorMap) throws IOException {
+        GamePackDownloader.info("Refactoring Jar File \"" + archive.getJarFile().getAbsolutePath() + "\"");
         archive.editArchive(new ArchiveEditor() {
             @Override
             public boolean shouldEdit(File file, ZipEntry entry) throws IOException {
@@ -30,6 +32,7 @@ public class JarRefactorer {
 
             @Override
             public byte[] edit(File file, ZipEntry entry, byte[] data) throws IOException {
+                GamePackDownloader.info("Refactoring \"" + entry.getName() + "\"");
                 return refactor(data, refactorMap);
             }
         });
