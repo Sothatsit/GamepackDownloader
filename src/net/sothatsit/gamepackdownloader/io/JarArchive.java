@@ -1,7 +1,6 @@
 package net.sothatsit.gamepackdownloader.io;
 
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
-import net.sothatsit.gamepackdownloader.GamePackDownloader;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -66,8 +65,6 @@ public class JarArchive {
     }
 
     public void editArchive(final ArchiveEditor editor) throws IOException {
-        GamePackDownloader.info("Editing archive \"" + jarFile.getAbsolutePath() + "\"");
-
         FileOutputStream fos = null;
         ZipOutputStream zip = null;
         try {
@@ -88,8 +85,6 @@ public class JarArchive {
 
                 @Override
                 public void onLoad(File file, ZipEntry entry, byte[] data) throws IOException {
-                    GamePackDownloader.info("Editing entry \"" + entry.getName() + "\"");
-
                     if(editor.shouldEdit(file, entry)) {
                         data = editor.edit(file, entry, data);
                     }
