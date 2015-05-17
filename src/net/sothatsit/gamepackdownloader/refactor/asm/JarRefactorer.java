@@ -48,7 +48,7 @@ public class JarRefactorer {
         ClassRefactorer refactorer = new ClassRefactorer(writer, refactorMap);
         reader.accept(refactorer, 0);
 
-        return new ArchiveEdit(className, writer.toByteArray());
+        return new ArchiveEdit(className + ".class", writer.toByteArray());
     }
 
 }
