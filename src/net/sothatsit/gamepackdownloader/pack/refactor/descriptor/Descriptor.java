@@ -17,6 +17,8 @@ public abstract class Descriptor {
 
     public abstract String getDescriptorReformatted();
 
+    public abstract String getWorkingDescriptor();
+
     public static final Map<Character, String> fullNames = new HashMap<>();
 
     static {
