@@ -322,7 +322,7 @@ public class ClassMap {
 
             @Override
             public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-                map.getMapClass(className).registerField(access, name, desc, signature, exceptions);
+                map.getMapClass(className).registerMethod(access, name, desc, signature, exceptions);
                 return super.visitMethod(access, name, desc, signature, exceptions);
             }
 
