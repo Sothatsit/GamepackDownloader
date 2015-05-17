@@ -3,6 +3,7 @@ package net.sothatsit.gamepackdownloader.refactor.asm;
 import jdk.internal.org.objectweb.asm.ClassReader;
 import jdk.internal.org.objectweb.asm.ClassWriter;
 import net.sothatsit.gamepackdownloader.GamePackDownloader;
+import net.sothatsit.gamepackdownloader.io.ArchiveEdit;
 import net.sothatsit.gamepackdownloader.io.ArchiveEditor;
 import net.sothatsit.gamepackdownloader.io.JarArchive;
 import net.sothatsit.gamepackdownloader.refactor.IClassRenamer;
@@ -31,19 +32,23 @@ public class JarRefactorer {
             }
 
             @Override
-            public byte[] edit(File file, ZipEntry entry, byte[] data) throws IOException {
+            public ArchiveEdit edit(File file, ZipEntry entry, byte[] data) throws IOException {
                 GamePackDownloader.info("Refactoring \"" + entry.getName() + "\"");
                 return refactor(data, refactorMap);
             }
         });
     }
 
-    public static byte[] refactor(byte[] bytecode, RefactorMap refactorMap) {
+    public static ArchiveEdit refactor(byte[] bytecode, RefactorMap refactorMap) {
         ClassReader reader = new ClassReader(bytecode);
+
+        String className = refactorMap.getNewClassName(reader.getClassName());
+
         ClassWriter writer = new ClassWriter(reader, 0);
         ClassRefactorer refactorer = new ClassRefactorer(writer, refactorMap);
         reader.accept(refactorer, 0);
-        return writer.toByteArray();
+
+        return new ArchiveEdit(className, writer.toByteArray());
     }
 
 }
