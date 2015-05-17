@@ -1,11 +1,12 @@
 package net.sothatsit.gamepackdownloader.io;
 
 import net.sothatsit.gamepackdownloader.refactor.BaseRefactorer;
+import net.sothatsit.gamepackdownloader.refactor.descriptor.ClassNameSupplier;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class JarResourceRenamer extends BaseRefactorer {
+public class JarResourceRenamer extends BaseRefactorer implements ClassNameSupplier {
 
     private Map<String, String> oldClassToNew = new HashMap<>();
 
@@ -56,4 +57,8 @@ public class JarResourceRenamer extends BaseRefactorer {
         return origName;
     }
 
+    @Override
+    public String getClassName(String oldName) {
+        return oldClassToNew.getOrDefault(oldName, oldName);
+    }
 }
