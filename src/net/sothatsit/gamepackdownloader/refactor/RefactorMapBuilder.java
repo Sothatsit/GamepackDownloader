@@ -1,8 +1,8 @@
-package net.sothatsit.gamepackdownloader.pack.refactor;
+package net.sothatsit.gamepackdownloader.refactor;
 
 import net.sothatsit.gamepackdownloader.GamePackDownloader;
-import net.sothatsit.gamepackdownloader.pack.io.JarArchive;
-import net.sothatsit.gamepackdownloader.pack.refactor.descriptor.Descriptor;
+import net.sothatsit.gamepackdownloader.io.JarArchive;
+import net.sothatsit.gamepackdownloader.refactor.descriptor.Descriptor;
 
 import java.io.IOException;
 import java.lang.reflect.Method;

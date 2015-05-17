@@ -1,4 +1,4 @@
-package net.sothatsit.gamepackdownloader.pack.refactor;
+package net.sothatsit.gamepackdownloader.refactor;
 
 public interface IClassRenamer {
 

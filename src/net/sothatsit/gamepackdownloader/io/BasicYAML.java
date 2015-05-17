@@ -1,4 +1,4 @@
-package net.sothatsit.gamepackdownloader.refactor;
+package net.sothatsit.gamepackdownloader.io;
 
 import java.io.BufferedReader;
 import java.io.IOException;

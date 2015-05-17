@@ -1,12 +1,12 @@
-package net.sothatsit.gamepackdownloader.pack.refactor.asm;
+package net.sothatsit.gamepackdownloader.refactor.asm;
 
 import jdk.internal.org.objectweb.asm.ClassVisitor;
 import jdk.internal.org.objectweb.asm.FieldVisitor;
 import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Opcodes;
-import net.sothatsit.gamepackdownloader.pack.refactor.RefactorMap;
-import net.sothatsit.gamepackdownloader.pack.refactor.descriptor.FieldDescriptor;
-import net.sothatsit.gamepackdownloader.pack.refactor.descriptor.MethodDescriptor;
+import net.sothatsit.gamepackdownloader.refactor.RefactorMap;
+import net.sothatsit.gamepackdownloader.refactor.descriptor.FieldDescriptor;
+import net.sothatsit.gamepackdownloader.refactor.descriptor.MethodDescriptor;
 
 public class ClassRefactorer extends ClassVisitor {
 

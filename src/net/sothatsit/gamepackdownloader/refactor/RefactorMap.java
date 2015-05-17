@@ -1,6 +1,6 @@
-package net.sothatsit.gamepackdownloader.pack.refactor;
+package net.sothatsit.gamepackdownloader.refactor;
 
-import net.sothatsit.gamepackdownloader.pack.refactor.descriptor.ClassNameSupplier;
+import net.sothatsit.gamepackdownloader.refactor.descriptor.ClassNameSupplier;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,8 +1,8 @@
-package net.sothatsit.gamepackdownloader.pack.refactor;
+package net.sothatsit.gamepackdownloader.refactor;
 
-import net.sothatsit.gamepackdownloader.pack.refactor.descriptor.Descriptor;
-import net.sothatsit.gamepackdownloader.pack.refactor.descriptor.FieldDescriptor;
-import net.sothatsit.gamepackdownloader.pack.refactor.descriptor.MethodDescriptor;
+import net.sothatsit.gamepackdownloader.refactor.descriptor.Descriptor;
+import net.sothatsit.gamepackdownloader.refactor.descriptor.FieldDescriptor;
+import net.sothatsit.gamepackdownloader.refactor.descriptor.MethodDescriptor;
 
 import java.util.ArrayList;
 import java.util.List;

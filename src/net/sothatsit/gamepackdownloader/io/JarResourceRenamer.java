@@ -1,6 +1,6 @@
-package net.sothatsit.gamepackdownloader.pack.io;
+package net.sothatsit.gamepackdownloader.io;
 
-import net.sothatsit.gamepackdownloader.pack.refactor.BaseRefactorer;
+import net.sothatsit.gamepackdownloader.refactor.BaseRefactorer;
 
 import java.util.HashMap;
 import java.util.Map;

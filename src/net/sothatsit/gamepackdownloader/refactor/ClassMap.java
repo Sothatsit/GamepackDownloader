@@ -1,10 +1,10 @@
-package net.sothatsit.gamepackdownloader.pack.refactor;
+package net.sothatsit.gamepackdownloader.refactor;
 
 import jdk.internal.org.objectweb.asm.*;
-import net.sothatsit.gamepackdownloader.pack.io.ArchiveLoader;
-import net.sothatsit.gamepackdownloader.pack.io.JarArchive;
-import net.sothatsit.gamepackdownloader.pack.refactor.descriptor.FieldDescriptor;
-import net.sothatsit.gamepackdownloader.pack.refactor.descriptor.MethodDescriptor;
+import net.sothatsit.gamepackdownloader.io.ArchiveLoader;
+import net.sothatsit.gamepackdownloader.io.JarArchive;
+import net.sothatsit.gamepackdownloader.refactor.descriptor.FieldDescriptor;
+import net.sothatsit.gamepackdownloader.refactor.descriptor.MethodDescriptor;
 
 import java.io.File;
 import java.io.IOException;

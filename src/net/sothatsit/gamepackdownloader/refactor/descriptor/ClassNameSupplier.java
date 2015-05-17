@@ -1,4 +1,4 @@
-package net.sothatsit.gamepackdownloader.pack.refactor.descriptor;
+package net.sothatsit.gamepackdownloader.refactor.descriptor;
 
 public interface ClassNameSupplier {
 

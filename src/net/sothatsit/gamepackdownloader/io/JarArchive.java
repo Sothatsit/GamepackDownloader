@@ -1,4 +1,4 @@
-package net.sothatsit.gamepackdownloader.pack.io;
+package net.sothatsit.gamepackdownloader.io;
 
 import java.io.File;
 import java.io.FileInputStream;

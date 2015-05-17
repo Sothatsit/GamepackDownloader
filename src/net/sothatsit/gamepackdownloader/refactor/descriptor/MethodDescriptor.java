@@ -1,4 +1,6 @@
-package net.sothatsit.gamepackdownloader.refactor;
+package net.sothatsit.gamepackdownloader.refactor.descriptor;
+
+import net.sothatsit.gamepackdownloader.io.BasicYAML;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +10,7 @@ public class MethodDescriptor extends Descriptor {
     private String[] arguments;
     private String returnType;
 
-    public MethodDescriptor(String descriptorRaw, ClassNameStore store) {
+    public MethodDescriptor(String descriptorRaw, ClassNameSupplier supplier) {
         super(descriptorRaw);
 
         String[] split = BasicYAML.splitAtFirst(descriptorRaw, ")");
@@ -27,7 +29,7 @@ public class MethodDescriptor extends Descriptor {
             ret = split[1];
         }
 
-        this.returnType = Descriptor.getFullName(ret, store);
+        this.returnType = Descriptor.getFullName(ret, supplier);
 
         List<String> arguments = new ArrayList<>();
 
@@ -43,7 +45,7 @@ public class MethodDescriptor extends Descriptor {
                 builder.append(c);
 
                 if (c == ';') {
-                    arguments.add(Descriptor.getFullName(add + builder.toString(), store));
+                    arguments.add(Descriptor.getFullName(add + builder.toString(), supplier));
                     builder = null;
                     append = null;
                 }
@@ -58,7 +60,7 @@ public class MethodDescriptor extends Descriptor {
                     builder = new StringBuilder();
                     builder.append(c);
                 } else {
-                    arguments.add(Descriptor.getFullName(add + Character.toString(c), store));
+                    arguments.add(Descriptor.getFullName(add + Character.toString(c), supplier));
                     append = null;
                 }
             }
@@ -80,6 +82,21 @@ public class MethodDescriptor extends Descriptor {
 
         builder.append("r");
         builder.append(returnType);
+
+        return builder.toString();
+    }
+
+    @Override
+    public String getWorkingDescriptor() {
+        StringBuilder builder = new StringBuilder('(');
+
+        for(String argument : arguments) {
+            builder.append(Descriptor.getDescriptorName(argument));
+        }
+
+        builder.append(')');
+
+        builder.append(Descriptor.getDescriptorName(returnType));
 
         return builder.toString();
     }

@@ -1,13 +1,13 @@
-package net.sothatsit.gamepackdownloader.pack.refactor.asm;
+package net.sothatsit.gamepackdownloader.refactor.asm;
 
 import jdk.internal.org.objectweb.asm.ClassReader;
 import jdk.internal.org.objectweb.asm.ClassWriter;
-import net.sothatsit.gamepackdownloader.pack.io.ArchiveEditor;
-import net.sothatsit.gamepackdownloader.pack.io.JarArchive;
-import net.sothatsit.gamepackdownloader.pack.refactor.IClassRenamer;
-import net.sothatsit.gamepackdownloader.pack.refactor.IFieldRenamer;
-import net.sothatsit.gamepackdownloader.pack.refactor.IMethodRenamer;
-import net.sothatsit.gamepackdownloader.pack.refactor.RefactorMap;
+import net.sothatsit.gamepackdownloader.io.ArchiveEditor;
+import net.sothatsit.gamepackdownloader.io.JarArchive;
+import net.sothatsit.gamepackdownloader.refactor.IClassRenamer;
+import net.sothatsit.gamepackdownloader.refactor.IFieldRenamer;
+import net.sothatsit.gamepackdownloader.refactor.IMethodRenamer;
+import net.sothatsit.gamepackdownloader.refactor.RefactorMap;
 
 import java.io.File;
 import java.io.IOException;
