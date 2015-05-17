@@ -8,6 +8,6 @@ public interface ArchiveEditor {
 
     public boolean shouldEdit(File file, ZipEntry entry) throws IOException;
 
-    public String edit(File file, ZipEntry entry, byte[] data) throws IOException;
+    public ArchiveEdit edit(File file, ZipEntry entry, byte[] data) throws IOException;
 
 }
