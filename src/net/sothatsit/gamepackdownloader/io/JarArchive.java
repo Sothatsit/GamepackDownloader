@@ -31,7 +31,6 @@ public class JarArchive {
             fis = new FileInputStream(jarFile);
             zip = new ZipInputStream(fis);
 
-            int offset = 0;
             ZipEntry entry;
             while((entry = zip.getNextEntry()) != null) {
                 long size = entry.getSize();
@@ -52,7 +51,7 @@ public class JarArchive {
                 if(!entry.isDirectory() && loader.shouldLoad(jarFile, entry)) {
                     byte[] data = new byte[(int) size];
 
-                    int read = zip.read(data, offset, (int) size);
+                    int read = zip.read(data, 0, (int) size);
 
                     if(read < 0) {
                         break;
@@ -60,8 +59,6 @@ public class JarArchive {
 
                     loader.onLoad(jarFile, entry, data);
                 }
-
-                offset += size;
             }
         } finally {
             if(fis != null) {
