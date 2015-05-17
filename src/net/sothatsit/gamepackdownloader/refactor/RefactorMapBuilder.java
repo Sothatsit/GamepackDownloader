@@ -101,7 +101,7 @@ public class RefactorMapBuilder {
 
                 if(checkClasses) {
                     for(Class<?> c : superClasses) {
-                        for(Method m : c.getMethods()) {
+                        superMethods: for(Method m : c.getMethods()) {
                             if(!m.getName().equals(method.getName()) || (returnType != null && !returnType.equals(m.getReturnType()))) {
                                 continue;
                             }
@@ -112,7 +112,7 @@ public class RefactorMapBuilder {
 
                             for(int i=0; i < arguments.length; i++) {
                                 if(!arguments[i].equals(m.getParameterTypes()[i])) {
-                                    continue;
+                                    continue superMethods;
                                 }
                             }
 
@@ -178,7 +178,15 @@ public class RefactorMapBuilder {
             }
         }
 
-        String refactored = classRenamer.getNewName(clazz.getVersion(), clazz.getAccess(), clazz.getName(), clazz.getSignature(), clazz.getSuperName(), clazz.getInterfaces());
+        String superName = refactorMap.getNewClassName(clazz.getSuperName());
+        String[] origInterfaces = clazz.getInterfaces();
+        String[] interfaces = new String[origInterfaces.length];
+
+        for(int i=0; i<interfaces.length; i++) {
+            interfaces[i] = refactorMap.getNewClassName(origInterfaces[i]);
+        }
+
+        String refactored = classRenamer.getNewName(clazz.getVersion(), clazz.getAccess(), clazz.getName(), clazz.getSignature(), superName, interfaces);
 
         refactorMap.createRenameClass(clazz.getName());
 
