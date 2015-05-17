@@ -1,5 +1,7 @@
 package net.sothatsit.gamepackdownloader.io;
 
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -33,31 +35,18 @@ public class JarArchive {
 
             ZipEntry entry;
             while((entry = zip.getNextEntry()) != null) {
-                long size = entry.getSize();
+                if(!entry.isDirectory() && loader.shouldLoad(jarFile, entry)) {
+                    ByteOutputStream stream = null;
+                    try {
+                        stream = new ByteOutputStream();
+                        stream.write(zip);
 
-                if (size < 0) {
-                    for(Entry e : entries) {
-                        if(e.getName().equals(entry.getName())) {
-                            size = e.getSize();
-                            break;
+                        loader.onLoad(jarFile, entry, stream.getBytes());
+                    } finally {
+                        if(stream != null) {
+                            stream.close();
                         }
                     }
-
-                    if(size < 0) {
-                        continue;
-                    }
-                }
-
-                if(!entry.isDirectory() && loader.shouldLoad(jarFile, entry)) {
-                    byte[] data = new byte[(int) size];
-
-                    int read = zip.read(data, 0, (int) size);
-
-                    if(read < 0) {
-                        break;
-                    }
-
-                    loader.onLoad(jarFile, entry, data);
                 }
             }
         } finally {
