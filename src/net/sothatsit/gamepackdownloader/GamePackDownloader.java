@@ -117,7 +117,7 @@ public class GamePackDownloader {
 
             info("Refactoring Gamepack " + latest);
 
-            JarArchive archive = new JarArchive(jarFile);
+            JarArchive archive = new JarArchive(refactored);
             JarResourceRenamer nameSupplier = new JarResourceRenamer();
 
             JarRefactorer.refactor(archive, nameSupplier, nameSupplier, nameSupplier);
