@@ -17,7 +17,7 @@ public class RefactorMap {
         return classes;
     }
 
-    public RenameClass getRenameClass(String oldName) {
+    public RenameClass createRenameClass(String oldName) {
         for(RenameClass clazz : classes) {
             if(clazz.getOldName().equals(oldName)) {
                 return clazz;
@@ -31,8 +31,19 @@ public class RefactorMap {
         return clazz;
     }
 
+    public RenameClass getRenameClass(String oldName) {
+        for(RenameClass clazz : classes) {
+            if(clazz.getOldName().equals(oldName)) {
+                return clazz;
+            }
+        }
+        return null;
+    }
+
     public String getNewClassName(String oldName) {
-        return getRenameClass(oldName).getNewName();
+        RenameClass renameClass = getRenameClass(oldName);
+
+        return renameClass.getNewName();
     }
 
     public String getOldClassName(String newName) {
@@ -45,31 +56,39 @@ public class RefactorMap {
     }
 
     public String getNewFieldName(String clazz, String oldName) {
-        return getRenameClass(clazz).getFieldName(oldName);
+        RenameClass renameClass = getRenameClass(clazz);
+
+        return renameClass.getFieldName(oldName);
     }
 
     public String getNewMethodName(String clazz, String oldName) {
-        return getRenameClass(clazz).getMethodName(oldName);
+        RenameClass renameClass = getRenameClass(clazz);
+
+        return renameClass.getMethodName(oldName);
     }
 
     public String getOldFieldName(String clazz, String newName) {
-        return getRenameClass(clazz).getOldFieldName(newName);
+        RenameClass renameClass = getRenameClass(clazz);
+
+        return renameClass.getOldFieldName(newName);
     }
 
     public String getOldMethodName(String clazz, String newName) {
-        return getRenameClass(clazz).getOldMethodName(newName);
+        RenameClass renameClass = getRenameClass(clazz);
+
+        return renameClass.getOldMethodName(newName);
     }
 
     public void setClassName(String oldName, String newName) {
-        getRenameClass(oldName).setClassName(newName);
+        createRenameClass(oldName).setClassName(newName);
     }
 
     public void setFieldName(String clazz, String oldName, String newName) {
-        getRenameClass(clazz).setFieldName(oldName, newName);
+        createRenameClass(clazz).setFieldName(oldName, newName);
     }
 
     public void setMethodName(String clazz, String oldName, String newName) {
-        getRenameClass(clazz).setMethodName(oldName, newName);
+        createRenameClass(clazz).setMethodName(oldName, newName);
     }
 
     public void fixDuplicates() {
