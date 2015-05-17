@@ -139,16 +139,20 @@ public class BasicYAML {
             return files.get(resource);
         }
 
-        InputStream stream = BasicYAML.class.getResourceAsStream(resource);
+        try {
+            InputStream stream = BasicYAML.class.getResourceAsStream(resource);
 
-        if (stream == null) {
+            if (stream == null) {
+                return null;
+            }
+
+            BasicYAML yaml = new BasicYAML(stream);
+
+            files.put(resource, yaml);
+
+            return yaml;
+        } catch (Exception e) {
             return null;
         }
-
-        BasicYAML yaml = new BasicYAML(stream);
-
-        files.put(resource, yaml);
-
-        return yaml;
     }
 }
