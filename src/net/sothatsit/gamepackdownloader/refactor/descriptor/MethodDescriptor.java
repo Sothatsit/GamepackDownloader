@@ -88,7 +88,9 @@ public class MethodDescriptor extends Descriptor {
 
     @Override
     public String getWorkingDescriptor() {
-        StringBuilder builder = new StringBuilder('(');
+        StringBuilder builder = new StringBuilder();
+
+        builder.append('(');
 
         for(String argument : arguments) {
             builder.append(Descriptor.getDescriptorName(argument));
