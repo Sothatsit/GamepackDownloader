@@ -46,7 +46,7 @@ public class BaseRefactorer implements IClassRenamer, IFieldRenamer, IMethodRena
     public String getNewName(String className, int access, String name, String desc, String signature, Object value) {
         FieldDescriptor descriptor = new FieldDescriptor(desc, supplier);
 
-        final String nameBase = "f_" + Descriptor.getShortName(className) + "_" + descriptor.getDescriptorReformatted();
+        final String nameBase = "f_" + Descriptor.getShortName(className) + "_" + Descriptor.getShortName(descriptor.getDescriptorReformatted());
 
         String newName = nameBase;
 
@@ -65,7 +65,7 @@ public class BaseRefactorer implements IClassRenamer, IFieldRenamer, IMethodRena
     public String getNewName(String className, int access, String name, String desc, String signature, String[] exceptions) {
         MethodDescriptor descriptor = new MethodDescriptor(desc, supplier);
 
-        final String nameBase = "m_" + Descriptor.getShortName(className) + "_" + descriptor.getDescriptorReformatted();
+        final String nameBase = "m_" + Descriptor.getShortName(className) + "_" + Descriptor.getShortName(descriptor.getDescriptorReformatted());
 
         String newName = nameBase;
 
