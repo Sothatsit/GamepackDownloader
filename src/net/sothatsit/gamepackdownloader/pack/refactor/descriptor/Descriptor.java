@@ -68,6 +68,15 @@ public abstract class Descriptor {
         return descriptorPart + append;
     }
 
+    public static String getDescriptorName(String name) {
+        for(Map.Entry<Character, String> entry : fullNames.entrySet()) {
+            if(entry.getValue().equals(name)) {
+                return Character.toString(entry.getKey());
+            }
+        }
+        return name;
+    }
+
     public static String getShortName(String fullName) {
         int index = fullName.lastIndexOf('/');
 
