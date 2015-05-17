@@ -101,7 +101,7 @@ public class GamePackDownloader {
 
     public static void refactor(File folder) {
         try {
-            File jarFile = new File(folder, "gamepack_" + getLatestVersion(folder) + ".jar");
+            File jarFile = new File(folder, "gamepack " + getLatestVersion(folder) + ".jar");
 
             JarArchive archive = new JarArchive(jarFile);
             JarResourceRenamer nameSupplier = new JarResourceRenamer();
