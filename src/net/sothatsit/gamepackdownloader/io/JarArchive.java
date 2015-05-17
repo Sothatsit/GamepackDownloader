@@ -97,10 +97,6 @@ public class JarArchive {
 
             loadArchive(loader);
         } finally {
-            if(fos != null) {
-                fos.close();
-            }
-
             if(zip != null) {
                 zip.close();
             }
