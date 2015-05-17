@@ -4,7 +4,7 @@ import net.sothatsit.gamepackdownloader.refactor.BasicYAML;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MethodDescriptor extends net.sothatsit.gamepackdownloader.refactor.Descriptor {
+public class MethodDescriptor extends Descriptor {
 
     private String[] arguments;
     private String returnType;
@@ -81,6 +81,21 @@ public class MethodDescriptor extends net.sothatsit.gamepackdownloader.refactor.
 
         builder.append("r");
         builder.append(returnType);
+
+        return builder.toString();
+    }
+
+    @Override
+    public String getWorkingDescriptor() {
+        StringBuilder builder = new StringBuilder('(');
+
+        for(String argument : arguments) {
+            builder.append(Descriptor.getDescriptorName(argument));
+        }
+
+        builder.append(')');
+
+        builder.append(Descriptor.getDescriptorName(returnType));
 
         return builder.toString();
     }
