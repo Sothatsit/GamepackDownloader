@@ -30,8 +30,6 @@ public class ClassRefactorer extends ClassVisitor {
             newInterfaces[i] = refactorMap.getNewClassName(interfaces[i]);
         }
 
-        System.out.println("Class signature: " + signature);
-
         visitor.visit(version, access, newName, signature, newSuperName, newInterfaces);
     }
 
@@ -50,8 +48,6 @@ public class ClassRefactorer extends ClassVisitor {
             }
         }
 
-        System.out.println("Method signature: " + signature);
-
         return new MethodRefactorer(visitor.visitMethod(access, name, newDesc, signature, newExceptions), refactorMap);
     }
 
@@ -59,8 +55,6 @@ public class ClassRefactorer extends ClassVisitor {
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
         FieldDescriptor descriptor = new FieldDescriptor(desc, refactorMap);
         String newDesc = descriptor.getWorkingDescriptor();
-
-        System.out.println("Field signature: " + signature);
 
         return visitor.visitField(access, name, newDesc, signature, value);
     }
