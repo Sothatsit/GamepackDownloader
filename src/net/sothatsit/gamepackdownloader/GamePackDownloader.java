@@ -1,6 +1,9 @@
 package net.sothatsit.gamepackdownloader;
 
-import org.jetbrains.java.decompiler.main.decompiler.ConsoleDecompiler;
+import de.fernflower.main.decompiler.ConsoleDecompiler;
+import net.sothatsit.gamepackdownloader.io.JarArchive;
+import net.sothatsit.gamepackdownloader.io.JarResourceRenamer;
+import net.sothatsit.gamepackdownloader.refactor.asm.JarRefactorer;
 
 import java.io.*;
 import java.net.URL;
@@ -51,11 +54,12 @@ public class GamePackDownloader {
 
         if (options.length() < 2 || options.charAt(0) != '-') {
             log("Invalid options supplied: " + options);
-            exit("Valid: -<d (download) , s (decompile)>");
+            exit("Valid: -<d (download) , r (refactor) , s (decompile)>");
             return;
         }
 
         boolean download = false;
+        boolean refactor = false;
         boolean decompile = false;
 
         for (char c : options.substring(1).toCharArray()) {
@@ -63,19 +67,25 @@ public class GamePackDownloader {
                 download = true;
             } else if (c == 's') {
                 decompile = true;
+            } else if(c == 'r') {
+                refactor = true;
             } else {
-                exit("Unknown Argument: '" + c + '\'');
+                exit("Unknown option: '" + c + '\'');
                 return;
             }
         }
 
         if (download && !downloadLatest(folder)) {
-            if (decompile) {
-                exit("No new versions to decompile, exiting");
+            if (decompile || refactor) {
+                exit("No new versions to " + (decompile ? (refactor ? "refactor or decompile" : "decompile") : "refactor") + ", exiting");
             } else {
                 exit();
             }
             return;
+        }
+
+        if(refactor) {
+            refactor(folder);
         }
 
         if (decompile) {
@@ -87,6 +97,19 @@ public class GamePackDownloader {
         }
 
         exit();
+    }
+
+    public static void refactor(File folder) {
+        try {
+            File jarFile = new File(folder, "gamepack_" + getLatestVersion(folder) + ".jar");
+
+            JarArchive archive = new JarArchive(jarFile);
+            JarResourceRenamer nameSupplier = new JarResourceRenamer();
+
+            JarRefactorer.refactor(archive, nameSupplier, nameSupplier, nameSupplier);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void decompileFile(File folder, String[] args) {
@@ -107,12 +130,10 @@ public class GamePackDownloader {
 
         f.mkdir();
 
-        String[] arguments = new String[args.length + 4];
+        String[] arguments = new String[args.length + 2];
 
         System.arraycopy(args, 0, arguments, 0, args.length);
 
-        arguments[arguments.length - 4] = "-ren=1";
-        arguments[arguments.length - 3] = "-urc=net.sothatsit.gamepackdownloader.refactor.GamePackRenamer";
         arguments[arguments.length - 2] = file.getAbsolutePath();
         arguments[arguments.length - 1] = f.getAbsolutePath();
 
