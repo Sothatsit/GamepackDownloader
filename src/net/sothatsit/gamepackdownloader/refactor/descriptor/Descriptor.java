@@ -73,7 +73,7 @@ public abstract class Descriptor {
 
         while(name.endsWith("Array")) {
             builder.append('[');
-            name = name.substring(name.length() - 5);
+            name = name.substring(0, name.length() - 5);
         }
 
         if(!fullNames.containsValue(name)) {
