@@ -1,6 +1,7 @@
 package net.sothatsit.gamepackdownloader.io;
 
 import net.sothatsit.gamepackdownloader.refactor.BaseRefactorer;
+import net.sothatsit.gamepackdownloader.refactor.ClassMap;
 import net.sothatsit.gamepackdownloader.refactor.descriptor.ClassNameSupplier;
 
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.Map;
 
 public class JarResourceRenamer extends BaseRefactorer implements ClassNameSupplier {
 
+    private ClassMap classMap = null;
     private Map<String, String> oldClassToNew = new HashMap<>();
     private boolean hitRoadBlock = false;
     private boolean refactorFields = true;
@@ -45,17 +47,23 @@ public class JarResourceRenamer extends BaseRefactorer implements ClassNameSuppl
         return refactorMethods;
     }
 
+    public void setClassMap(ClassMap classMap) {
+        this.classMap = classMap;
+    }
+
     @Override
     public String getNewName(int version, int access, String name, String signature, String superName, String[] interfaces) {
-        if(!oldClassToNew.containsKey(superName)) {
-            hitRoadBlock = true;
-            return name;
-        }
-
-        for(String str : interfaces) {
-            if(!oldClassToNew.containsKey(str)) {
+        if(classMap != null) {
+            if(!oldClassToNew.containsKey(superName) && classExists(superName)) {
                 hitRoadBlock = true;
                 return name;
+            }
+
+            for(String str : interfaces) {
+                if(!oldClassToNew.containsKey(str) && classExists(superName)) {
+                    hitRoadBlock = true;
+                    return name;
+                }
             }
         }
 
@@ -115,5 +123,9 @@ public class JarResourceRenamer extends BaseRefactorer implements ClassNameSuppl
     @Override
     public String getClassName(String oldName) {
         return oldClassToNew.getOrDefault(oldName, oldName);
+    }
+
+    public boolean classExists(String name) {
+        return classMap.getMapClass(name) != null;
     }
 }
