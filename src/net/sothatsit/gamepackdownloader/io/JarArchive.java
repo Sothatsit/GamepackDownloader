@@ -96,6 +96,11 @@ public class JarArchive {
             };
 
             loadArchive(loader);
+
+            jarFile.delete();
+
+            new File(name).renameTo(jarFile);
+
         } finally {
             if(fos != null && zip == null) {
                 fos.close();
