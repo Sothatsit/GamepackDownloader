@@ -31,6 +31,8 @@ public class RefactorMapBuilder {
         if(classRenamer instanceof JarResourceRenamer) {
             JarResourceRenamer renamer = (JarResourceRenamer) classRenamer;
 
+            renamer.setClassMap(classMap);
+
             do {
                 renamer.softReset();
                 for(ClassMap.MapClass clazz : classMap.getClasses()) {
