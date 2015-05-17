@@ -23,6 +23,10 @@ public class JarArchive {
         this.jarFile = jarFile;
     }
 
+    public File getJarFile() {
+        return jarFile;
+    }
+
     public void loadArchive(ArchiveLoader loader) throws IOException {
         loadEntriesList();
 
