@@ -328,7 +328,7 @@ public class ClassMap {
 
             @Override
             public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-                map.getMapClass(name).registerField(access, name, desc, signature, value);
+                map.getMapClass(className).registerField(access, name, desc, signature, value);
                 return super.visitField(access, name, desc, signature, value);
             }
         };
