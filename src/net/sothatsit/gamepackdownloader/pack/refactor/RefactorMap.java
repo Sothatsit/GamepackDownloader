@@ -1,11 +1,13 @@
 package net.sothatsit.gamepackdownloader.pack.refactor;
 
+import net.sothatsit.gamepackdownloader.pack.refactor.descriptor.ClassNameSupplier;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RefactorMap {
+public class RefactorMap implements ClassNameSupplier {
 
     private List<RenameClass> classes;
 
@@ -43,7 +45,7 @@ public class RefactorMap {
     public String getNewClassName(String oldName) {
         RenameClass renameClass = getRenameClass(oldName);
 
-        return renameClass.getNewName();
+        return renameClass == null ? oldName : renameClass.getNewName();
     }
 
     public String getOldClassName(String newName) {
@@ -58,25 +60,25 @@ public class RefactorMap {
     public String getNewFieldName(String clazz, String oldName) {
         RenameClass renameClass = getRenameClass(clazz);
 
-        return renameClass.getFieldName(oldName);
+        return renameClass == null ? oldName : renameClass.getFieldName(oldName);
     }
 
     public String getNewMethodName(String clazz, String oldName) {
         RenameClass renameClass = getRenameClass(clazz);
 
-        return renameClass.getMethodName(oldName);
+        return renameClass == null ? oldName : renameClass.getMethodName(oldName);
     }
 
     public String getOldFieldName(String clazz, String newName) {
         RenameClass renameClass = getRenameClass(clazz);
 
-        return renameClass.getOldFieldName(newName);
+        return renameClass == null ? newName : renameClass.getOldFieldName(newName);
     }
 
     public String getOldMethodName(String clazz, String newName) {
         RenameClass renameClass = getRenameClass(clazz);
 
-        return renameClass.getOldMethodName(newName);
+        return renameClass == null ? newName : renameClass.getOldMethodName(newName);
     }
 
     public void setClassName(String oldName, String newName) {
@@ -116,6 +118,11 @@ public class RefactorMap {
 
             names.add(name);
         }
+    }
+
+    @Override
+    public String getClassName(String oldName) {
+        return getNewClassName(oldName);
     }
 
     public class RenameClass {
