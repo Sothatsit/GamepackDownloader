@@ -20,12 +20,12 @@ public class BaseRefactorer implements IClassRenamer, IFieldRenamer, IMethodRena
         StringBuilder newName = new StringBuilder("class");
 
         if(superName != null && !Descriptor.getShortName(superName).equals("Object")) {
-            newName.append('_');
+            newName.append("_e");
             newName.append(Descriptor.getShortName(Descriptor.getFullName(superName, supplier)));
         }
 
         for(String str : interfaces) {
-            newName.append('_');
+            newName.append("_i");
             newName.append(Descriptor.getShortName(Descriptor.getFullName(str, supplier)));
         }
 
