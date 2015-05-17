@@ -40,10 +40,14 @@ public class ClassRefactorer extends ClassVisitor {
         MethodDescriptor descriptor = new MethodDescriptor(desc, refactorMap);
         String newDesc = descriptor.getWorkingDescriptor();
 
-        String[] newExceptions = (exceptions == null ? null : new String[exceptions.length]);
+        String[] newExceptions = null;
 
-        for(int i=0; i < exceptions.length; i++) {
-            newExceptions[i] = refactorMap.getNewClassName(exceptions[i]);
+        if(exceptions != null) {
+            newExceptions = new String[exceptions.length];
+
+            for(int i=0; i < exceptions.length; i++) {
+                newExceptions[i] = refactorMap.getNewClassName(exceptions[i]);
+            }
         }
 
         System.out.println("Method signature: " + signature);
