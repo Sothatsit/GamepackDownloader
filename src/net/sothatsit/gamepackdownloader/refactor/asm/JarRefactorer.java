@@ -40,14 +40,9 @@ public class JarRefactorer {
 
     public static byte[] refactor(byte[] bytecode, RefactorMap refactorMap) {
         ClassReader reader = new ClassReader(bytecode);
-        GamePackDownloader.info("Initialized Reader");
         ClassWriter writer = new ClassWriter(reader, 0);
-        GamePackDownloader.info("Initialized Writer");
         ClassRefactorer refactorer = new ClassRefactorer(writer, refactorMap);
-        GamePackDownloader.info("Initialized Refactorer");
-        GamePackDownloader.info("Refactoring");
         reader.accept(refactorer, 0);
-        GamePackDownloader.info("Finished Refactoring");
         return writer.toByteArray();
     }
 
