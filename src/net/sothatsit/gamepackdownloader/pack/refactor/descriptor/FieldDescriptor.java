@@ -15,6 +15,11 @@ public class FieldDescriptor extends Descriptor {
         return type;
     }
 
+    @Override
+    public String getWorkingDescriptor() {
+        return Descriptor.getDescriptorName(type);
+    }
+
     public String getType() {
         return type;
     }
