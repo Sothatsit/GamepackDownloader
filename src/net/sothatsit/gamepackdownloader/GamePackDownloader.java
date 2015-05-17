@@ -7,6 +7,7 @@ import net.sothatsit.gamepackdownloader.refactor.asm.JarRefactorer;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -84,8 +85,10 @@ public class GamePackDownloader {
             return;
         }
 
+        File refactored = null;
+
         if(refactor) {
-            refactor(folder);
+            refactored = refactor(folder);
         }
 
         if (decompile) {
@@ -93,16 +96,24 @@ public class GamePackDownloader {
 
             System.arraycopy(args, 2, arguments, 0, args.length - 2);
 
-            decompileFile(folder, arguments);
+            int latestVersion = getLatestVersion(folder);
+            File file = new File(folder, "gamepack " + latestVersion + ".jar");
+
+            decompileFile((refactored == null ? file : refactored), latestVersion, arguments);
         }
 
         exit();
     }
 
-    public static void refactor(File folder) {
+    public static File refactor(File folder) {
         try {
             int latest = getLatestVersion(folder);
             File jarFile = new File(folder, "gamepack " + latest + ".jar");
+            File refactored = new File(folder, "gamepack " + latest + " refactored.jar");
+
+            info("Copying Gamepack " + latest);
+
+            Files.copy(jarFile.toPath(), refactored.toPath());
 
             info("Refactoring Gamepack " + latest);
 
@@ -112,18 +123,18 @@ public class GamePackDownloader {
             JarRefactorer.refactor(archive, nameSupplier, nameSupplier, nameSupplier);
 
             info("Refactored Gamepack " + latest);
+
+            return refactored;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
-    public static void decompileFile(File folder, String[] args) {
-        int latest = getLatestVersion(folder);
-        File file = new File(folder, "gamepack " + latest + ".jar");
+    public static void decompileFile(File file, int version, String[] args) {
+        info("Decompiling Gamepack " + version + " using fernflower");
 
-        info("Decompiling Gamepack " + latest + " using fernflower");
-
-        File f = new File(folder, file.getName().substring(0, file.getName().length() - 4) + " source");
+        File f = new File(file.getParentFile(), file.getName().substring(0, file.getName().length() - 4) + " source");
 
         if (f.exists() && f.isDirectory()) {
             info("Deleting previous source code to avoid conflicts");
@@ -143,8 +154,6 @@ public class GamePackDownloader {
         arguments[arguments.length - 1] = f.getAbsolutePath();
 
         runFernflower(arguments);
-
-        int version = getLatestVersion(folder);
 
         info("Decompiled Gamepack " + version);
 
