@@ -12,7 +12,7 @@ public class FieldDescriptor extends Descriptor {
 
     @Override
     public String getDescriptorReformatted() {
-        return type;
+        return Descriptor.getShortName(type);
     }
 
     @Override
