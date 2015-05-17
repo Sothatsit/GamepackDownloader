@@ -85,13 +85,17 @@ public class JarArchive {
 
                 @Override
                 public void onLoad(File file, ZipEntry entry, byte[] data) throws IOException {
+                    ArchiveEdit edit;
+
                     if(editor.shouldEdit(file, entry)) {
-                        data = editor.edit(file, entry, data);
+                        edit = editor.edit(file, entry, data);
+                    } else {
+                        edit = new ArchiveEdit(entry.getName(), data);
                     }
 
-                    ZipEntry newEntry = new ZipEntry(entry.getName());
+                    ZipEntry newEntry = new ZipEntry((edit.getFileName() == null ? entry.getName() : edit.getFileName()));
                     stream.putNextEntry(newEntry);
-                    stream.write(data);
+                    stream.write(edit.getContents());
                 }
             };
 
