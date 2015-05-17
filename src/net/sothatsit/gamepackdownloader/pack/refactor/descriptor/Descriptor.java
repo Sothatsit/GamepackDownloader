@@ -69,12 +69,30 @@ public abstract class Descriptor {
     }
 
     public static String getDescriptorName(String name) {
-        for(Map.Entry<Character, String> entry : fullNames.entrySet()) {
-            if(entry.getValue().equals(name)) {
-                return Character.toString(entry.getKey());
-            }
+        StringBuilder builder = new StringBuilder();
+
+        while(name.endsWith("Array")) {
+            builder.append('[');
+            name = name.substring(name.length() - 5);
         }
-        return name;
+
+        if(!fullNames.containsValue(name)) {
+            builder.append('L');
+            builder.append(name);
+            builder.append(';');
+        } else {
+            Character arg = null;
+
+            for(Map.Entry<Character, String> entry : fullNames.entrySet()) {
+                if(entry.getValue().equals(name)) {
+                    arg = entry.getKey();
+                }
+            }
+
+            builder.append(arg);
+        }
+
+        return builder.toString();
     }
 
     public static String getShortName(String fullName) {
