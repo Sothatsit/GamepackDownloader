@@ -40,7 +40,7 @@ public class ClassRefactorer extends ClassVisitor {
         MethodDescriptor descriptor = new MethodDescriptor(desc, refactorMap);
         String newDesc = descriptor.getWorkingDescriptor();
 
-        String[] newExceptions = new String[exceptions.length];
+        String[] newExceptions = (exceptions == null ? null : new String[exceptions.length]);
 
         for(int i=0; i < exceptions.length; i++) {
             newExceptions[i] = refactorMap.getNewClassName(exceptions[i]);
