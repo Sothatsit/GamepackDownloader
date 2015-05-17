@@ -71,7 +71,7 @@ public class JarArchive {
             String path = jarFile.getAbsolutePath();
             int lastIndex = path.lastIndexOf('.');
 
-            String name = path.substring(0, lastIndex - 1) + " temp" + path.substring(lastIndex);
+            String name = path.substring(0, lastIndex) + " temp" + path.substring(lastIndex);
 
             fos = new FileOutputStream(new File(name));
             zip = new ZipOutputStream(fos);
