@@ -101,12 +101,17 @@ public class GamePackDownloader {
 
     public static void refactor(File folder) {
         try {
-            File jarFile = new File(folder, "gamepack " + getLatestVersion(folder) + ".jar");
+            int latest = getLatestVersion(folder);
+            File jarFile = new File(folder, "gamepack " + latest + ".jar");
+
+            info("Refactoring Gamepack " + latest);
 
             JarArchive archive = new JarArchive(jarFile);
             JarResourceRenamer nameSupplier = new JarResourceRenamer();
 
             JarRefactorer.refactor(archive, nameSupplier, nameSupplier, nameSupplier);
+
+            info("Refactored Gamepack " + latest);
         } catch (IOException e) {
             e.printStackTrace();
         }
