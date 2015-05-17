@@ -2,7 +2,6 @@ package net.sothatsit.gamepackdownloader.refactor;
 
 import net.sothatsit.gamepackdownloader.GamePackDownloader;
 import net.sothatsit.gamepackdownloader.io.JarArchive;
-import net.sothatsit.gamepackdownloader.io.JarResourceRenamer;
 import net.sothatsit.gamepackdownloader.refactor.descriptor.Descriptor;
 
 import java.io.IOException;
@@ -28,37 +27,8 @@ public class RefactorMapBuilder {
 
         RefactorMap map = new RefactorMap();
 
-        if(classRenamer instanceof JarResourceRenamer) {
-            JarResourceRenamer renamer = (JarResourceRenamer) classRenamer;
-
-            renamer.setClassMap(classMap);
-
-            do {
-                renamer.softReset();
-                for(ClassMap.MapClass clazz : classMap.getClasses()) {
-                    String refactored = classRenamer.getNewName(clazz.getVersion(), clazz.getAccess(), clazz.getName(), clazz.getSignature(), clazz.getSuperName(), clazz.getInterfaces());
-
-                    if(refactored.equals(clazz.getName())) {
-                        continue;
-                    }
-
-                    GamePackDownloader.info("Refactored class \"" + clazz.getName() + "\" to \"" + refactored + "\"");
-
-                    map.setClassName(clazz.getName(), refactored);
-                }
-            } while (renamer.hasHitRoadBlock());
-        } else {
-            for(ClassMap.MapClass clazz : classMap.getClasses()) {
-                String refactored = classRenamer.getNewName(clazz.getVersion(), clazz.getAccess(), clazz.getName(), clazz.getSignature(), clazz.getSuperName(), clazz.getInterfaces());
-
-                if(refactored.equals(clazz.getName())) {
-                    continue;
-                }
-
-                GamePackDownloader.info("Refactored class \"" + clazz.getName() + "\" to \"" + refactored + "\"");
-
-                map.setClassName(clazz.getName(), refactored);
-            }
+        for(ClassMap.MapClass clazz : classMap.getClasses()) {
+            refactor(clazz, map);
         }
 
         for(ClassMap.MapClass clazz : classMap.getClasses()) {
@@ -188,6 +158,37 @@ public class RefactorMapBuilder {
         map.fixDuplicates();
 
         return map;
+    }
+
+    public void refactor(ClassMap.MapClass clazz, RefactorMap refactorMap) {
+        if(refactorMap.getRenameClass(clazz.getName()) != null) {
+            return;
+        }
+
+        ClassMap.MapClass superClass = clazz.getSuperClass();
+        ClassMap.MapClass[] interfaceClasses = clazz.getInterfaceClasses();
+
+        if(superClass != null && refactorMap.getRenameClass(superClass.getName()) == null) {
+            refactor(superClass, refactorMap);
+        }
+
+        for(ClassMap.MapClass c : interfaceClasses) {
+            if(c != null && refactorMap.getRenameClass(c.getName()) == null) {
+                refactor(c, refactorMap);
+            }
+        }
+
+        String refactored = classRenamer.getNewName(clazz.getVersion(), clazz.getAccess(), clazz.getName(), clazz.getSignature(), clazz.getSuperName(), clazz.getInterfaces());
+
+        refactorMap.createRenameClass(clazz.getName());
+
+        if(refactored.equals(clazz.getName())) {
+            return;
+        }
+
+        GamePackDownloader.info("Refactored class \"" + clazz.getName() + "\" to \"" + refactored + "\"");
+
+        refactorMap.setClassName(clazz.getName(), refactored);
     }
 
 }
