@@ -56,7 +56,7 @@ public class BaseRefactorer implements IClassRenamer, IFieldRenamer, IMethodRena
             index++;
         }
 
-        fieldNames.add(Descriptor.getShortName(className) + "_" + newName);
+        fieldNames.add(className + "_" + newName);
 
         return newName;
     }
@@ -75,7 +75,7 @@ public class BaseRefactorer implements IClassRenamer, IFieldRenamer, IMethodRena
             index++;
         }
 
-        methodNames.add(Descriptor.getShortName(className) + "_" + newName);
+        methodNames.add(className + "_" + newName);
 
         return newName;
     }
