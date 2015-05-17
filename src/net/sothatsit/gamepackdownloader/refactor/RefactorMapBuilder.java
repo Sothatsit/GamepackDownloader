@@ -34,7 +34,7 @@ public class RefactorMapBuilder {
         for(ClassMap.MapClass clazz : classMap.getClasses()) {
             String className = map.getNewClassName(clazz.getName());
 
-            List<ClassMap.MapClass> implementingClasses = clazz.getImplementingClasses();
+            //List<ClassMap.MapClass> implementingClasses = clazz.getImplementingClasses();
             List<ClassMap.MapClass> superMapClasses = new ArrayList<>();
             List<Class<?>> superClasses = new ArrayList<>();
 
