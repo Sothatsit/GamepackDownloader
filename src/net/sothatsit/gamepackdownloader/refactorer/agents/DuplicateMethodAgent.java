@@ -32,7 +32,7 @@ public class DuplicateMethodAgent extends RefactorAgent {
             }
 
             for(MethodNode m : valid) {
-                if(ASMUtil.areSimilar(m.instructions, method.instructions)) {
+                if(m.desc.equals(method.desc) && ASMUtil.areSimilar(m.instructions, method.instructions)) {
                     map.setMethodName(node.name, method.name, m.name);
                     map.setRemoveMethod(node.name, method.name, method.desc, true);
                     Log.methodRename(node, method, m.name);
