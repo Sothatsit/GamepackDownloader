@@ -1,9 +1,5 @@
 package net.sothatsit.gamepackdownloader.refactorer;
 
-import net.sothatsit.gamepackdownloader.refactor.IClassRenamer;
-import net.sothatsit.gamepackdownloader.refactor.IFieldRenamer;
-import net.sothatsit.gamepackdownloader.refactor.IMethodRenamer;
-import net.sothatsit.gamepackdownloader.refactor.RefactorMapBuilder;
 import net.sothatsit.gamepackdownloader.refactor.descriptor.ClassNameSupplier;
 
 import java.util.ArrayList;
@@ -239,9 +235,5 @@ public class RefactorMap implements ClassNameSupplier {
                 names.add(name);
             }
         }
-    }
-
-    public static RefactorMapBuilder builder(IClassRenamer classRenamer, IFieldRenamer fieldRenamer, IMethodRenamer methodRenamer) {
-        return new RefactorMapBuilder(classRenamer, fieldRenamer, methodRenamer);
     }
 }
