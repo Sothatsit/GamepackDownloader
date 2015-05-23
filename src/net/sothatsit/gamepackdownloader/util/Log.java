@@ -23,12 +23,25 @@ public class Log {
         log("Class \"" + node.name + "\" -> \"" + name + "\"");
     }
 
+    public static void clazz(ClassNode node) {
+        log("");
+        log("Class \"" + node.name + "\"");
+    }
+
     public static void fieldRename(ClassNode node, FieldNode field, String name) {
         log(" - Field \"" + field.name + "\" -> \"" + name + "\"");
     }
 
     public static void methodRename(ClassNode node, MethodNode method, String name) {
         log(" - Method \"" + method.name + "\" -> \"" + name + "\"");
+    }
+
+    public static void fieldRemove(ClassNode node, FieldNode field, String reason) {
+        log(" - Removed Field \"" + field.name + "\" - " + reason);
+    }
+
+    public static void methodRemove(ClassNode node, MethodNode method, String reason) {
+        log(" - Removed Method \"" + method.name + "\" - " + reason);
     }
 
 }
