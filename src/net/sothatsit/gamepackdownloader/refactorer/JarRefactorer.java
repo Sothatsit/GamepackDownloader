@@ -12,29 +12,29 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.jar.JarInputStream;
+import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
 
 public class JarRefactorer {
 
     public static void refactor(File input, File output, RefactorMap refactorMap) {
         FileInputStream fis = null;
-        ZipInputStream zis = null;
+        JarInputStream zis = null;
         ByteOutputStream bos = null;
         FileOutputStream fos = null;
-        ZipOutputStream zos = null;
+        JarOutputStream zos = null;
 
         try {
             fis = new FileInputStream(input);
-            zis = new ZipInputStream(fis);
+            zis = new JarInputStream(fis);
             fos = new FileOutputStream(output);
-            zos = new ZipOutputStream(fos);
+            zos = new JarOutputStream(fos);
 
             ZipEntry entry;
             while((entry = zis.getNextEntry()) != null) {
                 if(!entry.getName().endsWith(".class")) {
-                    zos.putNextEntry(new ZipEntry(entry));
+                    zos.putNextEntry(new ZipEntry(entry.getName()));
 
                     int size;
                     byte[] buffer = new byte[2048];
