@@ -130,8 +130,10 @@ public class JarRefactorer {
             String newName = refactorMap.getNewFieldName(className, name);
             FieldDescriptor descriptor = new FieldDescriptor(desc, refactorMap);
             String newDesc = descriptor.getWorkingDescriptor();
+            UnknownDescriptor sig = new UnknownDescriptor(signature, refactorMap);
+            String newSignature = sig.getWorkingDescriptor();
 
-            return new FieldRefactorer(visitor.visitField(access, newName, newDesc, signature, value), refactorMap, className);
+            return new FieldRefactorer(visitor.visitField(access, newName, newDesc, newSignature, value), refactorMap, className);
         }
 
         public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
@@ -142,6 +144,8 @@ public class JarRefactorer {
             String newName = refactorMap.getNewMethodName(className, name);
             MethodDescriptor descriptor = new MethodDescriptor(desc, refactorMap);
             String newDesc = descriptor.getWorkingDescriptor();
+            UnknownDescriptor sig = new UnknownDescriptor(signature, refactorMap);
+            String newSignature = sig.getWorkingDescriptor();
             String[] newExceptions = null;
 
             if(exceptions != null) {
@@ -152,7 +156,7 @@ public class JarRefactorer {
                 }
             }
 
-            return new MethodRefactorer(visitor.visitMethod(access, newName, newDesc, signature, newExceptions), refactorMap, className);
+            return new MethodRefactorer(visitor.visitMethod(access, newName, newDesc, newSignature, newExceptions), refactorMap, className);
         }
 
     }
@@ -160,13 +164,13 @@ public class JarRefactorer {
     private static class MethodRefactorer extends MethodVisitor {
 
         private RefactorMap refactorMap;
-        private MethodVisitor visitor;
+        //private MethodVisitor visitor;
         private String className;
 
         public MethodRefactorer(MethodVisitor visitor, RefactorMap refactorMap, String className) {
             super(Opcodes.ASM5, visitor);
 
-            this.visitor = visitor;
+            //this.visitor = visitor;
             this.refactorMap = refactorMap;
             this.className = className;
         }
@@ -176,7 +180,7 @@ public class JarRefactorer {
 
             String newDesc = descriptor.getWorkingDescriptor();
 
-            return new AnnotationRefactorer(visitor.visitAnnotation(newDesc, visible), refactorMap, className);
+            return new AnnotationRefactorer(mv.visitAnnotation(newDesc, visible), refactorMap, className);
         }
 
         public AnnotationVisitor visitParameterAnnotation(int index, String desc, boolean visible) {
@@ -184,11 +188,11 @@ public class JarRefactorer {
 
             String newDesc = descriptor.getWorkingDescriptor();
 
-            return new AnnotationRefactorer(visitor.visitParameterAnnotation(index, newDesc, visible), refactorMap, className);
+            return new AnnotationRefactorer(mv.visitParameterAnnotation(index, newDesc, visible), refactorMap, className);
         }
 
         public AnnotationVisitor visitAnnotationDefault() {
-            return new AnnotationRefactorer(visitor.visitAnnotationDefault(), refactorMap, className);
+            return new AnnotationRefactorer(mv.visitAnnotationDefault(), refactorMap, className);
         }
 
         public void visitFieldInsn(int opcode, String owner, String name, String desc) {
@@ -197,29 +201,29 @@ public class JarRefactorer {
             FieldDescriptor descriptor = new FieldDescriptor(desc, refactorMap);
             String newDesc = descriptor.getWorkingDescriptor();
 
-            visitor.visitFieldInsn(opcode, newOwner, newName, newDesc);
+            mv.visitFieldInsn(opcode, newOwner, newName, newDesc);
         }
 
         public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
             String newOwner = refactorMap.getNewClassName(owner == null ? className : owner);
             String newName = refactorMap.getNewMethodName(owner == null ? className : owner, name);
-            FieldDescriptor descriptor = new FieldDescriptor(desc, refactorMap);
+            MethodDescriptor descriptor = new MethodDescriptor(desc, refactorMap);
             String newDesc = descriptor.getWorkingDescriptor();
 
-            visitor.visitMethodInsn(opcode, newOwner, newName, newDesc, itf);
+            mv.visitMethodInsn(opcode, newOwner, newName, newDesc, itf);
         }
 
         public void visitMultiANewArrayInsn(String desc, int dims) {
             FieldDescriptor descriptor = new FieldDescriptor(desc, refactorMap);
             String newDesc = descriptor.getWorkingDescriptor();
 
-            visitor.visitMultiANewArrayInsn(newDesc, dims);
+            mv.visitMultiANewArrayInsn(newDesc, dims);
         }
 
         public void visitTypeInsn(int opcode, String type) {
             String newType = refactorMap.getNewClassName(type);
 
-            visitor.visitTypeInsn(opcode, newType);
+            mv.visitTypeInsn(opcode, newType);
         }
 
     }
@@ -227,13 +231,13 @@ public class JarRefactorer {
     private static class FieldRefactorer extends FieldVisitor {
 
         private RefactorMap refactorMap;
-        private FieldVisitor visitor;
+        //private FieldVisitor visitor;
         private String className;
 
         public FieldRefactorer(FieldVisitor visitor, RefactorMap refactorMap, String className) {
             super(Opcodes.ASM5, visitor);
 
-            this.visitor = visitor;
+            //this.visitor = visitor;
             this.refactorMap = refactorMap;
             this.className = className;
         }
@@ -243,7 +247,7 @@ public class JarRefactorer {
 
             String newDesc = descriptor.getWorkingDescriptor();
 
-            return new AnnotationRefactorer(visitor.visitAnnotation(newDesc, visible), refactorMap, className);
+            return new AnnotationRefactorer(fv.visitAnnotation(newDesc, visible), refactorMap, className);
         }
 
     }
@@ -251,13 +255,13 @@ public class JarRefactorer {
     private static class AnnotationRefactorer extends AnnotationVisitor {
 
         private RefactorMap refactorMap;
-        private AnnotationVisitor visitor;
+        //private AnnotationVisitor visitor;
         private String className;
 
         public AnnotationRefactorer(AnnotationVisitor visitor, RefactorMap refactorMap, String className) {
             super(Opcodes.ASM5, visitor);
 
-            this.visitor = visitor;
+            //this.visitor = visitor;
             this.refactorMap = refactorMap;
             this.className = className;
         }
@@ -267,7 +271,7 @@ public class JarRefactorer {
 
             String newDesc = descriptor.getWorkingDescriptor();
 
-            return new AnnotationRefactorer(visitor.visitAnnotation(name, newDesc), refactorMap, className);
+            return new AnnotationRefactorer(av.visitAnnotation(name, newDesc), refactorMap, className);
         }
 
         public void visitEnum(String name, String desc, String value) {
@@ -275,7 +279,7 @@ public class JarRefactorer {
 
             String newDesc = descriptor.getWorkingDescriptor();
 
-            visitor.visitEnum(name, newDesc, value);
+            av.visitEnum(name, newDesc, value);
         }
 
     }
