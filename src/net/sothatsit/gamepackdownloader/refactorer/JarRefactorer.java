@@ -34,10 +34,11 @@ public class JarRefactorer {
             ZipEntry entry;
             while((entry = zis.getNextEntry()) != null) {
                 if(!entry.getName().endsWith(".class")) {
+                    zos.putNextEntry(new ZipEntry(entry));
+
                     int size;
                     byte[] buffer = new byte[2048];
                     while((size = zis.read(buffer, 0, buffer.length)) != -1) {
-                        zos.putNextEntry(new ZipEntry(entry));
                         zos.write(buffer, 0, size);
                     }
                     continue;
@@ -80,7 +81,9 @@ public class JarRefactorer {
             JarUtil.close(zis, "ZipInputStream");
             JarUtil.close(bos, "ByteOutputStream");
             JarUtil.close(fos, "FileOutputStream");
-            JarUtil.close(zos, "ZipOutputStream");
+            if(zos == null) {
+                JarUtil.close(zos, "ZipOutputStream");
+            }
         }
     }
 
