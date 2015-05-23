@@ -114,6 +114,11 @@ public class GamePackDownloader {
             File jarFile = new File(folder, "gamepack " + latest + ".jar");
             File refactored = new File(folder, "gamepack " + latest + " refactored.jar");
 
+            if(refactored.exists()) {
+                info("Refactored jar exists, deleting");
+                refactored.delete();
+            }
+
             info("Copying Gamepack " + latest);
 
             Files.copy(jarFile.toPath(), refactored.toPath());
