@@ -24,7 +24,8 @@ public class UnknownDescriptor extends Descriptor {
                 clazzBuilder.append(c);
 
                 if(c == ';') {
-                    classes.add(clazzBuilder.toString());
+                    String refactored = supplier.getClassName(clazzBuilder.toString().substring(1, clazzBuilder.length() - 1));
+                    classes.add("L" + refactored + ";");
                     clazzBuilder = null;
                     textBuilder = new StringBuilder();
                     continue;
