@@ -1,4 +1,4 @@
-package net.sothatsit.gamepackdownloader.rename;
+package net.sothatsit.gamepackdownloader.refactor;
 
 import net.sothatsit.gamepackdownloader.refactor.IClassRenamer;
 import net.sothatsit.gamepackdownloader.refactor.IFieldRenamer;
