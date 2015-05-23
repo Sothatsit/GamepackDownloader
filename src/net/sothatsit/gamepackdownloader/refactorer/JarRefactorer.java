@@ -52,12 +52,13 @@ public class JarRefactorer {
                     bos.write(buffer, 0, size);
                 }
 
+                bos.flush();
+                bos.close();
+
                 ClassReader reader = new ClassReader(bos.getBytes());
 
                 if(refactorMap.isRemoveClass(reader.getClassName())) {
                     Log.info("Removed Entry \"" + entry.getName() + "\"");
-
-                    bos.close();
                     bos = null;
                     continue;
                 }
@@ -71,7 +72,6 @@ public class JarRefactorer {
 
                 Log.info("Refactored Entry \"" + entry.getName() + "\"");
 
-                bos.close();
                 bos = null;
             }
         } catch (IOException e) {
