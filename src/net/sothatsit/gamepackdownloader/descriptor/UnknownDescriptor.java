@@ -12,6 +12,10 @@ public class UnknownDescriptor extends Descriptor {
     public UnknownDescriptor(String descriptorRaw, ClassNameSupplier supplier) {
         super(descriptorRaw);
 
+        if(descriptorRaw == null) {
+            return;
+        }
+
         StringBuilder start = new StringBuilder();
         List<String> classes = new ArrayList<>();
         List<String> text = new ArrayList<>();
@@ -79,11 +83,15 @@ public class UnknownDescriptor extends Descriptor {
 
     @Override
     public String getDescriptorReformatted() {
-        return getWorkingDescriptor();
+        return (getDescriptorRaw() == null ? null : getWorkingDescriptor());
     }
 
     @Override
     public String getWorkingDescriptor() {
+        if(getDescriptorRaw() == null) {
+            return null;
+        }
+
         StringBuilder builder = new StringBuilder();
 
         builder.append(start);
