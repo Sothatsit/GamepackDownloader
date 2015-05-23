@@ -66,7 +66,7 @@ public class JarRefactorer {
                 ClassRefactorer refactorer = new ClassRefactorer(writer, refactorMap);
                 reader.accept(refactorer, 0);
 
-                zos.putNextEntry(new ZipEntry(entry));
+                zos.putNextEntry(new ZipEntry(entry.getName()));
                 zos.write(writer.toByteArray());
 
                 Log.info("Refactored Entry \"" + entry.getName() + "\"");
