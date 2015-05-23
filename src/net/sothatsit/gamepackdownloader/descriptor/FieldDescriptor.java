@@ -7,17 +7,21 @@ public class FieldDescriptor extends Descriptor {
     public FieldDescriptor(String descriptorRaw, ClassNameSupplier supplier) {
         super(descriptorRaw);
 
+        if(descriptorRaw == null) {
+            return;
+        }
+
         this.type = Descriptor.getFullName(descriptorRaw, supplier);
     }
 
     @Override
     public String getDescriptorReformatted() {
-        return Descriptor.getShortName(type);
+        return (getDescriptorRaw() == null ? null : Descriptor.getShortName(type));
     }
 
     @Override
     public String getWorkingDescriptor() {
-        return Descriptor.getDescriptorName(type);
+        return (getDescriptorRaw() == null ? null : Descriptor.getDescriptorName(type));
     }
 
     public String getType() {
