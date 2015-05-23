@@ -1,7 +1,7 @@
 package net.sothatsit.gamepackdownloader.io;
 
 import net.sothatsit.gamepackdownloader.refactor.BaseRefactorer;
-import net.sothatsit.gamepackdownloader.refactor.descriptor.ClassNameSupplier;
+import net.sothatsit.gamepackdownloader.descriptor.ClassNameSupplier;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,10 +1,6 @@
 package net.sothatsit.gamepackdownloader.refactor;
 
-import net.sothatsit.gamepackdownloader.refactor.IClassRenamer;
-import net.sothatsit.gamepackdownloader.refactor.IFieldRenamer;
-import net.sothatsit.gamepackdownloader.refactor.IMethodRenamer;
-import net.sothatsit.gamepackdownloader.refactor.RefactorMapBuilder;
-import net.sothatsit.gamepackdownloader.refactor.descriptor.ClassNameSupplier;
+import net.sothatsit.gamepackdownloader.descriptor.ClassNameSupplier;
 
 import java.util.ArrayList;
 import java.util.HashMap;

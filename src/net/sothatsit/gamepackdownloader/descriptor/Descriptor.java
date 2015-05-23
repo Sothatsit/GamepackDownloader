@@ -1,4 +1,4 @@
-package net.sothatsit.gamepackdownloader.refactor.descriptor;
+package net.sothatsit.gamepackdownloader.descriptor;
 
 import java.util.HashMap;
 import java.util.Map;
