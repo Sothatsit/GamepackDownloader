@@ -18,14 +18,13 @@ public class Log {
         log("[Error] " + error);
     }
 
-    public static void classRename(ClassNode node, String name) {
-        log("");
-        log("Class \"" + node.name + "\" -> \"" + name + "\"");
-    }
-
     public static void clazz(ClassNode node) {
         log("");
         log("Class \"" + node.name + "\"");
+    }
+
+    public static void classRename(ClassNode node, String name) {
+        log("Rename Class \"" + node.name + "\" -> \"" + name + "\"");
     }
 
     public static void fieldRename(ClassNode node, FieldNode field, String name) {
