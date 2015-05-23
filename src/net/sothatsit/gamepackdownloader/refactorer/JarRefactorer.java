@@ -163,6 +163,57 @@ public class JarRefactorer {
             this.className = className;
         }
 
+        public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
+            FieldDescriptor descriptor = new FieldDescriptor(desc, refactorMap);
+
+            String newDesc = descriptor.getWorkingDescriptor();
+
+            return new AnnotationRefactorer(visitor.visitAnnotation(newDesc, visible), refactorMap, className);
+        }
+
+        public AnnotationVisitor visitParameterAnnotation(int index, String desc, boolean visible) {
+            FieldDescriptor descriptor = new FieldDescriptor(desc, refactorMap);
+
+            String newDesc = descriptor.getWorkingDescriptor();
+
+            return new AnnotationRefactorer(visitor.visitParameterAnnotation(index, newDesc, visible), refactorMap, className);
+        }
+
+        public AnnotationVisitor visitAnnotationDefault() {
+            return new AnnotationRefactorer(visitor.visitAnnotationDefault(), refactorMap, className);
+        }
+
+        public void visitFieldInsn(int opcode, String owner, String name, String desc) {
+            String newOwner = refactorMap.getNewClassName(owner);
+            String newName = refactorMap.getNewFieldName(owner, name);
+            FieldDescriptor descriptor = new FieldDescriptor(desc, refactorMap);
+            String newDesc = descriptor.getWorkingDescriptor();
+
+            visitor.visitFieldInsn(opcode, newOwner, newName, newDesc);
+        }
+
+        public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
+            String newOwner = refactorMap.getNewClassName(owner);
+            String newName = refactorMap.getNewMethodName(owner, name);
+            FieldDescriptor descriptor = new FieldDescriptor(desc, refactorMap);
+            String newDesc = descriptor.getWorkingDescriptor();
+
+            visitor.visitMethodInsn(opcode, newOwner, newName, newDesc, itf);
+        }
+
+        public void visitMultiANewArrayInsn(String desc, int dims) {
+            FieldDescriptor descriptor = new FieldDescriptor(desc, refactorMap);
+            String newDesc = descriptor.getWorkingDescriptor();
+
+            visitor.visitMultiANewArrayInsn(newDesc, dims);
+        }
+
+        public void visitTypeInsn(int opcode, String type) {
+            String newType = refactorMap.getNewClassName(type);
+
+            visitor.visitTypeInsn(opcode, newType);
+        }
+
     }
 
     private static class FieldRefactorer extends FieldVisitor {
@@ -177,6 +228,14 @@ public class JarRefactorer {
             this.visitor = visitor;
             this.refactorMap = refactorMap;
             this.className = className;
+        }
+
+        public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
+            FieldDescriptor descriptor = new FieldDescriptor(desc, refactorMap);
+
+            String newDesc = descriptor.getWorkingDescriptor();
+
+            return new AnnotationRefactorer(visitor.visitAnnotation(newDesc, visible), refactorMap, className);
         }
 
     }
