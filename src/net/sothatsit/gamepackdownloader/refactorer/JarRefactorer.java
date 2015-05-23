@@ -62,7 +62,7 @@ public class JarRefactorer {
                     continue;
                 }
 
-                ClassWriter writer = new ClassWriter(0);
+                ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
                 ClassRefactorer refactorer = new ClassRefactorer(writer, refactorMap);
                 reader.accept(refactorer, 0);
 
