@@ -73,6 +73,7 @@ public class JarUtil {
             if(stream instanceof InputStream) {
                 ((InputStream) stream).close();
             } else if(stream instanceof OutputStream) {
+                ((OutputStream) stream).flush();
                 ((OutputStream) stream).close();
             }
         } catch(IOException e) {
