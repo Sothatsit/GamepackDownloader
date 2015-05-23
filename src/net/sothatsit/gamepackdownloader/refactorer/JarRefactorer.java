@@ -2,6 +2,8 @@ package net.sothatsit.gamepackdownloader.refactorer;
 
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import jdk.internal.org.objectweb.asm.*;
+import net.sothatsit.gamepackdownloader.descriptor.FieldDescriptor;
+import net.sothatsit.gamepackdownloader.descriptor.MethodDescriptor;
 import net.sothatsit.gamepackdownloader.util.JarUtil;
 import net.sothatsit.gamepackdownloader.util.Log;
 
@@ -85,6 +87,7 @@ public class JarRefactorer {
 
         private RefactorMap refactorMap;
         private ClassVisitor visitor;
+        private String className;
 
         public ClassRefactorer(ClassVisitor visitor, RefactorMap refactorMap) {
             super(Opcodes.ASM4, visitor);
@@ -93,18 +96,71 @@ public class JarRefactorer {
             this.refactorMap = refactorMap;
         }
 
+        public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+            this.className = name;
+
+            String newName = refactorMap.getNewClassName(name);
+            String newSuperName = refactorMap.getNewClassName(superName);
+            String[] newInterfaces = new String[interfaces.length];
+
+            for(int i=0; i<newInterfaces.length; i++) {
+                newInterfaces[i] = refactorMap.getNewClassName(interfaces[i]);
+            }
+
+            visitor.visit(version, access, newName, signature, newSuperName, newInterfaces);
+        }
+
+        public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
+            FieldDescriptor descriptor = new FieldDescriptor(desc, refactorMap);
+
+            String newDesc = descriptor.getWorkingDescriptor();
+
+            return new AnnotationRefactorer(visitor.visitAnnotation(newDesc, visible), refactorMap, className);
+        }
+
+        public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
+            if(refactorMap.isRemoveField(className, name, desc)) {
+                return null;
+            }
+
+            String newName = refactorMap.getNewFieldName(className, name);
+            FieldDescriptor descriptor = new FieldDescriptor(desc, refactorMap);
+            String newDesc = descriptor.getWorkingDescriptor();
+
+            return new FieldRefactorer(visitor.visitField(access, newName, newDesc, signature, value), refactorMap, className);
+        }
+
+        public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+            if(refactorMap.isRemoveMethod(className, name, desc)) {
+                return null;
+            }
+
+            String newName = refactorMap.getNewMethodName(className, name);
+            MethodDescriptor descriptor = new MethodDescriptor(desc, refactorMap);
+            String newDesc = descriptor.getWorkingDescriptor();
+            String[] newExceptions = new String[exceptions.length];
+
+            for(int i=0; i<exceptions.length; i++) {
+                newExceptions[i] = refactorMap.getNewClassName(exceptions[i]);
+            }
+
+            return new MethodRefactorer(visitor.visitMethod(access, newName, newDesc, signature, newExceptions), refactorMap, className);
+        }
+
     }
 
     private static class MethodRefactorer extends MethodVisitor {
 
         private RefactorMap refactorMap;
         private MethodVisitor visitor;
+        private String className;
 
-        public MethodRefactorer(MethodVisitor visitor, RefactorMap refactorMap) {
+        public MethodRefactorer(MethodVisitor visitor, RefactorMap refactorMap, String className) {
             super(Opcodes.ASM4, visitor);
 
             this.visitor = visitor;
             this.refactorMap = refactorMap;
+            this.className = className;
         }
 
     }
@@ -113,12 +169,30 @@ public class JarRefactorer {
 
         private RefactorMap refactorMap;
         private FieldVisitor visitor;
+        private String className;
 
-        public FieldRefactorer(FieldVisitor visitor, RefactorMap refactorMap) {
+        public FieldRefactorer(FieldVisitor visitor, RefactorMap refactorMap, String className) {
             super(Opcodes.ASM4, visitor);
 
             this.visitor = visitor;
             this.refactorMap = refactorMap;
+            this.className = className;
+        }
+
+    }
+
+    private static class AnnotationRefactorer extends AnnotationVisitor {
+
+        private RefactorMap refactorMap;
+        private AnnotationVisitor visitor;
+        private String className;
+
+        public AnnotationRefactorer(AnnotationVisitor visitor, RefactorMap refactorMap, String className) {
+            super(Opcodes.ASM4, visitor);
+
+            this.visitor = visitor;
+            this.refactorMap = refactorMap;
+            this.className = className;
         }
 
     }
