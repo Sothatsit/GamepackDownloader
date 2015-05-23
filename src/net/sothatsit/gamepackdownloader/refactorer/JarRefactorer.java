@@ -142,10 +142,14 @@ public class JarRefactorer {
             String newName = refactorMap.getNewMethodName(className, name);
             MethodDescriptor descriptor = new MethodDescriptor(desc, refactorMap);
             String newDesc = descriptor.getWorkingDescriptor();
-            String[] newExceptions = new String[exceptions.length];
+            String[] newExceptions = null;
 
-            for(int i=0; i<exceptions.length; i++) {
-                newExceptions[i] = refactorMap.getNewClassName(exceptions[i]);
+            if(exceptions != null) {
+                newExceptions = new String[exceptions.length];
+
+                for(int i=0; i<exceptions.length; i++) {
+                    newExceptions[i] = refactorMap.getNewClassName(exceptions[i]);
+                }
             }
 
             return new MethodRefactorer(visitor.visitMethod(access, newName, newDesc, signature, newExceptions), refactorMap, className);
