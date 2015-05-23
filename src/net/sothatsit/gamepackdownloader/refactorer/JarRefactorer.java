@@ -192,8 +192,8 @@ public class JarRefactorer {
         }
 
         public void visitFieldInsn(int opcode, String owner, String name, String desc) {
-            String newOwner = refactorMap.getNewClassName(owner);
-            String newName = refactorMap.getNewFieldName(owner, name);
+            String newOwner = refactorMap.getNewClassName(owner == null ? className : owner);
+            String newName = refactorMap.getNewFieldName(owner == null ? className : owner, name);
             FieldDescriptor descriptor = new FieldDescriptor(desc, refactorMap);
             String newDesc = descriptor.getWorkingDescriptor();
 
@@ -201,8 +201,8 @@ public class JarRefactorer {
         }
 
         public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
-            String newOwner = refactorMap.getNewClassName(owner);
-            String newName = refactorMap.getNewMethodName(owner, name);
+            String newOwner = refactorMap.getNewClassName(owner == null ? className : owner);
+            String newName = refactorMap.getNewMethodName(owner == null ? className : owner, name);
             FieldDescriptor descriptor = new FieldDescriptor(desc, refactorMap);
             String newDesc = descriptor.getWorkingDescriptor();
 
