@@ -18,7 +18,7 @@ public class DuplicateMethodAgent extends RefactorAgent {
 
     @Override
     public boolean accept(ClassNode classNode) {
-        return true;
+        return !ASMUtil.isInterface(classNode);
     }
 
     @Override
@@ -27,6 +27,10 @@ public class DuplicateMethodAgent extends RefactorAgent {
 
         List<MethodNode> valid = new ArrayList<>();
         methods: for(MethodNode method : node.methods) {
+            if(ASMUtil.isAbstract(method)) {
+                continue;
+            }
+
             for(MethodNode m : valid) {
                 if(ASMUtil.areSimilar(m.instructions, method.instructions)) {
                     map.setMethodName(node.name, method.name, m.name);
