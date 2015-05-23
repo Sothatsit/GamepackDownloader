@@ -64,7 +64,7 @@ public class JarUtil {
         return map;
     }
 
-    private static void close(Object stream, String name) {
+    public static void close(Object stream, String name) {
         if(stream == null) {
             return;
         }
