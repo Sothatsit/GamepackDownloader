@@ -14,6 +14,7 @@ public class RefactorMap implements ClassNameSupplier {
 
     public RefactorMap() {
         this.classes = new ArrayList<>();
+        this.removeClasses = new ArrayList<>();
     }
 
     public List<RenameClass> getRenameClasses() {
@@ -142,6 +143,8 @@ public class RefactorMap implements ClassNameSupplier {
             this.newName = null;
             this.fieldNames = new HashMap<>();
             this.methodNames = new HashMap<>();
+            this.removeMethods = new ArrayList<>();
+            this.removeFields = new ArrayList<>();
         }
 
         public Map<String, String> getFieldNames() {
