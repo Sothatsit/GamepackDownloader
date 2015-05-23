@@ -93,33 +93,6 @@ public class RefactorMap implements ClassNameSupplier {
         createRenameClass(clazz).setMethodName(oldName, newName);
     }
 
-    public void fixDuplicates() {
-        fixDuplicateClassNames();
-
-        for(RenameClass clazz : classes) {
-            clazz.fixDuplicateFieldNames();
-            clazz.fixDuplicateMethodNames();
-        }
-    }
-
-    public void fixDuplicateClassNames() {
-        List<String> names = new ArrayList<>();
-
-        for(RenameClass clazz : classes) {
-            String name = clazz.getNewName();
-            int index = 0;
-            while(names.contains(clazz.getNewName())) {
-                name = clazz.getNewName() + "_" + index++;
-            }
-
-            if(index > 0) {
-                clazz.setClassName(name);
-            }
-
-            names.add(name);
-        }
-    }
-
     @Override
     public String getClassName(String oldName) {
         return getNewClassName(oldName);
@@ -130,6 +103,8 @@ public class RefactorMap implements ClassNameSupplier {
         private String newName;
         private Map<String, String> fieldNames;
         private Map<String, String> methodNames;
+        private List<String> removeMethods;
+        private List<String> removeFields;
 
         public RenameClass(String name) {
             this.oldName = name;
@@ -144,6 +119,14 @@ public class RefactorMap implements ClassNameSupplier {
 
         public Map<String, String> getMethodNames() {
             return methodNames;
+        }
+
+        public List<String> getRemoveMethods() {
+            return removeMethods;
+        }
+
+        public List<String> getRemoveFields() {
+            return removeFields;
         }
 
         public String getOldName() {
@@ -190,50 +173,6 @@ public class RefactorMap implements ClassNameSupplier {
 
         public void setMethodName(String oldName, String newName) {
             this.methodNames.put(oldName, newName);
-        }
-
-        public void fixDuplicateFieldNames() {
-            List<String> names = new ArrayList<>();
-
-            Map.Entry<String, String>[] entries = fieldNames.entrySet().toArray(new Map.Entry[0]);
-            for(int i=0; i < entries.length; i++) {
-                Map.Entry<String, String> entry = entries[i];
-
-                String name = entry.getValue();
-                int index = 0;
-                while(names.contains(entry.getValue())) {
-                    name = entry.getValue() + "_" + index++;
-                }
-
-                if(index > 0) {
-                    setFieldName(entry.getKey(), name);
-                    entries = fieldNames.entrySet().toArray(new Map.Entry[0]);
-                }
-
-                names.add(name);
-            }
-        }
-
-        public void fixDuplicateMethodNames() {
-            List<String> names = new ArrayList<>();
-
-            Map.Entry<String, String>[] entries = methodNames.entrySet().toArray(new Map.Entry[0]);
-            for(int i=0; i < entries.length; i++) {
-                Map.Entry<String, String> entry = entries[i];
-
-                String name = entry.getValue();
-                int index = 0;
-                while(names.contains(entry.getValue())) {
-                    name = entry.getValue() + "_" + index++;
-                }
-
-                if(index > 0) {
-                    setMethodName(entry.getKey(), name);
-                    entries = methodNames.entrySet().toArray(new Map.Entry[0]);
-                }
-
-                names.add(name);
-            }
         }
     }
 }
