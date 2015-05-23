@@ -3,6 +3,7 @@ package net.sothatsit.gamepackdownloader.refactorer;
 import jdk.internal.org.objectweb.asm.tree.ClassNode;
 import net.sothatsit.gamepackdownloader.refactorer.agents.DuplicateMethodAgent;
 import net.sothatsit.gamepackdownloader.refactorer.agents.JavaKeywordAgent;
+import net.sothatsit.gamepackdownloader.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,8 +33,8 @@ public abstract class RefactorAgent {
 
     public static List<RefactorAgent> generateAgentList(RefactorMap refactorMap) {
         return new ArrayList<>(Arrays.asList(
-                new DuplicateMethodAgent(refactorMap),
-                new JavaKeywordAgent(refactorMap)
+                new JavaKeywordAgent(refactorMap),
+                new DuplicateMethodAgent(refactorMap)
         ));
     }
 
@@ -44,6 +45,7 @@ public abstract class RefactorAgent {
 
     public static RefactorMap refactor(List<ClassNode> classes, RefactorMap refactorMap, List<RefactorAgent> agents) {
         for(ClassNode node : classes) {
+            Log.clazz(node);
             for(RefactorAgent agent : agents) {
                 agent.run(node);
             }
