@@ -1,15 +1,14 @@
 package net.sothatsit.gamepackdownloader.refactorer;
 
-import net.sothatsit.gamepackdownloader.refactor.descriptor.ClassNameSupplier;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RefactorMap implements ClassNameSupplier {
+public class RefactorMap {
 
     private List<RenameClass> classes;
+    private List<String> removeClasses;
 
     public RefactorMap() {
         this.classes = new ArrayList<>();
@@ -59,25 +58,21 @@ public class RefactorMap implements ClassNameSupplier {
 
     public String getNewFieldName(String clazz, String oldName) {
         RenameClass renameClass = getRenameClass(clazz);
-
         return renameClass == null ? oldName : renameClass.getFieldName(oldName);
     }
 
     public String getNewMethodName(String clazz, String oldName) {
         RenameClass renameClass = getRenameClass(clazz);
-
         return renameClass == null ? oldName : renameClass.getMethodName(oldName);
     }
 
     public String getOldFieldName(String clazz, String newName) {
         RenameClass renameClass = getRenameClass(clazz);
-
         return renameClass == null ? newName : renameClass.getOldFieldName(newName);
     }
 
     public String getOldMethodName(String clazz, String newName) {
         RenameClass renameClass = getRenameClass(clazz);
-
         return renameClass == null ? newName : renameClass.getOldMethodName(newName);
     }
 
@@ -93,9 +88,38 @@ public class RefactorMap implements ClassNameSupplier {
         createRenameClass(clazz).setMethodName(oldName, newName);
     }
 
-    @Override
-    public String getClassName(String oldName) {
-        return getNewClassName(oldName);
+    public boolean isRemoveClass(String name) {
+        return this.removeClasses.contains(name);
+    }
+
+    public void setRemoveClass(String name, boolean remove) {
+        if(isRemoveClass(name) == remove) {
+            return;
+        }
+
+        if(remove) {
+            this.removeClasses.add(name);
+        } else {
+            this.removeClasses.remove(name);
+        }
+    }
+
+    public boolean isRemoveField(String clazz, String fieldName, String fieldDesc) {
+        RenameClass renameClass = getRenameClass(clazz);
+        return renameClass != null && renameClass.isRemoveField(fieldName, fieldDesc);
+    }
+
+    public boolean isRemoveMethod(String clazz, String methodName, String methodDesc) {
+        RenameClass renameClass = getRenameClass(clazz);
+        return renameClass != null && renameClass.isRemoveMethod(methodName, methodDesc);
+    }
+
+    public void setRemoveField(String clazz, String fieldName, String fieldDesc, boolean remove) {
+        createRenameClass(clazz).setRemoveField(fieldName, fieldDesc, remove);
+    }
+
+    public void setRemoveMethod(String clazz, String methodName, String methodDesc, boolean remove) {
+        createRenameClass(clazz).setRemoveMethod(methodName, methodDesc, remove);
     }
 
     public class RenameClass {
@@ -174,5 +198,41 @@ public class RefactorMap implements ClassNameSupplier {
         public void setMethodName(String oldName, String newName) {
             this.methodNames.put(oldName, newName);
         }
+
+        public boolean isRemoveMethod(String methodName, String methodDesc) {
+            return this.removeMethods.contains(combine(methodName, methodDesc));
+        }
+
+        public boolean isRemoveField(String fieldName, String fieldDesc) {
+            return this.removeFields.contains(combine(fieldName, fieldDesc));
+        }
+
+        public void setRemoveMethod(String methodName, String methodDesc, boolean remove) {
+            if(remove == isRemoveMethod(methodName, methodDesc)) {
+                return;
+            }
+
+            if(remove) {
+                this.removeMethods.add(combine(methodName, methodDesc));
+            } else {
+                this.removeMethods.remove(combine(methodName, methodDesc));
+            }
+        }
+
+        public void setRemoveField(String fieldName, String fieldDesc, boolean remove) {
+            if(remove == isRemoveField(fieldName, fieldDesc)) {
+                return;
+            }
+
+            if(remove) {
+                this.removeFields.add(combine(fieldName, fieldDesc));
+            } else {
+                this.removeFields.remove(combine(fieldName, fieldDesc));
+            }
+        }
+    }
+
+    public static String combine(String str1, String str2) {
+        return str1 + " - " + str2;
     }
 }
