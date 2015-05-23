@@ -37,4 +37,19 @@ public abstract class RefactorAgent {
         ));
     }
 
+    public static RefactorMap refactor(List<ClassNode> classes) {
+        RefactorMap map = new RefactorMap();
+        return refactor(classes, map, generateAgentList(map));
+    }
+
+    public static RefactorMap refactor(List<ClassNode> classes, RefactorMap refactorMap, List<RefactorAgent> agents) {
+        for(ClassNode node : classes) {
+            for(RefactorAgent agent : agents) {
+                agent.run(node);
+            }
+        }
+
+        return refactorMap;
+    }
+
 }
