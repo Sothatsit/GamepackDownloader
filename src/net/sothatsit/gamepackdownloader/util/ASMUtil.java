@@ -259,7 +259,8 @@ public class ASMUtil {
         Label l1 = ln1.getLabel();
         Label l2 = ln2.getLabel();
 
-        return l1.getOffset() == l2.getOffset() && (l1.info == null || l2.info == null ? l1.info == null && l2.info == null : l1.info.equals(l2.info));
+        // Remove: "l1.getOffset() == l2.getOffset()", generated exception
+        return (l1.info == null || l2.info == null ? l1.info == null && l2.info == null : l1.info.equals(l2.info));
     }
 
 }
