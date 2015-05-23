@@ -2,13 +2,13 @@ package net.sothatsit.gamepackdownloader;
 
 import de.fernflower.main.decompiler.ConsoleDecompiler;
 import jdk.internal.org.objectweb.asm.tree.ClassNode;
+import net.sothatsit.gamepackdownloader.refactorer.JarRefactorer;
 import net.sothatsit.gamepackdownloader.refactorer.RefactorAgent;
 import net.sothatsit.gamepackdownloader.refactorer.RefactorMap;
 import net.sothatsit.gamepackdownloader.util.JarUtil;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -109,37 +109,30 @@ public class GamePackDownloader {
     }
 
     public static File refactor(File folder) {
-        try {
-            int latest = getLatestVersion(folder);
-            File jarFile = new File(folder, "gamepack " + latest + ".jar");
-            File refactored = new File(folder, "gamepack " + latest + " refactored.jar");
+        int latest = getLatestVersion(folder);
+        File jarFile = new File(folder, "gamepack " + latest + ".jar");
+        File refactored = new File(folder, "gamepack " + latest + " refactored.jar");
 
-            if(refactored.exists()) {
-                info("Refactored jar exists, deleting");
-                refactored.delete();
-            }
-
-            info("Copying Gamepack " + latest);
-
-            Files.copy(jarFile.toPath(), refactored.toPath());
-
-            info("Refactoring Gamepack " + latest);
-
-            Map<String, ClassNode> classes = JarUtil.loadClasses(refactored);
-            RefactorMap map = RefactorAgent.refactor(new ArrayList<>(classes.values()));
-
-            //JarArchive archive = new JarArchive(refactored);
-            //JarResourceRenamer nameSupplier = new JarResourceRenamer();
-            //
-            //JarRefactorer.refactor(archive, nameSupplier, nameSupplier, nameSupplier);
-
-            info("Refactored Gamepack " + latest);
-
-            return refactored;
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(refactored.exists()) {
+            info("Refactored jar exists, deleting");
+            refactored.delete();
         }
-        return null;
+
+        info("Refactoring Gamepack " + latest);
+
+        Map<String, ClassNode> classes = JarUtil.loadClasses(jarFile);
+        RefactorMap map = RefactorAgent.refactor(new ArrayList<>(classes.values()));
+
+        JarRefactorer.refactor(jarFile, refactored, map);
+
+        //JarArchive archive = new JarArchive(refactored);
+        //JarResourceRenamer nameSupplier = new JarResourceRenamer();
+        //
+        //JarRefactorer.refactor(archive, nameSupplier, nameSupplier, nameSupplier);
+
+        info("Refactored Gamepack " + latest);
+
+        return refactored;
     }
 
     public static void decompileFile(File file, int version, String[] args) {
