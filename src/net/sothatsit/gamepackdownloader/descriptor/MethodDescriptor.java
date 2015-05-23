@@ -13,6 +13,10 @@ public class MethodDescriptor extends Descriptor {
     public MethodDescriptor(String descriptorRaw, ClassNameSupplier supplier) {
         super(descriptorRaw);
 
+        if(descriptorRaw == null) {
+            return;
+        }
+
         String[] split = BasicYAML.splitAtFirst(descriptorRaw, ")");
 
         String args;
@@ -73,6 +77,10 @@ public class MethodDescriptor extends Descriptor {
 
     @Override
     public String getDescriptorReformatted() {
+        if(getDescriptorRaw() == null) {
+            return null;
+        }
+
         StringBuilder builder = new StringBuilder("a");
 
         for (String str : arguments) {
@@ -88,6 +96,10 @@ public class MethodDescriptor extends Descriptor {
 
     @Override
     public String getWorkingDescriptor() {
+        if(getDescriptorRaw() == null) {
+            return null;
+        }
+
         StringBuilder builder = new StringBuilder();
 
         builder.append('(');
