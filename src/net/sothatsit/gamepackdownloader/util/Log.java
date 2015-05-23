@@ -20,7 +20,7 @@ public class Log {
 
     public static void clazz(ClassNode node) {
         log("");
-        log("Class \"" + node.name + "\"");
+        log("Checking Class \"" + node.name + "\"");
     }
 
     public static void classRename(ClassNode node, String name) {
