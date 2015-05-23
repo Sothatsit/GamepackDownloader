@@ -3,6 +3,7 @@ package net.sothatsit.gamepackdownloader.refactor;
 import net.sothatsit.gamepackdownloader.GamePackDownloader;
 import net.sothatsit.gamepackdownloader.io.JarArchive;
 import net.sothatsit.gamepackdownloader.refactor.descriptor.Descriptor;
+import net.sothatsit.gamepackdownloader.rename.RefactorMap;
 
 import java.io.IOException;
 import java.lang.reflect.Method;

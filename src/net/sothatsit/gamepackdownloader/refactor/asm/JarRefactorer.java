@@ -9,7 +9,7 @@ import net.sothatsit.gamepackdownloader.io.JarArchive;
 import net.sothatsit.gamepackdownloader.refactor.IClassRenamer;
 import net.sothatsit.gamepackdownloader.refactor.IFieldRenamer;
 import net.sothatsit.gamepackdownloader.refactor.IMethodRenamer;
-import net.sothatsit.gamepackdownloader.refactor.RefactorMap;
+import net.sothatsit.gamepackdownloader.rename.RefactorMap;
 
 import java.io.File;
 import java.io.IOException;

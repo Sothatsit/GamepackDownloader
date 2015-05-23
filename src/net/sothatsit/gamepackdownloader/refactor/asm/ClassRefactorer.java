@@ -4,7 +4,7 @@ import jdk.internal.org.objectweb.asm.ClassVisitor;
 import jdk.internal.org.objectweb.asm.FieldVisitor;
 import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Opcodes;
-import net.sothatsit.gamepackdownloader.refactor.RefactorMap;
+import net.sothatsit.gamepackdownloader.rename.RefactorMap;
 import net.sothatsit.gamepackdownloader.refactor.descriptor.FieldDescriptor;
 import net.sothatsit.gamepackdownloader.refactor.descriptor.MethodDescriptor;
 
