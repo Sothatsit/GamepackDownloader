@@ -29,6 +29,68 @@ public class ASMUtil {
         return (clazz.access & Opcodes.ACC_INTERFACE) != 0;
     }
 
+    public static MethodNode findSuperMethod(ClassNode node, MethodNode method, List<ClassNode> classes) {
+        List<ClassNode> superClasses = new ArrayList<>();
+
+        ClassNode extend = findClass(node.superName, classes);
+        if(extend != null) {
+            superClasses.add(extend);
+        }
+
+        for(String i : node.interfaces) {
+            ClassNode inter = findClass(i, classes);
+            if(inter != null) {
+                superClasses.add(inter);
+            }
+        }
+
+        for(ClassNode sup : superClasses) {
+            MethodNode m = findMethod(sup, method.name, method.desc);
+
+            if(m != null) {
+                return m;
+            }
+        }
+        return null;
+    }
+
+    public static List<ClassNode> findSubClasses(ClassNode node, List<ClassNode> classes) {
+        List<ClassNode> subClasses = new ArrayList<>();
+
+        classFor: for(ClassNode sub : classes) {
+            for(String inter : sub.interfaces) {
+                if(inter.equals(node.name)) {
+                    subClasses.add(sub);
+                    continue classFor;
+                }
+            }
+
+            if(sub.superName.equals(node.name)) {
+                subClasses.add(sub);
+            }
+        }
+
+        return subClasses;
+    }
+
+    public static ClassNode findClass(String name, List<ClassNode> classes) {
+        for(ClassNode clazz : classes) {
+            if(clazz.name.equals(name)) {
+                return clazz;
+            }
+        }
+        return null;
+    }
+
+    public static MethodNode findMethod(ClassNode node, String name, String desc) {
+        for(MethodNode method : node.methods) {
+            if(method.name.equals(name) && method.desc.equals(desc)) {
+                return method;
+            }
+        }
+        return null;
+    }
+
     public static boolean areSimilar(InsnList list1, InsnList list2) {
         if(list1.size() != list2.size()) {
             return false;
