@@ -22,6 +22,7 @@ public class RefactorMap implements ClassNameSupplier {
     }
 
     public RenameClass createRenameClass(String oldName) {
+        verifyNotNull(oldName, "oldName");
         for(RenameClass clazz : classes) {
             if(clazz.getOldName().equals(oldName)) {
                 return clazz;
@@ -36,6 +37,7 @@ public class RefactorMap implements ClassNameSupplier {
     }
 
     public RenameClass getRenameClass(String oldName) {
+        verifyNotNull(oldName, "oldName");
         for(RenameClass clazz : classes) {
             if(clazz.getOldName().equals(oldName)) {
                 return clazz;
@@ -45,12 +47,14 @@ public class RefactorMap implements ClassNameSupplier {
     }
 
     public String getNewClassName(String oldName) {
+        verifyNotNull(oldName, "oldName");
         RenameClass renameClass = getRenameClass(oldName);
 
         return renameClass == null ? oldName : renameClass.getNewName();
     }
 
     public String getOldClassName(String newName) {
+        verifyNotNull(newName, "newName");
         for(RenameClass clazz : classes) {
             if(clazz.getNewName().equals(newName)) {
                 return clazz.getOldName();
@@ -60,42 +64,60 @@ public class RefactorMap implements ClassNameSupplier {
     }
 
     public String getNewFieldName(String clazz, String oldName) {
+        verifyNotNull(clazz, "clazz");
+        verifyNotNull(oldName, "oldName");
         RenameClass renameClass = getRenameClass(clazz);
         return renameClass == null ? oldName : renameClass.getFieldName(oldName);
     }
 
     public String getNewMethodName(String clazz, String oldName) {
+        verifyNotNull(clazz, "clazz");
+        verifyNotNull(oldName, "oldName");
         RenameClass renameClass = getRenameClass(clazz);
         return renameClass == null ? oldName : renameClass.getMethodName(oldName);
     }
 
     public String getOldFieldName(String clazz, String newName) {
+        verifyNotNull(clazz, "clazz");
+        verifyNotNull(newName, "newName");
         RenameClass renameClass = getRenameClass(clazz);
         return renameClass == null ? newName : renameClass.getOldFieldName(newName);
     }
 
     public String getOldMethodName(String clazz, String newName) {
+        verifyNotNull(clazz, "clazz");
+        verifyNotNull(newName, "newName");
         RenameClass renameClass = getRenameClass(clazz);
         return renameClass == null ? newName : renameClass.getOldMethodName(newName);
     }
 
     public void setClassName(String oldName, String newName) {
+        verifyNotNull(oldName, "oldName");
+        verifyNotNull(newName, "newName");
         createRenameClass(oldName).setClassName(newName);
     }
 
     public void setFieldName(String clazz, String oldName, String newName) {
+        verifyNotNull(clazz, "clazz");
+        verifyNotNull(oldName, "oldName");
+        verifyNotNull(newName, "newName");
         createRenameClass(clazz).setFieldName(oldName, newName);
     }
 
     public void setMethodName(String clazz, String oldName, String newName) {
+        verifyNotNull(clazz, "clazz");
+        verifyNotNull(oldName, "oldName");
+        verifyNotNull(newName, "newName");
         createRenameClass(clazz).setMethodName(oldName, newName);
     }
 
     public boolean isRemoveClass(String name) {
+        verifyNotNull(name, "name");
         return this.removeClasses.contains(name);
     }
 
     public void setRemoveClass(String name, boolean remove) {
+        verifyNotNull(name, "name");
         if(isRemoveClass(name) == remove) {
             return;
         }
@@ -108,25 +130,38 @@ public class RefactorMap implements ClassNameSupplier {
     }
 
     public boolean isRemoveField(String clazz, String fieldName, String fieldDesc) {
+        verifyNotNull(clazz, "clazz");
+        verifyNotNull(fieldName, "fieldName");
+        verifyNotNull(fieldDesc, "fieldDesc");
         RenameClass renameClass = getRenameClass(clazz);
         return renameClass != null && renameClass.isRemoveField(fieldName, fieldDesc);
     }
 
     public boolean isRemoveMethod(String clazz, String methodName, String methodDesc) {
+        verifyNotNull(clazz, "clazz");
+        verifyNotNull(methodName, "methodName");
+        verifyNotNull(methodDesc, "methodDesc");
         RenameClass renameClass = getRenameClass(clazz);
         return renameClass != null && renameClass.isRemoveMethod(methodName, methodDesc);
     }
 
     public void setRemoveField(String clazz, String fieldName, String fieldDesc, boolean remove) {
+        verifyNotNull(clazz, "clazz");
+        verifyNotNull(fieldName, "fieldName");
+        verifyNotNull(fieldDesc, "fieldDesc");
         createRenameClass(clazz).setRemoveField(fieldName, fieldDesc, remove);
     }
 
     public void setRemoveMethod(String clazz, String methodName, String methodDesc, boolean remove) {
+        verifyNotNull(clazz, "clazz");
+        verifyNotNull(methodName, "methodName");
+        verifyNotNull(methodDesc, "methodDesc");
         createRenameClass(clazz).setRemoveMethod(methodName, methodDesc, remove);
     }
 
     @Override
     public String getClassName(String oldName) {
+        verifyNotNull(oldName, "oldName");
         return getNewClassName(oldName);
     }
 
@@ -140,7 +175,7 @@ public class RefactorMap implements ClassNameSupplier {
 
         public RenameClass(String name) {
             this.oldName = name;
-            this.newName = null;
+            this.newName = name;
             this.fieldNames = new HashMap<>();
             this.methodNames = new HashMap<>();
             this.removeMethods = new ArrayList<>();
@@ -244,5 +279,11 @@ public class RefactorMap implements ClassNameSupplier {
 
     public static String combine(String str1, String str2) {
         return str1 + " - " + str2;
+    }
+
+    public static void verifyNotNull(Object obj, String name) {
+        if(obj == null) {
+            throw new IllegalArgumentException("Argument \"" + name + "\" cannot be null");
+        }
     }
 }
