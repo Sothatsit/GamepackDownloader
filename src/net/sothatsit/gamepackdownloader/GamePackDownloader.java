@@ -1,14 +1,17 @@
 package net.sothatsit.gamepackdownloader;
 
 import de.fernflower.main.decompiler.ConsoleDecompiler;
-import net.sothatsit.gamepackdownloader.io.JarArchive;
-import net.sothatsit.gamepackdownloader.io.JarResourceRenamer;
-import net.sothatsit.gamepackdownloader.refactor.asm.JarRefactorer;
+import jdk.internal.org.objectweb.asm.tree.ClassNode;
+import net.sothatsit.gamepackdownloader.refactorer.RefactorAgent;
+import net.sothatsit.gamepackdownloader.refactorer.RefactorMap;
+import net.sothatsit.gamepackdownloader.util.JarUtil;
 
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -117,10 +120,13 @@ public class GamePackDownloader {
 
             info("Refactoring Gamepack " + latest);
 
-            JarArchive archive = new JarArchive(refactored);
-            JarResourceRenamer nameSupplier = new JarResourceRenamer();
+            Map<String, ClassNode> classes = JarUtil.loadClasses(refactored);
+            RefactorMap map = RefactorAgent.refactor(new ArrayList<>(classes.values()));
 
-            JarRefactorer.refactor(archive, nameSupplier, nameSupplier, nameSupplier);
+            //JarArchive archive = new JarArchive(refactored);
+            //JarResourceRenamer nameSupplier = new JarResourceRenamer();
+            //
+            //JarRefactorer.refactor(archive, nameSupplier, nameSupplier, nameSupplier);
 
             info("Refactored Gamepack " + latest);
 
