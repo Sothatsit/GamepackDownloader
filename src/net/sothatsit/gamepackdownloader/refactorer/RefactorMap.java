@@ -1,11 +1,13 @@
 package net.sothatsit.gamepackdownloader.refactorer;
 
+import net.sothatsit.gamepackdownloader.descriptor.ClassNameSupplier;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RefactorMap {
+public class RefactorMap implements ClassNameSupplier {
 
     private List<RenameClass> classes;
     private List<String> removeClasses;
@@ -120,6 +122,11 @@ public class RefactorMap {
 
     public void setRemoveMethod(String clazz, String methodName, String methodDesc, boolean remove) {
         createRenameClass(clazz).setRemoveMethod(methodName, methodDesc, remove);
+    }
+
+    @Override
+    public String getClassName(String oldName) {
+        return getNewClassName(oldName);
     }
 
     public class RenameClass {
