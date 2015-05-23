@@ -4,6 +4,7 @@ import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import jdk.internal.org.objectweb.asm.*;
 import net.sothatsit.gamepackdownloader.descriptor.FieldDescriptor;
 import net.sothatsit.gamepackdownloader.descriptor.MethodDescriptor;
+import net.sothatsit.gamepackdownloader.descriptor.UnknownDescriptor;
 import net.sothatsit.gamepackdownloader.util.JarUtil;
 import net.sothatsit.gamepackdownloader.util.Log;
 
@@ -90,7 +91,7 @@ public class JarRefactorer {
         private String className;
 
         public ClassRefactorer(ClassVisitor visitor, RefactorMap refactorMap) {
-            super(Opcodes.ASM4, visitor);
+            super(Opcodes.ASM5, visitor);
 
             this.visitor = visitor;
             this.refactorMap = refactorMap;
@@ -156,7 +157,7 @@ public class JarRefactorer {
         private String className;
 
         public MethodRefactorer(MethodVisitor visitor, RefactorMap refactorMap, String className) {
-            super(Opcodes.ASM4, visitor);
+            super(Opcodes.ASM5, visitor);
 
             this.visitor = visitor;
             this.refactorMap = refactorMap;
@@ -223,7 +224,7 @@ public class JarRefactorer {
         private String className;
 
         public FieldRefactorer(FieldVisitor visitor, RefactorMap refactorMap, String className) {
-            super(Opcodes.ASM4, visitor);
+            super(Opcodes.ASM5, visitor);
 
             this.visitor = visitor;
             this.refactorMap = refactorMap;
@@ -247,11 +248,27 @@ public class JarRefactorer {
         private String className;
 
         public AnnotationRefactorer(AnnotationVisitor visitor, RefactorMap refactorMap, String className) {
-            super(Opcodes.ASM4, visitor);
+            super(Opcodes.ASM5, visitor);
 
             this.visitor = visitor;
             this.refactorMap = refactorMap;
             this.className = className;
+        }
+
+        public AnnotationVisitor visitAnnotation(String name, String desc) {
+            UnknownDescriptor descriptor = new UnknownDescriptor(desc, refactorMap);
+
+            String newDesc = descriptor.getWorkingDescriptor();
+
+            return new AnnotationRefactorer(visitor.visitAnnotation(name, newDesc), refactorMap, className);
+        }
+
+        public void visitEnum(String name, String desc, String value) {
+            UnknownDescriptor descriptor = new UnknownDescriptor(desc, refactorMap);
+
+            String newDesc = descriptor.getWorkingDescriptor();
+
+            visitor.visitEnum(name, newDesc, value);
         }
 
     }
