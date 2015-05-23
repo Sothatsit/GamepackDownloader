@@ -103,6 +103,8 @@ public class JarRefactorer {
         public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
             this.className = name;
 
+            UnknownDescriptor sig = new UnknownDescriptor(signature, refactorMap);
+            String newSignature = sig.getWorkingDescriptor();
             String newName = refactorMap.getNewClassName(name);
             String newSuperName = refactorMap.getNewClassName(superName);
             String[] newInterfaces = new String[interfaces.length];
@@ -111,7 +113,7 @@ public class JarRefactorer {
                 newInterfaces[i] = refactorMap.getNewClassName(interfaces[i]);
             }
 
-            visitor.visit(version, access, newName, signature, newSuperName, newInterfaces);
+            visitor.visit(version, access, newName, newSignature, newSuperName, newInterfaces);
         }
 
         public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
