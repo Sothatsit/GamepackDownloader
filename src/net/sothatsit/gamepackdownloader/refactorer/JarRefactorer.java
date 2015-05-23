@@ -80,10 +80,7 @@ public class JarRefactorer {
             JarUtil.close(fis, "FileInputStream");
             JarUtil.close(zis, "ZipInputStream");
             JarUtil.close(bos, "ByteOutputStream");
-            JarUtil.close(fos, "FileOutputStream");
-            if(zos == null) {
-                JarUtil.close(zos, "ZipOutputStream");
-            }
+            JarUtil.close(zos, "ZipOutputStream");
         }
     }
 
