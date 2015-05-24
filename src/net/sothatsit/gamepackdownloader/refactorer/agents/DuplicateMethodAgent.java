@@ -36,12 +36,14 @@ public class DuplicateMethodAgent extends RefactorAgent {
                 continue;
             }
 
+            List<ClassNode> subClasses = ASMUtil.findSubClasses(node, classes);
+
             for(MethodNode m : valid) {
                 if(m.desc.equals(method.desc) && ASMUtil.areSimilar(m.instructions, method.instructions)) {
                     List<Pair<MethodNode, ClassNode>> validSub = new ArrayList<>();
                     List<Pair<MethodNode, ClassNode>> methodSub = new ArrayList<>();
 
-                    for(ClassNode sub : ASMUtil.findSubClasses(node, classes)) {
+                    for(ClassNode sub : subClasses) {
                         MethodNode subMethod = ASMUtil.findMethod(sub, m.name, m.desc);
 
                         if(subMethod != null) {
@@ -49,7 +51,7 @@ public class DuplicateMethodAgent extends RefactorAgent {
                         }
                     }
 
-                    for(ClassNode sub : ASMUtil.findSubClasses(node, classes)) {
+                    for(ClassNode sub : subClasses) {
                         MethodNode subMethod = ASMUtil.findMethod(sub, method.name, method.desc);
 
                         if(subMethod != null) {
@@ -88,6 +90,8 @@ public class DuplicateMethodAgent extends RefactorAgent {
                     map.setRemoveMethod(node.name, method.name, method.desc, true);
                     Log.methodRename(node, method, m.name);
                     Log.methodRemove(node, method, "Duplicate");
+
+
 
                     continue methods;
                 }
