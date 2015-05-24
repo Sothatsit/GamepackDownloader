@@ -14,7 +14,7 @@ public class UpperCamelCaseClassNames extends RefactorAgent {
 
     @Override
     public boolean accept(ClassNode classNode, List<ClassNode> classes) {
-        return classNode.name.length() > 2 && Character.toUpperCase(classNode.name.charAt(0)) != classNode.name.charAt(0);
+        return Character.toUpperCase(classNode.name.charAt(0)) != classNode.name.charAt(0);
     }
 
     @Override
