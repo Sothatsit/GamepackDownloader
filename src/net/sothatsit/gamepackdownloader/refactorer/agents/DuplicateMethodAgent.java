@@ -91,7 +91,14 @@ public class DuplicateMethodAgent extends RefactorAgent {
                     Log.methodRename(node, method, m.name);
                     Log.methodRemove(node, method, "Duplicate");
 
+                    for(ClassNode sub : subClasses) {
+                        MethodNode subMethod = ASMUtil.findMethod(sub, method.name, method.desc);
 
+                        if(subMethod != null) {
+                            map.setMethodName(sub.name, subMethod.name, m.name);
+                            map.setRemoveMethod(sub.name, subMethod.name, subMethod.desc, true);
+                        }
+                    }
 
                     continue methods;
                 }
