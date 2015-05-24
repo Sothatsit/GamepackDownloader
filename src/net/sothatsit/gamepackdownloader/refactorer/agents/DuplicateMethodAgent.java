@@ -6,6 +6,7 @@ import net.sothatsit.gamepackdownloader.refactorer.RefactorAgent;
 import net.sothatsit.gamepackdownloader.refactorer.RefactorMap;
 import net.sothatsit.gamepackdownloader.util.ASMUtil;
 import net.sothatsit.gamepackdownloader.util.Log;
+import net.sothatsit.gamepackdownloader.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +38,57 @@ public class DuplicateMethodAgent extends RefactorAgent {
 
             for(MethodNode m : valid) {
                 if(m.desc.equals(method.desc) && ASMUtil.areSimilar(m.instructions, method.instructions)) {
+                    List<Pair<MethodNode, ClassNode>> validSub = new ArrayList<>();
+                    List<Pair<MethodNode, ClassNode>> methodSub = new ArrayList<>();
+
+                    for(ClassNode sub : ASMUtil.findSubClasses(node, classes)) {
+                        MethodNode subMethod = ASMUtil.findMethod(sub, m.name, m.desc);
+
+                        if(subMethod != null) {
+                            validSub.add(new Pair<>(subMethod, sub));
+                        }
+                    }
+
+                    for(ClassNode sub : ASMUtil.findSubClasses(node, classes)) {
+                        MethodNode subMethod = ASMUtil.findMethod(sub, method.name, method.desc);
+
+                        if(subMethod != null) {
+                            methodSub.add(new Pair<>(subMethod, sub));
+                        }
+                    }
+
+                    List<Pair<MethodNode, MethodNode>> paired = new ArrayList<>();
+                    methodSubIter: for(Pair<MethodNode, ClassNode> pair1 : methodSub) {
+                        MethodNode subMethod = pair1.getObj1();
+                        ClassNode subMethodClass = pair1.getObj2();
+
+                        for(Pair<MethodNode, ClassNode> pair2 : validSub) {
+                            MethodNode subValid = pair2.getObj1();
+                            ClassNode subValidClass = pair2.getObj2();
+
+                            if(subMethodClass.name.equals(subValidClass.name)) {
+                                paired.add(new Pair<>(subMethod, subValid));
+                                continue methodSubIter;
+                            }
+                        }
+
+                        continue methods;
+                    }
+
+                    for(Pair<MethodNode, MethodNode> pair : paired) {
+                        MethodNode m1 = pair.getObj1();
+                        MethodNode m2 = pair.getObj2();
+
+                        if(!m1.desc.equals(m2.desc) || !ASMUtil.areSimilar(m1.instructions, m2.instructions)) {
+                            continue methods;
+                        }
+                    }
+
                     map.setMethodName(node.name, method.name, m.name);
                     map.setRemoveMethod(node.name, method.name, method.desc, true);
                     Log.methodRename(node, method, m.name);
                     Log.methodRemove(node, method, "Duplicate");
+
                     continue methods;
                 }
             }
