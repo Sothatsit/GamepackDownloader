@@ -7,13 +7,11 @@ import net.sothatsit.gamepackdownloader.refactorer.RefactorAgent;
 import net.sothatsit.gamepackdownloader.refactorer.RefactorMap;
 import net.sothatsit.gamepackdownloader.util.JarUtil;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 public class GamePackDownloader {
 
@@ -163,7 +161,7 @@ public class GamePackDownloader {
 
         File source = new File(f, file.getName());
 
-        unZipIt(source, f);
+        JarUtil.unZipIt(source, f);
 
         if (!source.delete()) {
             info("Unable to delete zip archive");
@@ -252,7 +250,7 @@ public class GamePackDownloader {
 
             boolean same;
             try {
-                same = areContentsSame(file, output);
+                same = JarUtil.areContentsSame(file, output);
             } catch (IOException e) {
                 info("Error checking contents of files against eachother");
                 e.printStackTrace();
@@ -327,79 +325,6 @@ public class GamePackDownloader {
             }
         }
         return -1;
-    }
-
-    public static void unZipIt(File zipFile, File outputFolder) {
-        byte[] buffer = new byte[1024];
-
-        try {
-            if (!outputFolder.exists()) {
-                outputFolder.mkdir();
-            }
-
-            ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
-            ZipEntry ze = zis.getNextEntry();
-
-            while (ze != null) {
-                String fileName = ze.getName();
-                File newFile = new File(outputFolder + File.separator + fileName);
-
-                System.out.println("file unzip : " + newFile.getAbsoluteFile());
-
-                new File(newFile.getParent()).mkdirs();
-
-                FileOutputStream fos = new FileOutputStream(newFile);
-
-                int len;
-                while ((len = zis.read(buffer)) > 0) {
-                    fos.write(buffer, 0, len);
-                }
-
-                fos.close();
-                ze = zis.getNextEntry();
-            }
-
-            zis.closeEntry();
-            zis.close();
-
-            System.out.println("Done");
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public static boolean areContentsSame(File f1, File f2) throws IOException {
-        if (f1 == null || f2 == null || !f1.exists() || !f2.exists() || f1.length() != f2.length()) {
-            return false;
-        }
-
-        BufferedInputStream stream1 = null;
-        BufferedInputStream stream2 = null;
-
-        try {
-            stream1 = new BufferedInputStream(new FileInputStream(f1));
-            stream2 = new BufferedInputStream(new FileInputStream(f1));
-
-            byte[] data1 = new byte[1024];
-            byte[] data2 = new byte[1024];
-
-            while (stream1.read(data1) != -1 && stream2.read(data2) != -1) {
-                if (!Arrays.equals(data1, data2)) {
-                    return false;
-                }
-            }
-
-            return true;
-        } finally {
-            if (stream1 != null) {
-                stream1.close();
-            }
-
-            if (stream2 != null) {
-                stream2.close();
-            }
-        }
     }
 
     public static double toKB(double bytes) {
