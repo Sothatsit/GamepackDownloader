@@ -1,7 +1,5 @@
 package net.sothatsit.gamepackdownloader.descriptor;
 
-import net.sothatsit.gamepackdownloader.io.BasicYAML;
-
 import java.util.ArrayList;
 import java.util.List;
 
