@@ -15,7 +15,7 @@ public class MethodDescriptor extends Descriptor {
             return;
         }
 
-        String[] split = BasicYAML.splitAtFirst(descriptorRaw, ")");
+        String[] split = splitAtFirst(descriptorRaw, ')');
 
         String args;
         String ret;
@@ -129,6 +129,28 @@ public class MethodDescriptor extends Descriptor {
         }
 
         return fullName;
+    }
+
+    public static String[] splitAtFirst(String str, char c) {
+        if(str == null) {
+            return new String[] {"", ""};
+        }
+
+        int index = str.indexOf(c);
+
+        if(index == -1) {
+            return new String[] {str, ""};
+        }
+
+        if(index == 0) {
+            return new String[] {"", str.substring(1)};
+        }
+
+        if(index == str.length() - 1) {
+            return new String[] {str.substring(0, str.length() - 1), ""};
+        }
+
+        return new String[] {str.substring(0, index - 1), str.substring(index + 1)};
     }
 
 }
