@@ -29,6 +29,12 @@ public class ASMUtil {
         return (clazz.access & Opcodes.ACC_INTERFACE) != 0;
     }
 
+    public static int makePublic(int access) {
+        int mask = ~(Opcodes.ACC_PROTECTED | Opcodes.ACC_PRIVATE);
+
+        return (access & mask) | Opcodes.ACC_PUBLIC;
+    }
+
     public static MethodNode findSuperMethod(ClassNode node, MethodNode method, List<ClassNode> classes) {
         List<ClassNode> superClasses = new ArrayList<>();
 
