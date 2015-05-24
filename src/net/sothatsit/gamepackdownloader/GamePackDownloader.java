@@ -5,6 +5,7 @@ import net.sothatsit.gamepackdownloader.refactorer.JarRefactorer;
 import net.sothatsit.gamepackdownloader.refactorer.RefactorAgent;
 import net.sothatsit.gamepackdownloader.refactorer.RefactorMap;
 import net.sothatsit.gamepackdownloader.util.JarUtil;
+import net.sothatsit.gamepackdownloader.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class GamePackDownloader {
 
     public static void run(String[] args) {
         if (args.length < 2) {
-            log("Not enough arguments supplied");
+            Log.log("Not enough arguments supplied");
             exit("args: [gamepack-output] [options] [fernflower-options]");
             return;
         }
@@ -48,13 +49,13 @@ public class GamePackDownloader {
         int latest = getLatestVersion(folder);
 
         if (latest > 0) {
-            info("Current Version: v" + latest);
+            Log.info("Current Version: v" + latest);
         }
 
         String options = args[1];
 
         if (options.length() < 2 || options.charAt(0) != '-') {
-            log("Invalid options supplied: " + options);
+            Log.log("Invalid options supplied: " + options);
             exit("Valid: -<d (download) , r (refactor) , s (decompile)>");
             return;
         }
@@ -111,11 +112,11 @@ public class GamePackDownloader {
         File refactored = new File(folder, "gamepack " + latest + " refactored.jar");
 
         if(refactored.exists()) {
-            info("Refactored jar exists, deleting");
+            Log.info("Refactored jar exists, deleting");
             refactored.delete();
         }
 
-        info("Refactoring Gamepack " + latest);
+        Log.info("Refactoring Gamepack " + latest);
 
         Map<String, ClassNode> classes = JarUtil.loadClasses(jarFile);
         RefactorMap map = RefactorAgent.refactor(new ArrayList<>(classes.values()));
@@ -127,7 +128,7 @@ public class GamePackDownloader {
         //
         //JarRefactorer.refactor(archive, nameSupplier, nameSupplier, nameSupplier);
 
-        info("Refactored Gamepack " + latest);
+        Log.info("Refactored Gamepack " + latest);
 
         return refactored;
     }
@@ -151,7 +152,7 @@ public class GamePackDownloader {
         File output = new File(folder, "gamepack temp.jar");
 
         if(output.exists() && output.delete()) {
-            info("Deleted gamepack temp");
+            Log.info("Deleted gamepack temp");
         }
 
         try {
@@ -178,7 +179,7 @@ public class GamePackDownloader {
                             double downloadSpeed = toKB((double) progress / (double) seconds);
                             double percentage = round((double) progress / (double) size * 100d, 2);
 
-                            log(toKB(progress) + "kb / " + toKB(size) + "kb (" + percentage + "%) " + downloadSpeed + "kb/s");
+                            Log.log(toKB(progress) + "kb / " + toKB(size) + "kb (" + percentage + "%) " + downloadSpeed + "kb/s");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -200,13 +201,13 @@ public class GamePackDownloader {
                 e.printStackTrace();
             }
 
-            info("Finished Downloading [" + (long) ((System.nanoTime() - start) / 1000000d) + "ms]");
+            Log.info("Finished Downloading [" + (long) ((System.nanoTime() - start) / 1000000d) + "ms]");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         if (file != null) {
-            info("Checking file against previous version");
+            Log.info("Checking file against previous version");
 
             final long start = System.nanoTime();
 
@@ -214,16 +215,16 @@ public class GamePackDownloader {
             try {
                 same = JarUtil.areContentsSame(file, output);
             } catch (IOException e) {
-                info("Error checking contents of files against eachother");
+                Log.info("Error checking contents of files against eachother");
                 e.printStackTrace();
                 exit();
                 return false;
             }
 
-            info("Files Checked [" + round((System.nanoTime() - start) / 1000000d, 2) + "ms]");
+            Log.info("Files Checked [" + round((System.nanoTime() - start) / 1000000d, 2) + "ms]");
 
             if (same) {
-                info("Contents of files are the same, deleting newly downloaded file");
+                Log.info("Contents of files are the same, deleting newly downloaded file");
 
                 boolean deleted = output.delete();
 
@@ -232,27 +233,27 @@ public class GamePackDownloader {
                     return false;
                 }
 
-                info("output deleted");
+                Log.info("output deleted");
                 exit("Current Version: v" + getLatestVersion(folder));
                 return false;
             } else {
                 if (output.renameTo(newFile)) {
-                    info("output renamed from temp");
+                    Log.info("output renamed from temp");
                 } else {
-                    info("unable to rename output from temp");
+                    Log.info("unable to rename output from temp");
                     return false;
                 }
             }
         } else {
             if (output.renameTo(newFile)) {
-                info("output renamed from temp");
+                Log.info("output renamed from temp");
             } else {
-                info("unable to rename output from temp");
+                Log.info("unable to rename output from temp");
                 return false;
             }
         }
 
-        info("New Version Downloaded: v" + getLatestVersion(folder));
+        Log.info("New Version Downloaded: v" + getLatestVersion(folder));
         return true;
     }
 
@@ -293,16 +294,8 @@ public class GamePackDownloader {
         return (double) ((int) (num * Math.pow(10, places))) / Math.pow(10, places);
     }
 
-    public static void info(String log) {
-        log("[Info] " + log);
-    }
-
-    public static void log(String log) {
-        System.out.println(log);
-    }
-
     public static void exit(String log) {
-        info(log);
+        Log.info(log);
         exit();
     }
 
