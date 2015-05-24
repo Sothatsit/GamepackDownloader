@@ -21,15 +21,15 @@ public abstract class RefactorAgent {
         return refactorMap;
     }
 
-    public final void run(ClassNode classNode) {
-        if(accept(classNode)) {
-            refactor(classNode);
+    public final void run(ClassNode classNode, List<ClassNode> classes) {
+        if(accept(classNode, classes)) {
+            refactor(classNode, classes);
         }
     }
 
-    public abstract boolean accept(ClassNode classNode);
+    public abstract boolean accept(ClassNode classNode, List<ClassNode> classes);
 
-    public abstract void refactor(ClassNode classNode);
+    public abstract void refactor(ClassNode classNode, List<ClassNode> classes);
 
     public static List<RefactorAgent> generateAgentList(RefactorMap refactorMap) {
         return new ArrayList<>(Arrays.asList(
@@ -47,7 +47,7 @@ public abstract class RefactorAgent {
         for(ClassNode node : classes) {
             Log.clazz(node);
             for(RefactorAgent agent : agents) {
-                agent.run(node);
+                agent.run(node, classes);
             }
         }
 
