@@ -1,6 +1,5 @@
 package net.sothatsit.gamepackdownloader;
 
-import de.fernflower.main.decompiler.ConsoleDecompiler;
 import jdk.internal.org.objectweb.asm.tree.ClassNode;
 import net.sothatsit.gamepackdownloader.refactorer.JarRefactorer;
 import net.sothatsit.gamepackdownloader.refactorer.RefactorAgent;
@@ -100,7 +99,7 @@ public class GamePackDownloader {
             int latestVersion = getLatestVersion(folder);
             File file = new File(folder, "gamepack " + latestVersion + ".jar");
 
-            decompileFile((refactored == null ? file : refactored), latestVersion, arguments);
+            FernFlowerHandler.decompileFile((refactored == null ? file : refactored), latestVersion, arguments);
         }
 
         exit();
@@ -131,43 +130,6 @@ public class GamePackDownloader {
         info("Refactored Gamepack " + latest);
 
         return refactored;
-    }
-
-    public static void decompileFile(File file, int version, String[] args) {
-        info("Decompiling Gamepack " + version + " using fernflower");
-
-        File f = new File(file.getParentFile(), file.getName().substring(0, file.getName().length() - 4) + " source");
-
-        if (f.exists() && f.isDirectory()) {
-            info("Deleting previous source code to avoid conflicts");
-            deleteFolder(f);
-        } else if (f.exists()) {
-            info("Deleting previous source code to avoid conflicts");
-            f.delete();
-        }
-
-        f.mkdir();
-
-        String[] arguments = new String[args.length + 2];
-
-        System.arraycopy(args, 0, arguments, 0, args.length);
-
-        arguments[arguments.length - 2] = file.getAbsolutePath();
-        arguments[arguments.length - 1] = f.getAbsolutePath();
-
-        runFernflower(arguments);
-
-        info("Decompiled Gamepack " + version);
-
-        File source = new File(f, file.getName());
-
-        JarUtil.unZipIt(source, f);
-
-        if (!source.delete()) {
-            info("Unable to delete zip archive");
-        }
-
-        info("Un-zipped Gamepack " + version + " source");
     }
 
     public static void deleteFolder(File folder) {
@@ -292,10 +254,6 @@ public class GamePackDownloader {
 
         info("New Version Downloaded: v" + getLatestVersion(folder));
         return true;
-    }
-
-    public static void runFernflower(String[] args) {
-        ConsoleDecompiler.main(args);
     }
 
     public static int getLatestVersion(File folder) {
