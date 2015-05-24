@@ -8,6 +8,8 @@ import net.sothatsit.gamepackdownloader.refactorer.RefactorMap;
 import net.sothatsit.gamepackdownloader.util.JavaUtil;
 import net.sothatsit.gamepackdownloader.util.Log;
 
+import java.util.List;
+
 public class JavaKeywordAgent extends RefactorAgent {
 
     public static final String SUFFIX = "_key";
@@ -17,12 +19,12 @@ public class JavaKeywordAgent extends RefactorAgent {
     }
 
     @Override
-    public boolean accept(ClassNode classNode) {
+    public boolean accept(ClassNode classNode, List<ClassNode> classes) {
         return true;
     }
 
     @Override
-    public void refactor(ClassNode node) {
+    public void refactor(ClassNode node, List<ClassNode> classes) {
         RefactorMap map = getRefactorMap();
 
         if(JavaUtil.isJavaKeyword(node.name)) {
