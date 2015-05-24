@@ -1,20 +1,20 @@
 package net.sothatsit.gamepackdownloader.util;
 
-public class Pair<T extends Object> {
+public class Pair<A extends Object, B extends Object > {
 
-    private T obj1;
-    private T obj2;
+    private A obj1;
+    private B obj2;
 
-    public Pair(T obj1, T obj2) {
+    public Pair(A obj1, B obj2) {
         this.obj1 = obj1;
         this.obj2 = obj2;
     }
 
-    public T getObj1() {
+    public A getObj1() {
         return obj1;
     }
 
-    public T getObj2() {
+    public B getObj2() {
         return obj2;
     }
 
