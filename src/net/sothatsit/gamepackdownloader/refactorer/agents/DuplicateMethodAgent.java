@@ -17,17 +17,21 @@ public class DuplicateMethodAgent extends RefactorAgent {
     }
 
     @Override
-    public boolean accept(ClassNode classNode) {
+    public boolean accept(ClassNode classNode, List<ClassNode> classes) {
         return !ASMUtil.isInterface(classNode);
     }
 
     @Override
-    public void refactor(ClassNode node) {
+    public void refactor(ClassNode node, List<ClassNode> classes) {
         RefactorMap map = getRefactorMap();
 
         List<MethodNode> valid = new ArrayList<>();
         methods: for(MethodNode method : node.methods) {
             if(ASMUtil.isAbstract(method)) {
+                continue;
+            }
+
+            if(ASMUtil.findSuperMethod(node, method, classes) != null) {
                 continue;
             }
 
