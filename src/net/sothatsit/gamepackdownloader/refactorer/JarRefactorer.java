@@ -5,6 +5,7 @@ import jdk.internal.org.objectweb.asm.*;
 import net.sothatsit.gamepackdownloader.descriptor.FieldDescriptor;
 import net.sothatsit.gamepackdownloader.descriptor.MethodDescriptor;
 import net.sothatsit.gamepackdownloader.descriptor.UnknownDescriptor;
+import net.sothatsit.gamepackdownloader.util.ASMUtil;
 import net.sothatsit.gamepackdownloader.util.JarUtil;
 import net.sothatsit.gamepackdownloader.util.Log;
 
@@ -110,7 +111,7 @@ public class JarRefactorer {
                 newInterfaces[i] = refactorMap.getNewClassName(interfaces[i]);
             }
 
-            visitor.visit(version, access, newName, newSignature, newSuperName, newInterfaces);
+            visitor.visit(version, ASMUtil.makePublic(access), newName, newSignature, newSuperName, newInterfaces);
         }
 
         public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
@@ -132,7 +133,7 @@ public class JarRefactorer {
             UnknownDescriptor sig = new UnknownDescriptor(signature, refactorMap);
             String newSignature = sig.getWorkingDescriptor();
 
-            return new FieldRefactorer(visitor.visitField(access, newName, newDesc, newSignature, value), refactorMap, className);
+            return new FieldRefactorer(visitor.visitField(ASMUtil.makePublic(access), newName, newDesc, newSignature, value), refactorMap, className);
         }
 
         public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
@@ -155,7 +156,7 @@ public class JarRefactorer {
                 }
             }
 
-            return new MethodRefactorer(visitor.visitMethod(access, newName, newDesc, newSignature, newExceptions), refactorMap, className);
+            return new MethodRefactorer(visitor.visitMethod(ASMUtil.makePublic(access), newName, newDesc, newSignature, newExceptions), refactorMap, className);
         }
 
     }
