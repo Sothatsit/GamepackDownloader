@@ -57,6 +57,10 @@ public abstract class RefactorAgent {
             }
         }
 
+        for(RefactorAgent agent : agents) {
+            agent.logStatistics();
+        }
+
         return refactorMap;
     }
 
