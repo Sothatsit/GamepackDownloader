@@ -46,7 +46,7 @@ public class JarUtil {
 
                 map.put(entry.getName(), node);
 
-                Log.info("Loaded Entry \"" + entry.getName() + "\"");
+                Log.loadedEntry(entry.getName());
 
                 bos.close();
                 bos = null;
