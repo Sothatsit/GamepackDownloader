@@ -82,7 +82,7 @@ public class Log {
             return;
         }
 
-        log("Loaded Entry \"" + name + "\"");
+        info("Loaded Entry \"" + name + "\"");
     }
 
     public static void refactoredEntry(String name) {
@@ -90,7 +90,7 @@ public class Log {
             return;
         }
 
-        log("Refactored Entry \"" + name + "\"");
+        info("Refactored Entry \"" + name + "\"");
     }
 
 }
