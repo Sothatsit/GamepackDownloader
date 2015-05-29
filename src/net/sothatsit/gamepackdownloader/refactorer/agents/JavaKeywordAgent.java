@@ -14,8 +14,13 @@ public class JavaKeywordAgent extends RefactorAgent {
 
     public static final String SUFFIX = "_key";
 
+    private int renamedClasses;
+    private int renamedFields;
+    private int renamedMethods;
+
     public JavaKeywordAgent(RefactorMap refactorMap) {
         super(refactorMap);
+        resetStatistics();
     }
 
     @Override
@@ -45,5 +50,17 @@ public class JavaKeywordAgent extends RefactorAgent {
                 Log.methodRename(node, method, method.name + SUFFIX);
             }
         }
+    }
+
+    @Override
+    public void logStatistics() {
+        Log.info("Renamed " + renamedClasses + "classes, " + renamedFields + " fields and " + renamedMethods + " methods for having java keywords in their names");
+    }
+
+    @Override
+    public void resetStatistics() {
+        renamedClasses = 0;
+        renamedFields = 0;
+        renamedMethods = 0;
     }
 }
