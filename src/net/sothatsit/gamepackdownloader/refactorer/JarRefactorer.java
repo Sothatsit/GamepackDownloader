@@ -71,7 +71,7 @@ public class JarRefactorer {
                 zos.putNextEntry(new ZipEntry(refactorMap.getNewClassName(reader.getClassName()) + ".class"));
                 zos.write(writer.toByteArray());
 
-                Log.info("Refactored Entry \"" + entry.getName() + "\"");
+                Log.refactoredEntry(entry.getName());
 
                 bos = null;
             }
