@@ -23,7 +23,7 @@ public abstract class RefactorAgent {
     }
 
     public final void run(ClassNode classNode, List<ClassNode> classes) {
-        if(accept(classNode, classes)) {
+        if (accept(classNode, classes)) {
             refactor(classNode, classes);
         }
     }
@@ -31,6 +31,10 @@ public abstract class RefactorAgent {
     public abstract boolean accept(ClassNode classNode, List<ClassNode> classes);
 
     public abstract void refactor(ClassNode classNode, List<ClassNode> classes);
+
+    public abstract void logStatistics();
+
+    public abstract void resetStatistics();
 
     public static List<RefactorAgent> generateAgentList(RefactorMap refactorMap) {
         return new ArrayList<>(Arrays.asList(
