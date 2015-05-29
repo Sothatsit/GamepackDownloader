@@ -77,4 +77,20 @@ public class Log {
         log(" - Removed Method \"" + method.name + "\" - " + reason);
     }
 
+    public static void loadedEntry(String name) {
+        if(logLevel == LogLevel.BASIC) {
+            return;
+        }
+
+        log("Loaded Entry \"" + name + "\"");
+    }
+
+    public static void refactoredEntry(String name) {
+        if(logLevel == LogLevel.BASIC) {
+            return;
+        }
+
+        log("Refactored Entry \"" + name + "\"");
+    }
+
 }
