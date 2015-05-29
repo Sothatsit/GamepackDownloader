@@ -6,6 +6,7 @@ import net.sothatsit.gamepackdownloader.refactorer.RefactorAgent;
 import net.sothatsit.gamepackdownloader.refactorer.RefactorMap;
 import net.sothatsit.gamepackdownloader.util.JarUtil;
 import net.sothatsit.gamepackdownloader.util.Log;
+import net.sothatsit.gamepackdownloader.util.LogLevel;
 
 import java.io.File;
 import java.io.IOException;
@@ -117,6 +118,8 @@ public class GamePackDownloader {
         }
 
         Log.info("Refactoring Gamepack " + latest);
+
+        Log.setLogLevel(LogLevel.BASIC);
 
         Map<String, ClassNode> classes = JarUtil.loadClasses(jarFile);
         RefactorMap map = RefactorAgent.refactor(new ArrayList<>(classes.values()));
