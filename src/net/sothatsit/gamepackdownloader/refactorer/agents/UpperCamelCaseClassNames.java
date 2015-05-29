@@ -9,6 +9,8 @@ import java.util.List;
 
 public class UpperCamelCaseClassNames extends RefactorAgent {
 
+    private int renamedClasses;
+
     public UpperCamelCaseClassNames(RefactorMap refactorMap) {
         super(refactorMap);
     }
@@ -26,5 +28,16 @@ public class UpperCamelCaseClassNames extends RefactorAgent {
 
         map.setClassName(node.name, newName);
         Log.classRename(node, newName);
+        renamedClasses += 1;
+    }
+
+    @Override
+    public void logStatistics() {
+        Log.info("Renamed " + renamedClasses + " classes to have UpperCamelCase names");
+    }
+
+    @Override
+    public void resetStatistics() {
+        renamedClasses = 0;
     }
 }
