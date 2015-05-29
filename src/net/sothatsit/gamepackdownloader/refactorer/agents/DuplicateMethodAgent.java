@@ -13,8 +13,12 @@ import java.util.List;
 
 public class DuplicateMethodAgent extends RefactorAgent {
 
+    private int duplicateMethods;
+    private int removedMethods;
+
     public DuplicateMethodAgent(RefactorMap refactorMap) {
         super(refactorMap);
+        resetStatistics();
     }
 
     @Override
@@ -90,6 +94,8 @@ public class DuplicateMethodAgent extends RefactorAgent {
                     map.setRemoveMethod(node.name, method.name, method.desc, true);
                     Log.methodRename(node, method, m.name);
                     Log.methodRemove(node, method, "Duplicate");
+                    duplicateMethods += 1;
+                    removedMethods += 1;
 
                     for(ClassNode sub : subClasses) {
                         MethodNode subMethod = ASMUtil.findMethod(sub, method.name, method.desc);
@@ -97,6 +103,7 @@ public class DuplicateMethodAgent extends RefactorAgent {
                         if(subMethod != null) {
                             map.setMethodName(sub.name, subMethod.name, m.name);
                             map.setRemoveMethod(sub.name, subMethod.name, subMethod.desc, true);
+                            removedMethods += 1;
                         }
                     }
 
@@ -106,5 +113,17 @@ public class DuplicateMethodAgent extends RefactorAgent {
 
             valid.add(method);
         }
+    }
+
+    @Override
+    public void logStatistics() {
+        Log.info("Found " + duplicateMethods + " Duplicate Methods");
+        Log.info("Removed " + duplicateMethods + " Duplicate Methods");
+    }
+
+    @Override
+    public void resetStatistics() {
+        this.duplicateMethods = 0;
+        this.removedMethods = 0;
     }
 }
