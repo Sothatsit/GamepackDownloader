@@ -54,7 +54,7 @@ public class JavaKeywordAgent extends RefactorAgent {
 
     @Override
     public void logStatistics() {
-        Log.info("Renamed " + renamedClasses + "classes, " + renamedFields + " fields and " + renamedMethods + " methods for having java keywords in their names");
+        Log.info("Renamed " + renamedClasses + " classes, " + renamedFields + " fields and " + renamedMethods + " methods for having java keywords in their names");
     }
 
     @Override
