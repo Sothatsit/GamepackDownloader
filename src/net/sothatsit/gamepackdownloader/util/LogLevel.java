@@ -7,7 +7,7 @@ public enum LogLevel {
     FINE_DEBUG;
 
     public boolean higherThan(LogLevel other) {
-        return ordinal() >= other.ordinal();
+        return ordinal() > other.ordinal();
     }
 
 }
