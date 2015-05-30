@@ -28,69 +28,53 @@ public class Log {
         log("[Error] " + error);
     }
 
-    public static void clazz(ClassNode node) {
-        if(logLevel == LogLevel.BASIC) {
+    public static void fineDebug(String debug) {
+        if(logLevel.higherThan(LogLevel.FINE_DEBUG)) {
             return;
         }
 
-        log("");
-        log("Checking Class \"" + node.name + "\"");
+        log(debug);
+    }
+
+    public static void debug(String debug) {
+        if(logLevel.higherThan(LogLevel.DEBUG)) {
+            return;
+        }
+
+        log(debug);
+    }
+
+    public static void clazz(ClassNode node) {
+        debug("");
+        debug("Checking Class \"" + node.name + "\"");
     }
 
     public static void classRename(ClassNode node, String name) {
-        if(logLevel == LogLevel.BASIC) {
-            return;
-        }
-
-        log("Rename Class \"" + node.name + "\" -> \"" + name + "\"");
+        debug("Rename Class \"" + node.name + "\" -> \"" + name + "\"");
     }
 
     public static void fieldRename(ClassNode node, FieldNode field, String name) {
-        if(logLevel == LogLevel.BASIC) {
-            return;
-        }
-
-        log(" - Field \"" + field.name + "\" -> \"" + name + "\"");
+        debug(" - Field \"" + field.name + "\" -> \"" + name + "\"");
     }
 
     public static void methodRename(ClassNode node, MethodNode method, String name) {
-        if(logLevel == LogLevel.BASIC) {
-            return;
-        }
-
-        log(" - Method \"" + method.name + "\" -> \"" + name + "\"");
+        debug(" - Method \"" + method.name + "\" -> \"" + name + "\"");
     }
 
     public static void fieldRemove(ClassNode node, FieldNode field, String reason) {
-        if(logLevel == LogLevel.BASIC) {
-            return;
-        }
-
-        log(" - Removed Field \"" + field.name + "\" - " + reason);
+        debug(" - Removed Field \"" + field.name + "\" - " + reason);
     }
 
     public static void methodRemove(ClassNode node, MethodNode method, String reason) {
-        if(logLevel == LogLevel.BASIC) {
-            return;
-        }
-
-        log(" - Removed Method \"" + method.name + "\" - " + reason);
+        debug(" - Removed Method \"" + method.name + "\" - " + reason);
     }
 
     public static void loadedEntry(String name) {
-        if(logLevel == LogLevel.BASIC) {
-            return;
-        }
-
-        info("Loaded Entry \"" + name + "\"");
+        debug("Loaded Entry \"" + name + "\"");
     }
 
     public static void refactoredEntry(String name) {
-        if(logLevel == LogLevel.BASIC) {
-            return;
-        }
-
-        info("Refactored Entry \"" + name + "\"");
+        debug("Refactored Entry \"" + name + "\"");
     }
 
 }
