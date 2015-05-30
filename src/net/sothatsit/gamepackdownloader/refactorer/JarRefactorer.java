@@ -176,11 +176,43 @@ public class JarRefactorer {
         }
 
         public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-            FieldDescriptor descriptor = new FieldDescriptor(desc, refactorMap);
+            UnknownDescriptor descriptor = new UnknownDescriptor(desc, refactorMap);
 
             String newDesc = descriptor.getWorkingDescriptor();
 
             return new AnnotationRefactorer(mv.visitAnnotation(newDesc, visible), refactorMap, className);
+        }
+
+        public AnnotationVisitor visitInsnAnnotation(int typeRef, TypePath typePath, String desc, boolean visible) {
+            UnknownDescriptor descriptor = new UnknownDescriptor(desc, refactorMap);
+
+            String newDesc = descriptor.getWorkingDescriptor();
+
+            return new AnnotationRefactorer(mv.visitInsnAnnotation(typeRef, typePath, newDesc, visible), refactorMap, className);
+        }
+
+        public AnnotationVisitor visitLocalVariableAnnotation(int typeRef, TypePath typePath, Label[] start, Label[] end, int[] index, String desc, boolean visible) {
+            UnknownDescriptor descriptor = new UnknownDescriptor(desc, refactorMap);
+
+            String newDesc = descriptor.getWorkingDescriptor();
+
+            return new AnnotationRefactorer(mv.visitLocalVariableAnnotation(typeRef, typePath, start, end, index, newDesc, visible), refactorMap, className);
+        }
+
+        public AnnotationVisitor visitTryCatchAnnotation(int typeRef, TypePath typePath, String desc, boolean visible) {
+            UnknownDescriptor descriptor = new UnknownDescriptor(desc, refactorMap);
+
+            String newDesc = descriptor.getWorkingDescriptor();
+
+            return new AnnotationRefactorer(mv.visitTryCatchAnnotation(typeRef, typePath, newDesc, visible), refactorMap, className);
+        }
+
+        public AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, String desc, boolean visible) {
+            UnknownDescriptor descriptor = new UnknownDescriptor(desc, refactorMap);
+
+            String newDesc = descriptor.getWorkingDescriptor();
+
+            return new AnnotationRefactorer(mv.visitTypeAnnotation(typeRef, typePath, newDesc, visible), refactorMap, className);
         }
 
         public AnnotationVisitor visitParameterAnnotation(int index, String desc, boolean visible) {
@@ -202,6 +234,20 @@ public class JarRefactorer {
             String newDesc = descriptor.getWorkingDescriptor();
 
             mv.visitFieldInsn(opcode, newOwner, newName, newDesc);
+        }
+
+        public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs) {
+            String newName = refactorMap.getNewMethodName(className, name);
+            MethodDescriptor descriptor = new MethodDescriptor(desc, refactorMap);
+            String newDesc = descriptor.getWorkingDescriptor();
+
+            String newBsmOwner = refactorMap.getNewClassName(bsm.getOwner());
+            String newBsmName = refactorMap.getNewMethodName(bsm.getOwner(), bsm.getName());
+            MethodDescriptor bsmDescriptor = new MethodDescriptor(bsm.getDesc(), refactorMap);
+            String newBsmDesc = bsmDescriptor.getWorkingDescriptor();
+            Handle newBsm = new Handle(bsm.getTag(), newBsmOwner, newBsmName, newBsmDesc);
+
+            mv.visitInvokeDynamicInsn(newName, newDesc, newBsm, bsmArgs);
         }
 
         public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
