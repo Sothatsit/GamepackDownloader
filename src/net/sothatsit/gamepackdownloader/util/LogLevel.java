@@ -2,7 +2,12 @@ package net.sothatsit.gamepackdownloader.util;
 
 public enum LogLevel {
 
-    ALL,
-    BASIC;
+    BASIC,
+    SOME,
+    ALL;
+
+    public boolean higherThan(LogLevel other) {
+        return ordinal() >= other.ordinal();
+    }
 
 }
