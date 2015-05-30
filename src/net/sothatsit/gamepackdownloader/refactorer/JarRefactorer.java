@@ -88,13 +88,13 @@ public class JarRefactorer {
     private static class ClassRefactorer extends ClassVisitor {
 
         private RefactorMap refactorMap;
-        private ClassVisitor visitor;
+        // private ClassVisitor visitor;
         private String className;
 
         public ClassRefactorer(ClassVisitor visitor, RefactorMap refactorMap) {
             super(Opcodes.ASM5, visitor);
 
-            this.visitor = visitor;
+            //this.visitor = visitor;
             this.refactorMap = refactorMap;
         }
 
@@ -111,7 +111,7 @@ public class JarRefactorer {
                 newInterfaces[i] = refactorMap.getNewClassName(interfaces[i]);
             }
 
-            visitor.visit(version, ASMUtil.makePublic(access), newName, newSignature, newSuperName, newInterfaces);
+            cv.visit(version, ASMUtil.makePublic(access), newName, newSignature, newSuperName, newInterfaces);
         }
 
         public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
@@ -119,7 +119,7 @@ public class JarRefactorer {
 
             String newDesc = descriptor.getWorkingDescriptor();
 
-            return new AnnotationRefactorer(visitor.visitAnnotation(newDesc, visible), refactorMap, className);
+            return new AnnotationRefactorer(cv.visitAnnotation(newDesc, visible), refactorMap, className);
         }
 
         public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
@@ -133,7 +133,7 @@ public class JarRefactorer {
             UnknownDescriptor sig = new UnknownDescriptor(signature, refactorMap);
             String newSignature = sig.getWorkingDescriptor();
 
-            return new FieldRefactorer(visitor.visitField(ASMUtil.makePublic(access), newName, newDesc, newSignature, value), refactorMap, className);
+            return new FieldRefactorer(cv.visitField(ASMUtil.makePublic(access), newName, newDesc, newSignature, value), refactorMap, className);
         }
 
         public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
@@ -156,7 +156,20 @@ public class JarRefactorer {
                 }
             }
 
-            return new MethodRefactorer(visitor.visitMethod(ASMUtil.makePublic(access), newName, newDesc, newSignature, newExceptions), refactorMap, className);
+            return new MethodRefactorer(cv.visitMethod(ASMUtil.makePublic(access), newName, newDesc, newSignature, newExceptions), refactorMap, className);
+        }
+
+        public void visitInnerClass(String name, String outerName, String innerName, int access) {
+            cv.visitInnerClass(name, (outerName == null ? null : refactorMap.getNewClassName(outerName)), innerName, access);
+        }
+
+        public void visitOuterClass(String owner, String name, String desc) {
+            String newOwner = refactorMap.getNewClassName(owner);
+            String newName = (name == null ? null : refactorMap.getNewMethodName(owner, name));
+            MethodDescriptor descriptor = new MethodDescriptor(desc, refactorMap);
+            String newDesc = descriptor.getWorkingDescriptor();
+
+            cv.visitOuterClass(newOwner, newName, newDesc);
         }
 
     }
@@ -260,7 +273,7 @@ public class JarRefactorer {
         }
 
         public void visitMultiANewArrayInsn(String desc, int dims) {
-            FieldDescriptor descriptor = new FieldDescriptor(desc, refactorMap);
+            UnknownDescriptor descriptor = new UnknownDescriptor(desc, refactorMap);
             String newDesc = descriptor.getWorkingDescriptor();
 
             mv.visitMultiANewArrayInsn(newDesc, dims);
@@ -270,6 +283,20 @@ public class JarRefactorer {
             String newType = refactorMap.getNewClassName(type);
 
             mv.visitTypeInsn(opcode, newType);
+        }
+
+        public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
+            String newName = refactorMap.getNewFieldName(className, name);
+            FieldDescriptor descriptor = new FieldDescriptor(desc, refactorMap);
+            String newDesc = descriptor.getWorkingDescriptor();
+            UnknownDescriptor descriptor2 = new UnknownDescriptor(signature, refactorMap);
+            String newSig = descriptor2.getWorkingDescriptor();
+
+            mv.visitLocalVariable(newName, newDesc, newSig, start, end, index);
+        }
+
+        public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
+            mv.visitTryCatchBlock(start, end, handler, (type == null ? null : refactorMap.getClassName(type)));
         }
 
     }
