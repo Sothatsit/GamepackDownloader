@@ -35,12 +35,15 @@ public class JavaKeywordAgent extends SingleRefactorAgent {
         if(JavaUtil.isJavaKeyword(node.name)) {
             map.setClassName(node.name, node.name + SUFFIX);
             Log.classRename(node, node.name + SUFFIX);
+            renamedClasses += 1;
         }
 
         for(FieldNode field : node.fields) {
             if(JavaUtil.isJavaKeyword(field.name)) {
                 map.setFieldName(node.name, field.name, field.name + SUFFIX);
                 Log.fieldRename(node, field, field.name + SUFFIX);
+
+                renamedFields += 1;
             }
         }
 
@@ -48,6 +51,8 @@ public class JavaKeywordAgent extends SingleRefactorAgent {
             if(JavaUtil.isJavaKeyword(method.name)) {
                 map.setMethodName(node.name, method.name, method.name + SUFFIX);
                 Log.methodRename(node, method, method.name + SUFFIX);
+
+                renamedMethods += 1;
             }
         }
     }
