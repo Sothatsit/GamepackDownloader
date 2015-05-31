@@ -57,13 +57,15 @@ public class GamePackDownloader {
 
         if (options.length() < 2 || options.charAt(0) != '-') {
             Log.log("Invalid options supplied: " + options);
-            exit("Valid: -<d (download) , r (refactor) , s (decompile)>");
+            exit("Valid: -<d (download) , r (refactor) , s (decompile), x (debug), y (fine debug)>");
             return;
         }
 
         boolean download = false;
         boolean refactor = false;
         boolean decompile = false;
+        boolean debug = false;
+        boolean fineDebug = false;
 
         for (char c : options.substring(1).toCharArray()) {
             if (c == 'd') {
@@ -72,10 +74,22 @@ public class GamePackDownloader {
                 decompile = true;
             } else if(c == 'r') {
                 refactor = true;
+            } else if(c == 'x') {
+                debug = true;
+            } else if(c == 'y') {
+                fineDebug = true;
             } else {
                 exit("Unknown option: '" + c + '\'');
                 return;
             }
+        }
+
+        if(fineDebug) {
+            Log.setLogLevel(LogLevel.FINE_DEBUG);
+        } else if(debug) {
+            Log.setLogLevel(LogLevel.DEBUG);
+        } else {
+            Log.setLogLevel(LogLevel.BASIC);
         }
 
         if (download && !downloadLatest(folder)) {
