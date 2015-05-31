@@ -3,6 +3,7 @@ package net.sothatsit.gamepackdownloader.refactorer.agents;
 import jdk.internal.org.objectweb.asm.tree.*;
 import net.sothatsit.gamepackdownloader.refactorer.MultiRefactorAgent;
 import net.sothatsit.gamepackdownloader.refactorer.RefactorMap;
+import net.sothatsit.gamepackdownloader.util.ASMUtil;
 import net.sothatsit.gamepackdownloader.util.Log;
 
 import java.util.ArrayList;
@@ -39,13 +40,50 @@ public class UnusedMethodAgent extends MultiRefactorAgent {
 
         for(ClassNode node : classes) {
             for(MethodNode method : node.methods) {
-                if(!referencedMethods.contains(node.name + " - " + method.name + method.desc)) {
+                if(canRemove(node, method, classes) && !referencedMethods.contains(node.name + " - " + method.name + method.desc)) {
                     map.setRemoveMethod(node.name, method.name, method.desc, true);
                     Log.methodRemove(node, method, "Method Unused");
                     removedMethods += 1;
                 }
             }
         }
+    }
+
+    public static boolean canRemove(ClassNode node, MethodNode method, List<ClassNode> classes) {
+        if(method.name.equals("<init>") || method.name.equals("<clinit>")) {
+            return false;
+        }
+
+        List<String> check = new ArrayList<>();
+
+        if(node.superName != null) {
+            check.add(node.superName);
+        }
+
+        if(node.interfaces != null) {
+            check.addAll(node.interfaces);
+        }
+
+        for(String str : check) {
+            ClassNode clazz = ASMUtil.findClass(str, classes);
+
+            if(clazz == null) {
+                return false;
+            } else {
+                if(ASMUtil.findMethod(clazz, method.name, method.desc) != null) {
+                    return false;
+                }
+            }
+        }
+
+        List<ClassNode> subClasses = ASMUtil.findSubClasses(node, classes);
+        for(ClassNode clazz : subClasses) {
+            if(ASMUtil.findMethod(clazz, method.name, method.desc) != null) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override
