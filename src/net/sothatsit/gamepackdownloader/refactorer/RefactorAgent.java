@@ -3,6 +3,7 @@ package net.sothatsit.gamepackdownloader.refactorer;
 import jdk.internal.org.objectweb.asm.tree.ClassNode;
 import net.sothatsit.gamepackdownloader.refactorer.agents.DuplicateMethodAgent;
 import net.sothatsit.gamepackdownloader.refactorer.agents.JavaKeywordAgent;
+import net.sothatsit.gamepackdownloader.refactorer.agents.UnusedMethodAgent;
 import net.sothatsit.gamepackdownloader.refactorer.agents.UpperCamelCaseClassNames;
 import net.sothatsit.gamepackdownloader.util.Log;
 
@@ -26,7 +27,8 @@ public abstract class RefactorAgent {
         return new ArrayList<>(Arrays.asList(
                 new JavaKeywordAgent(refactorMap),
                 new DuplicateMethodAgent(refactorMap),
-                new UpperCamelCaseClassNames(refactorMap)
+                new UpperCamelCaseClassNames(refactorMap),
+                new UnusedMethodAgent(refactorMap)
         ));
     }
 
