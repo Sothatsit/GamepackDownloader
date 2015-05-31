@@ -8,13 +8,14 @@ import java.awt.*;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.URLStreamHandlerFactory;
 
 public class GamePackRunner {
 
     public static Applet loadApplet(File jarFile) throws Exception {
         URLClassLoader classLoader = new URLClassLoader(new URL[] {jarFile.toURI().toURL()}, GamePackRunner.class.getClassLoader());
-        Class<?> Client = classLoader.loadClass("Client");
-        Object inst = Client.newInstance();
+        Class<?> client = classLoader.loadClass("client");
+        Object inst = client.newInstance();
 
         return (Applet) inst;
     }
@@ -30,7 +31,7 @@ public class GamePackRunner {
         try {
             applet = loadApplet(gameJar);
         } catch (Exception e) {
-            Log.error("Error loaded game jar");
+            Log.error("Error loading game jar");
             e.printStackTrace();
             GamePackDownloader.exit();
             return;
@@ -45,6 +46,23 @@ public class GamePackRunner {
         frame.pack();
         frame.revalidate();
         frame.repaint();
+        frame.setVisible(true);
+    }
+
+    public static class GamePackClassLoader extends URLClassLoader {
+
+        public GamePackClassLoader(URL[] urls, ClassLoader parent) {
+            super(urls, parent);
+        }
+
+        public GamePackClassLoader(URL[] urls) {
+            super(urls);
+        }
+
+        public GamePackClassLoader(URL[] urls, ClassLoader parent, URLStreamHandlerFactory factory) {
+            super(urls, parent, factory);
+        }
+
     }
 
 }
