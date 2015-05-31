@@ -4,7 +4,7 @@ import jdk.internal.org.objectweb.asm.tree.ClassNode;
 
 import java.util.List;
 
-public abstract class MultiRefactorAgent {
+public abstract class MultiRefactorAgent extends RefactorAgent {
 
     private RefactorMap refactorMap;
 
@@ -16,7 +16,7 @@ public abstract class MultiRefactorAgent {
         return refactorMap;
     }
 
-    public abstract void refactor(List<ClassNode> classes);
+    public abstract void refactorClasses(List<ClassNode> classes);
 
     public boolean isSingle() {
         return false;
@@ -27,7 +27,7 @@ public abstract class MultiRefactorAgent {
     }
 
     public void runMulti(List<ClassNode> classes) {
-        refactor(classes);
+        refactorClasses(classes);
     }
 
 }
