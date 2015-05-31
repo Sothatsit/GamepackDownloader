@@ -31,7 +31,7 @@ public class UnusedMethodAgent extends MultiRefactorAgent {
                     } else if(insn instanceof InvokeDynamicInsnNode) {
                         InvokeDynamicInsnNode dynamicInsn = (InvokeDynamicInsnNode) insn;
                         addIfNotExists(referencedMethods, node.name + " - " + dynamicInsn.name + dynamicInsn.desc);
-                        addIfNotExists(referencedMethods, dynamicInsn.bsm.getName() + dynamicInsn.bsm.getDesc());
+                        addIfNotExists(referencedMethods, node.name + " - " + dynamicInsn.bsm.getName() + dynamicInsn.bsm.getDesc());
                     }
                 }
             }
