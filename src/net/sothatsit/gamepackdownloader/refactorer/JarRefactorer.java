@@ -197,6 +197,10 @@ public class JarRefactorer {
             cv.visitOuterClass(newOwner, newName, newDesc);
         }
 
+        public void visitSource(String source, String debug) {
+            cv.visitSource(className + ".java", debug);
+        }
+
     }
 
     private static class MethodRefactorer extends MethodVisitor {
