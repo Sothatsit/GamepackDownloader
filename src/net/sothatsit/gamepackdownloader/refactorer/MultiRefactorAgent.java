@@ -18,10 +18,6 @@ public abstract class MultiRefactorAgent {
 
     public abstract void refactor(List<ClassNode> classes);
 
-    public abstract void logStatistics();
-
-    public abstract void resetStatistics();
-
     public boolean isSingle() {
         return false;
     }

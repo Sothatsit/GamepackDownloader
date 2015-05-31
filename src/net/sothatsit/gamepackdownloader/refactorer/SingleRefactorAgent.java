@@ -26,10 +26,6 @@ public abstract class SingleRefactorAgent extends RefactorAgent {
 
     public abstract void refactor(ClassNode classNode, List<ClassNode> classes);
 
-    public abstract void logStatistics();
-
-    public abstract void resetStatistics();
-
     public boolean isSingle() {
         return true;
     }

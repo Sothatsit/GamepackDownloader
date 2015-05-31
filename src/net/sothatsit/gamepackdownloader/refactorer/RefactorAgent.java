@@ -18,6 +18,10 @@ public abstract class RefactorAgent {
 
     public abstract void runMulti(List<ClassNode> classes);
 
+    public abstract void logStatistics();
+
+    public abstract void resetStatistics();
+
     public static List<RefactorAgent> generateAgentList(RefactorMap refactorMap) {
         return new ArrayList<>(Arrays.asList(
                 new JavaKeywordAgent(refactorMap),
