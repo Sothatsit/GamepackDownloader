@@ -145,6 +145,14 @@ public class GamePackDownloader {
 
         Log.info("Refactored Gamepack " + latest);
 
+        final File gameJar = refactored;
+        new Thread() {
+            @Override
+            public void run() {
+                GamePackRunner.run(gameJar);
+            }
+        }.start();
+
         return refactored;
     }
 
