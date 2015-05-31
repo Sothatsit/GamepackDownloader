@@ -1,5 +1,5 @@
 # GamepackDownloader
-Downloads the latest oldschool runescape gamepack.
+Downloads the latest oldschool runescape gamepack, refactors it and decompiles it. GamepackDownloader is not finished and is a work in progress.
 
 # Usage
 java -jar [jar-file-location] [options] [output-directory] [fernflower-options]
