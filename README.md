@@ -12,12 +12,21 @@ Options:
 
 "r" - refactor latest version
 
+"x" - turn on debugging
+
+"y" - turn on fine debugging
+
+
 Example Usage:
 
 "-d" - just downloads gamepack, useful to check for new versions
+
 "-dr" - downloads and if new refactors gamepack but does not decompile
+
 "-dsr" - downloads gamepack, if new refactors gamepack and then decompiles
+
 "-sr" - refactors and decompiles the latest downloaded gamepack
+
 
 # Output
 The program will output files called "gamepack <version>.jar". The versions are calculated from the known versions previously downloaded.
