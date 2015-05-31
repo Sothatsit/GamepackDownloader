@@ -1,13 +1,13 @@
 package net.sothatsit.gamepackdownloader.refactorer.agents;
 
 import jdk.internal.org.objectweb.asm.tree.ClassNode;
-import net.sothatsit.gamepackdownloader.refactorer.RefactorAgent;
+import net.sothatsit.gamepackdownloader.refactorer.SingleRefactorAgent;
 import net.sothatsit.gamepackdownloader.refactorer.RefactorMap;
 import net.sothatsit.gamepackdownloader.util.Log;
 
 import java.util.List;
 
-public class UnusedMethodAgent extends RefactorAgent {
+public class UnusedMethodAgent extends SingleRefactorAgent {
 
     public static final String SUFFIX = "_key";
 

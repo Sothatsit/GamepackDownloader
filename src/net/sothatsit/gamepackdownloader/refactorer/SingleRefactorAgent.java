@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class RefactorAgent {
+public abstract class SingleRefactorAgent {
 
     private RefactorMap refactorMap;
 
-    public RefactorAgent(RefactorMap refactorMap) {
+    public SingleRefactorAgent(RefactorMap refactorMap) {
         this.refactorMap = refactorMap;
     }
 
@@ -36,7 +36,7 @@ public abstract class RefactorAgent {
 
     public abstract void resetStatistics();
 
-    public static List<RefactorAgent> generateAgentList(RefactorMap refactorMap) {
+    public static List<SingleRefactorAgent> generateAgentList(RefactorMap refactorMap) {
         return new ArrayList<>(Arrays.asList(
                 new JavaKeywordAgent(refactorMap),
                 new DuplicateMethodAgent(refactorMap),
@@ -49,17 +49,17 @@ public abstract class RefactorAgent {
         return refactor(classes, map, generateAgentList(map));
     }
 
-    public static RefactorMap refactor(List<ClassNode> classes, RefactorMap refactorMap, List<RefactorAgent> agents) {
+    public static RefactorMap refactor(List<ClassNode> classes, RefactorMap refactorMap, List<SingleRefactorAgent> agents) {
         for(ClassNode node : classes) {
             Log.clazz(node);
-            for(RefactorAgent agent : agents) {
+            for(SingleRefactorAgent agent : agents) {
                 agent.run(node, classes);
             }
         }
 
         Log.info("");
 
-        for(RefactorAgent agent : agents) {
+        for(SingleRefactorAgent agent : agents) {
             agent.logStatistics();
         }
 

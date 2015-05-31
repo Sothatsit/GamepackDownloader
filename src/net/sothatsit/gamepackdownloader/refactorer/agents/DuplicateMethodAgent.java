@@ -2,7 +2,7 @@ package net.sothatsit.gamepackdownloader.refactorer.agents;
 
 import jdk.internal.org.objectweb.asm.tree.ClassNode;
 import jdk.internal.org.objectweb.asm.tree.MethodNode;
-import net.sothatsit.gamepackdownloader.refactorer.RefactorAgent;
+import net.sothatsit.gamepackdownloader.refactorer.SingleRefactorAgent;
 import net.sothatsit.gamepackdownloader.refactorer.RefactorMap;
 import net.sothatsit.gamepackdownloader.util.ASMUtil;
 import net.sothatsit.gamepackdownloader.util.Log;
@@ -11,7 +11,7 @@ import net.sothatsit.gamepackdownloader.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DuplicateMethodAgent extends RefactorAgent {
+public class DuplicateMethodAgent extends SingleRefactorAgent {
 
     private int duplicateMethods;
     private int removedMethods;

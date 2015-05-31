@@ -2,7 +2,7 @@ package net.sothatsit.gamepackdownloader;
 
 import jdk.internal.org.objectweb.asm.tree.ClassNode;
 import net.sothatsit.gamepackdownloader.refactorer.JarRefactorer;
-import net.sothatsit.gamepackdownloader.refactorer.RefactorAgent;
+import net.sothatsit.gamepackdownloader.refactorer.SingleRefactorAgent;
 import net.sothatsit.gamepackdownloader.refactorer.RefactorMap;
 import net.sothatsit.gamepackdownloader.util.JarUtil;
 import net.sothatsit.gamepackdownloader.util.Log;
@@ -122,7 +122,7 @@ public class GamePackDownloader {
         Log.setLogLevel(LogLevel.BASIC);
 
         Map<String, ClassNode> classes = JarUtil.loadClasses(jarFile);
-        RefactorMap map = RefactorAgent.refactor(new ArrayList<>(classes.values()));
+        RefactorMap map = SingleRefactorAgent.refactor(new ArrayList<>(classes.values()));
 
         JarRefactorer.refactor(jarFile, refactored, map);
 
