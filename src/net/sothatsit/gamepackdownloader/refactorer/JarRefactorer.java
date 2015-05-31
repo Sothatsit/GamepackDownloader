@@ -113,7 +113,7 @@ public class JarRefactorer {
             }
 
             String neww = getMethodString("visit", version, ASMUtil.makePublic(access), newName, newSignature, newSuperName, newInterfaces);
-            String orig = getMethodString(" ", version, access, name, signature, superName, interfaces);
+            String orig = getMethodString("     orig", version, access, name, signature, superName, interfaces);
             Log.fineDebug(neww + orig);
 
             cv.visit(version, ASMUtil.makePublic(access), newName, newSignature, newSuperName, newInterfaces);
@@ -125,7 +125,7 @@ public class JarRefactorer {
             String newDesc = descriptor.getWorkingDescriptor();
 
             String neww = getMethodString("visitAnnotation", newDesc, visible);
-            String orig = getMethodString(" ", desc, visible);
+            String orig = getMethodString("     orig", desc, visible);
             Log.fineDebug(neww + orig);
 
             return new AnnotationRefactorer(cv.visitAnnotation(newDesc, visible), refactorMap, className);
@@ -143,7 +143,7 @@ public class JarRefactorer {
             String newSignature = sig.getWorkingDescriptor();
 
             String neww = getMethodString("visitField", ASMUtil.makePublic(access), newName, newDesc, newSignature, value);
-            String orig = getMethodString(" ", access, name, desc, signature, value);
+            String orig = getMethodString("     orig", access, name, desc, signature, value);
             Log.fineDebug(neww + orig);
 
             return new FieldRefactorer(cv.visitField(ASMUtil.makePublic(access), newName, newDesc, newSignature, value), refactorMap, className);
@@ -170,7 +170,7 @@ public class JarRefactorer {
             }
 
             String neww = getMethodString("visitMethod", ASMUtil.makePublic(access), newName, newDesc, newSignature, newExceptions);
-            String orig = getMethodString(" ", access, name, desc, signature, exceptions);
+            String orig = getMethodString("     orig", access, name, desc, signature, exceptions);
             Log.fineDebug(neww + orig);
 
             return new MethodRefactorer(cv.visitMethod(ASMUtil.makePublic(access), newName, newDesc, newSignature, newExceptions), refactorMap, className);
@@ -178,7 +178,7 @@ public class JarRefactorer {
 
         public void visitInnerClass(String name, String outerName, String innerName, int access) {
             String neww = getMethodString("visitInnerClass", name, (outerName == null ? null : refactorMap.getNewClassName(outerName)), innerName, access);
-            String orig = getMethodString(" ", name, outerName, innerName, access);
+            String orig = getMethodString("     orig", name, outerName, innerName, access);
             Log.fineDebug(neww + orig);
 
             cv.visitInnerClass(name, (outerName == null ? null : refactorMap.getNewClassName(outerName)), innerName, access);
@@ -191,7 +191,7 @@ public class JarRefactorer {
             String newDesc = descriptor.getWorkingDescriptor();
 
             String neww = getMethodString("visitOuterClass", newOwner, newName, newDesc);
-            String orig = getMethodString(" ", owner, name, desc);
+            String orig = getMethodString("     orig", owner, name, desc);
             Log.fineDebug(neww + orig);
 
             cv.visitOuterClass(newOwner, newName, newDesc);
@@ -219,7 +219,7 @@ public class JarRefactorer {
             String newDesc = descriptor.getWorkingDescriptor();
 
             String neww = getMethodString("visitAnnotation", newDesc, visible);
-            String orig = getMethodString(" ", desc, visible);
+            String orig = getMethodString("     orig", desc, visible);
             Log.fineDebug(neww + orig);
 
             return new AnnotationRefactorer(mv.visitAnnotation(newDesc, visible), refactorMap, className);
@@ -231,7 +231,7 @@ public class JarRefactorer {
             String newDesc = descriptor.getWorkingDescriptor();
 
             String neww = getMethodString("visitInsnAnnotation", typeRef, typePath, newDesc, visible);
-            String orig = getMethodString(" ", typeRef, typePath, desc, visible);
+            String orig = getMethodString("     orig", typeRef, typePath, desc, visible);
             Log.fineDebug(neww + orig);
 
             return new AnnotationRefactorer(mv.visitInsnAnnotation(typeRef, typePath, newDesc, visible), refactorMap, className);
@@ -243,7 +243,7 @@ public class JarRefactorer {
             String newDesc = descriptor.getWorkingDescriptor();
 
             String neww = getMethodString("visitLocalVariableAnnotation", typeRef, typePath, start, end, index, newDesc, visible);
-            String orig = getMethodString(" ", typeRef, typePath, start, end, index, desc, visible);
+            String orig = getMethodString("     orig", typeRef, typePath, start, end, index, desc, visible);
             Log.fineDebug(neww + orig);
 
             return new AnnotationRefactorer(mv.visitLocalVariableAnnotation(typeRef, typePath, start, end, index, newDesc, visible), refactorMap, className);
@@ -255,7 +255,7 @@ public class JarRefactorer {
             String newDesc = descriptor.getWorkingDescriptor();
 
             String neww = getMethodString("visitTryCatchAnnotation", typeRef, typePath, newDesc, visible);
-            String orig = getMethodString(" ", typeRef, typePath, desc, visible);
+            String orig = getMethodString("     orig", typeRef, typePath, desc, visible);
             Log.fineDebug(neww + orig);
 
             return new AnnotationRefactorer(mv.visitTryCatchAnnotation(typeRef, typePath, newDesc, visible), refactorMap, className);
@@ -267,7 +267,7 @@ public class JarRefactorer {
             String newDesc = descriptor.getWorkingDescriptor();
 
             String neww = getMethodString("visitTypeAnnotation", typeRef, typePath, newDesc, visible);
-            String orig = getMethodString(" ", typeRef, typePath, desc, visible);
+            String orig = getMethodString("     orig", typeRef, typePath, desc, visible);
             Log.fineDebug(neww + orig);
 
             return new AnnotationRefactorer(mv.visitTypeAnnotation(typeRef, typePath, newDesc, visible), refactorMap, className);
@@ -279,7 +279,7 @@ public class JarRefactorer {
             String newDesc = descriptor.getWorkingDescriptor();
 
             String neww = getMethodString("visitParameterAnnotation", index, newDesc, visible);
-            String orig = getMethodString(" ", index, desc, visible);
+            String orig = getMethodString("     orig", index, desc, visible);
             Log.fineDebug(neww + orig);
 
             return new AnnotationRefactorer(mv.visitParameterAnnotation(index, newDesc, visible), refactorMap, className);
@@ -287,7 +287,7 @@ public class JarRefactorer {
 
         public AnnotationVisitor visitAnnotationDefault() {
             String neww = getMethodString("visitAnnotationDefault");
-            String orig = getMethodString(" ");
+            String orig = getMethodString("     orig");
             Log.fineDebug(neww + orig);
 
             return new AnnotationRefactorer(mv.visitAnnotationDefault(), refactorMap, className);
@@ -300,7 +300,7 @@ public class JarRefactorer {
             String newDesc = descriptor.getWorkingDescriptor();
 
             String neww = getMethodString("visitFieldInsn", opcode, newOwner, newName, newDesc);
-            String orig = getMethodString(" ", opcode, owner, name, desc);
+            String orig = getMethodString("     orig", opcode, owner, name, desc);
             Log.fineDebug(neww + orig);
 
             mv.visitFieldInsn(opcode, newOwner, newName, newDesc);
@@ -318,7 +318,7 @@ public class JarRefactorer {
             Handle newBsm = new Handle(bsm.getTag(), newBsmOwner, newBsmName, newBsmDesc);
 
             String neww = getMethodString("visitInvokeDynamicInsn", newName, newDesc, newBsm, bsmArgs);
-            String orig = getMethodString(" ", name, desc, bsm, bsmArgs);
+            String orig = getMethodString("     orig", name, desc, bsm, bsmArgs);
             Log.fineDebug(neww + orig);
 
             mv.visitInvokeDynamicInsn(newName, newDesc, newBsm, bsmArgs);
@@ -331,7 +331,7 @@ public class JarRefactorer {
             String newDesc = descriptor.getWorkingDescriptor();
 
             String neww = getMethodString("visitMethodInsn", opcode, newOwner, newName, newDesc, itf);
-            String orig = getMethodString(" ", opcode, owner, name, desc, itf);
+            String orig = getMethodString("     orig", opcode, owner, name, desc, itf);
             Log.fineDebug(neww + orig);
 
             mv.visitMethodInsn(opcode, newOwner, newName, newDesc, itf);
@@ -342,7 +342,7 @@ public class JarRefactorer {
             String newDesc = descriptor.getWorkingDescriptor();
 
             String neww = getMethodString("visitMultiANewArrayInsn", newDesc, dims);
-            String orig = getMethodString(" ", desc, dims);
+            String orig = getMethodString("     orig", desc, dims);
             Log.fineDebug(neww + orig);
 
             mv.visitMultiANewArrayInsn(newDesc, dims);
@@ -352,7 +352,7 @@ public class JarRefactorer {
             String newType = refactorMap.getNewClassName(type);
 
             String neww = getMethodString("visitTypeInsn", opcode, newType);
-            String orig = getMethodString(" ", opcode, type);
+            String orig = getMethodString("     orig", opcode, type);
             Log.fineDebug(neww + orig);
 
             mv.visitTypeInsn(opcode, newType);
@@ -366,7 +366,7 @@ public class JarRefactorer {
             String newSig = descriptor2.getWorkingDescriptor();
 
             String neww = getMethodString("visitLocalVariable", newName, newDesc, newSig, start, end, index);
-            String orig = getMethodString(" ", name, desc, signature, start, end, index);
+            String orig = getMethodString("     orig", name, desc, signature, start, end, index);
             Log.fineDebug(neww + orig);
 
             mv.visitLocalVariable(newName, newDesc, newSig, start, end, index);
@@ -374,7 +374,7 @@ public class JarRefactorer {
 
         public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
             String neww = getMethodString("visitTryCatchBlock", start, end, handler, (type == null ? null : refactorMap.getClassName(type)));
-            String orig = getMethodString(" ", start, end, handler, type);
+            String orig = getMethodString("     orig", start, end, handler, type);
             Log.fineDebug(neww + orig);
 
             mv.visitTryCatchBlock(start, end, handler, (type == null ? null : refactorMap.getClassName(type)));
@@ -402,7 +402,7 @@ public class JarRefactorer {
             String newDesc = descriptor.getWorkingDescriptor();
 
             String neww = getMethodString("visitAnnotation", newDesc, visible);
-            String orig = getMethodString(" ", desc, visible);
+            String orig = getMethodString("     orig", desc, visible);
             Log.fineDebug(neww + orig);
 
             return new AnnotationRefactorer(fv.visitAnnotation(newDesc, visible), refactorMap, className);
@@ -430,7 +430,7 @@ public class JarRefactorer {
             String newDesc = descriptor.getWorkingDescriptor();
 
             String neww = getMethodString("visitAnnotation", name, newDesc);
-            String orig = getMethodString(" ", name, desc);
+            String orig = getMethodString("     orig", name, desc);
             Log.fineDebug(neww + orig);
 
             return new AnnotationRefactorer(av.visitAnnotation(name, newDesc), refactorMap, className);
@@ -442,7 +442,7 @@ public class JarRefactorer {
             String newDesc = descriptor.getWorkingDescriptor();
 
             String neww = getMethodString("visitEnum", name, newDesc, value);
-            String orig = getMethodString(" ", name, desc, value);
+            String orig = getMethodString("     orig", name, desc, value);
             Log.fineDebug(neww + orig);
 
             av.visitEnum(name, newDesc, value);
