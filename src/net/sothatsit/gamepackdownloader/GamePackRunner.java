@@ -14,7 +14,7 @@ public class GamePackRunner {
 
     public static Applet loadApplet(File jarFile) throws Exception {
         URLClassLoader classLoader = new URLClassLoader(new URL[] {jarFile.toURI().toURL()}, GamePackRunner.class.getClassLoader());
-        Class<?> client = classLoader.loadClass("client");
+        Class<?> client = classLoader.loadClass("Client");
         Object inst = client.newInstance();
 
         return (Applet) inst;
