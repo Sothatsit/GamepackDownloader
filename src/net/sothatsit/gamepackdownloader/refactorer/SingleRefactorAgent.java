@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class SingleRefactorAgent {
+public abstract class SingleRefactorAgent extends RefactorAgent {
 
     private RefactorMap refactorMap;
 
@@ -66,6 +66,18 @@ public abstract class SingleRefactorAgent {
         Log.info("");
 
         return refactorMap;
+    }
+
+    public boolean isSingle() {
+        return true;
+    }
+
+    public void runSingle(ClassNode node, List<ClassNode> classes) {
+        run(node, classes);
+    }
+
+    public void runMulti(List<ClassNode> classes) {
+        throw new UnsupportedOperationException("Cannot run multi on SingleRefactorAgent");
     }
 
 }
