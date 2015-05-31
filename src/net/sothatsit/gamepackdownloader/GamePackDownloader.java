@@ -133,8 +133,6 @@ public class GamePackDownloader {
 
         Log.info("Refactoring Gamepack " + latest);
 
-        Log.setLogLevel(LogLevel.BASIC);
-
         Map<String, ClassNode> classes = JarUtil.loadClasses(jarFile);
         RefactorMap map = RefactorAgent.refactor(new ArrayList<>(classes.values()));
 
