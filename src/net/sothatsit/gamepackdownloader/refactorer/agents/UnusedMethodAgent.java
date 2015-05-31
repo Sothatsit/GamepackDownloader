@@ -1,15 +1,13 @@
 package net.sothatsit.gamepackdownloader.refactorer.agents;
 
 import jdk.internal.org.objectweb.asm.tree.ClassNode;
-import net.sothatsit.gamepackdownloader.refactorer.SingleRefactorAgent;
+import net.sothatsit.gamepackdownloader.refactorer.MultiRefactorAgent;
 import net.sothatsit.gamepackdownloader.refactorer.RefactorMap;
 import net.sothatsit.gamepackdownloader.util.Log;
 
 import java.util.List;
 
-public class UnusedMethodAgent extends SingleRefactorAgent {
-
-    public static final String SUFFIX = "_key";
+public class UnusedMethodAgent extends MultiRefactorAgent {
 
     private int removedMethods;
 
@@ -18,12 +16,7 @@ public class UnusedMethodAgent extends SingleRefactorAgent {
     }
 
     @Override
-    public boolean accept(ClassNode classNode, List<ClassNode> classes) {
-        return false;
-    }
-
-    @Override
-    public void refactor(ClassNode node, List<ClassNode> classes) {
+    public void refactor(List<ClassNode> classes) {
         //RefactorMap map = getRefactorMap();
     }
 
