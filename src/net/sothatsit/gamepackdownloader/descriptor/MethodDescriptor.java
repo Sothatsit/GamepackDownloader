@@ -150,7 +150,7 @@ public class MethodDescriptor extends Descriptor {
             return new String[] {str.substring(0, str.length() - 1), ""};
         }
 
-        return new String[] {str.substring(0, index - 1), str.substring(index + 1)};
+        return new String[] {str.substring(0, index), str.substring(index + 1)};
     }
 
 }
