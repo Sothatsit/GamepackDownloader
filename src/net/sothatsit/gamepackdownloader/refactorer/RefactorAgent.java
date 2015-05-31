@@ -37,6 +37,7 @@ public abstract class RefactorAgent {
 
     public static RefactorMap refactor(List<ClassNode> classes, RefactorMap refactorMap, List<RefactorAgent> agents) {
         for(RefactorAgent agent : agents) {
+            agent.resetStatistics();
             if(agent.isSingle()) {
                 for(ClassNode node : classes) {
                     agent.runSingle(node, classes);
@@ -49,7 +50,7 @@ public abstract class RefactorAgent {
         Log.info("");
 
         for(RefactorAgent agent : agents) {
-            //agent.logStatistics();
+            agent.logStatistics();
         }
 
         Log.info("");
