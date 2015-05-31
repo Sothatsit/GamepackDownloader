@@ -29,7 +29,7 @@ public class Log {
     }
 
     public static void fineDebug(String debug) {
-        if(logLevel.higherThan(LogLevel.FINE_DEBUG)) {
+        if(logLevel.lowerThan(LogLevel.FINE_DEBUG)) {
             return;
         }
 
@@ -37,7 +37,7 @@ public class Log {
     }
 
     public static void debug(String debug) {
-        if(logLevel.higherThan(LogLevel.DEBUG)) {
+        if(logLevel.lowerThan(LogLevel.DEBUG)) {
             return;
         }
 
