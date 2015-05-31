@@ -22,4 +22,16 @@ public abstract class MultiRefactorAgent {
 
     public abstract void resetStatistics();
 
+    public boolean isSingle() {
+        return false;
+    }
+
+    public void runSingle(ClassNode node, List<ClassNode> classes) {
+        throw new UnsupportedOperationException("Cannot run single on MultiRefactorAgent");
+    }
+
+    public void runMulti(List<ClassNode> classes) {
+        refactor(classes);
+    }
+
 }
