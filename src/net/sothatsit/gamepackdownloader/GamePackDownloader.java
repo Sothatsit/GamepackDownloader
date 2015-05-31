@@ -145,7 +145,7 @@ public class GamePackDownloader {
 
         Log.info("Refactored Gamepack " + latest);
 
-        final File gameJar = jarFile;
+        final File gameJar = refactored;
         new Thread() {
             @Override
             public void run() {
