@@ -16,7 +16,7 @@ public class UnusedMethodAgent extends MultiRefactorAgent {
     }
 
     @Override
-    public void refactor(List<ClassNode> classes) {
+    public void refactorClasses(List<ClassNode> classes) {
         //RefactorMap map = getRefactorMap();
     }
 
