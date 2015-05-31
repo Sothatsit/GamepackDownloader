@@ -4,12 +4,12 @@ import jdk.internal.org.objectweb.asm.tree.ClassNode;
 
 import java.util.List;
 
-public interface RefactorAgent {
+public abstract class RefactorAgent {
 
-    public boolean isSingle();
+    public abstract boolean isSingle();
 
-    public void runSingle(ClassNode node, List<ClassNode> classes);
+    public abstract void runSingle(ClassNode node, List<ClassNode> classes);
 
-    public void runMulti(List<ClassNode> classes);
+    public abstract void runMulti(List<ClassNode> classes);
 
 }
